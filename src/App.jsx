@@ -5,6 +5,13 @@ import Home from "./pages/Home/Home";
 import ServicesTools from "./pages/ServicesTools/ServicesTools";
 import Tools from "./pages/ServicesTools/Tools";
 import Abouts from "./pages/AboutUs/Abouts";
+import Research from "./pages/Research/Research";
+import Markets from "./pages/Markets&Resources/Markets";
+import AllBlog from "./pages/Research/AllBlog";
+
+import Content from "./pages/Content/content";
+import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
+import Questions from "./pages/Questions/Questions.JSX";
 
 
 export default function App() {
@@ -16,6 +23,12 @@ export default function App() {
           <Route path="/ServicesTools" element={<ServicesTools />} />
           <Route path="/AboutUs" element={<Abouts />} />
           <Route path="/Tools" element={<Tools />} />
+          <Route path="/research-and-insights" element={<Research />} />
+          <Route path="/Markets" element={<Markets />} />
+          <Route path="/AllBlog" element={<AllBlog />} />
+          <Route path="/contact" element={<Content />} />
+          <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+          <Route path="/Questions" element={<Questions />} />
         </Route>
       </Routes>
     </Router>

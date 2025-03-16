@@ -1,0 +1,104 @@
+.blog-swiper {
+  padding: 0 !important;
+  margin-bottom: 3rem;
+}
+
+.blog-swiper .swiper-pagination {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding-left: 4rem; /* مساحة للسهم */
+}
+
+.pagination-arrow {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid #BB2632;
+  border-radius: 50%;
+  color: #BB2632;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.pagination-arrow:hover {
+  background: #BB2632;
+  color: white;
+}
+
+.blog-swiper .swiper-pagination-bullet {
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  line-height: 32px;
+  font-size: 14px;
+  color: #666;
+  opacity: 1;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  margin: 0 !important;
+}
+
+.blog-swiper .swiper-pagination-bullet:hover {
+  border-color: #BB2632;
+  color: #BB2632;
+}
+
+.blog-swiper .swiper-pagination-bullet-active {
+  color: #fff;
+  background: #BB2632;
+  border-color: #BB2632;
+}
+
+/* إزالة الأنماط غير المستخدمة */
+.blog-swiper .swiper-button-prev,
+.blog-swiper .swiper-button-next {
+  display: none;
+}
+
+/* تحديث الأنماط الحالية */
+.blog-swiper .swiper-slide {
+  padding: 1rem 0;
+}
+
+/* تحسينات للشاشات المتوسطة والصغيرة */
+@media (max-width: 768px) {
+  .blog-swiper {
+    padding: 0 1rem !important;
+  }
+  
+  .blog-swiper .swiper-pagination {
+    padding-left: 2.5rem;
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .blog-swiper .swiper-pagination {
+    padding-left: 3rem;
+  }
+
+  .pagination-arrow {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .blog-swiper .swiper-pagination-bullet {
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 12px;
+  }
+}

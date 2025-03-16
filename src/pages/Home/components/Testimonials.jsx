@@ -11,6 +11,17 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { MoveLeft, MoveRight } from "lucide-react";
 
+// أنماط CSS للغة العربية
+const comaArabicStyle = {
+  left: '4px',
+  right: 'auto'
+};
+
+// أنماط للشاشات المتوسطة
+const comaArabicMdStyle = {
+  left: '340px'
+};
+
 const testimonials = [
   {
     name: "George Ryner",
@@ -48,6 +59,9 @@ export default function Testimonials() {
     triggerOnce: true,
   });
 
+  // تحديد ما إذا كانت اللغة هي العربية
+  const isRTL = document.documentElement.dir === 'rtl';
+
   return (
     <section
       className={`min-h-screen bg-cover bg-center transition-all duration-1000 p-6 h-[1000px] overflow-x-hidden ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
@@ -56,36 +70,53 @@ export default function Testimonials() {
     >
       <h1 className="text-[#BB2632] text-5xl text-center pt-44 pb-11">Testimonials</h1>
       <div className="relative max-w-[1120px] mx-auto">
-      <Swiper
-  modules={[Navigation, Pagination, Autoplay]}
-  spaceBetween={50}
-  slidesPerView={1}
-  navigation={{ nextEl: '.custom-next', prevEl: '.custom-prev' }}
-  pagination={{ clickable: true, el: '.custom-pagination' }}
-  autoplay={{ delay: 3000 }}
-  className="py-20"
->
-  {testimonials.map((testimonial, index) => (
-    <SwiperSlide key={index}>
-      <div className="w-full md:w-[1120px] h-auto md:h-[425px] mx-auto rounded-xl shadow-lg grid grid-cols-1 md:grid-cols-2 overflow-hidden relative"
-        style={{ backgroundImage: `url(${Testimonialsbg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-        <img src={Coma1} alt="Coma 1" className="absolute right-4 md:right-[340px] top-[130px] md:top-[90px] w-10 h-10 md:w-16 md:h-16" />
-        <div className="p-5 md:p-10 md:pr-28 relative flex flex-col md:flex-row items-center md:items-start">
-          <img src={testimonial.image} alt={testimonial.name} className="w-16 h-16 md:w-20 md:h-20 rounded-full mb-4 md:mb-0 md:mr-5" />
-          <div className="text-center md:text-left">
-            <h2 className="text-[#BB2632] text-2xl md:text-3xl font-bold">{testimonial.name}</h2>
-            <p className="text-gray-600 italic text-sm md:text-base">{testimonial.profession}</p>
-            <p className="text-lg md:text-2xl w-full md:w-[700px] pt-8 md:pt-16 pr-0 md:pr-32 text-center md:text-left">{testimonial.text}</p>
-          </div>
-        </div>
-        <img src={Coma2} alt="Coma 2" className="absolute top-[330px] md:top-[300px] left-4 md:left-5 w-8 h-8 md:w-14 md:h-14  md:[--tw-translate-y-]]" />
-        <div className="pl-0 md:pl-64 flex justify-center items-center mt-8 md:mt-0">
-          <img src={testimonial.logo} alt="Company Logo" className="w-40 md:w-60 pb-10 pt-10" />
-        </div>
-      </div>
-    </SwiperSlide>
-  ))}
-</Swiper>
+      <div dir="ltr">
+        <Swiper
+          modules={[Navigation, Pagination, Autoplay]}
+          spaceBetween={50}
+          slidesPerView={1}
+          navigation={{ nextEl: '.custom-next', prevEl: '.custom-prev' }}
+          pagination={{ clickable: true, el: '.custom-pagination' }}
+          autoplay={{ delay: 3000 }}
+          className="py-20"
+        >
+          {testimonials.map((testimonial, index) => (
+            <SwiperSlide key={index}>
+              <div className="w-full md:w-[1120px] h-auto md:h-[425px] mx-auto rounded-xl shadow-lg grid grid-cols-1 md:grid-cols-2 overflow-hidden relative"
+                style={{ backgroundImage: `url(${Testimonialsbg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                {/* استخدام فئات Tailwind شرطية */}
+                <img 
+                  src={Coma1} 
+                  alt="Coma 1" 
+                  className={`absolute top-[140px] md:top-[100px] w-10 h-10 md:w-16 md:h-16 
+                    ${isRTL ? 'left-[380px] md:left-[660px] ' : 'right-14 md:right-[640px] '}`}
+                />
+                <div className="p-5 md:p-10 md:pr-28 relative flex flex-col md:flex-row items-center md:items-start">
+                  <img src={testimonial.image} alt={testimonial.name} className="w-16 h-16 md:w-20 md:h-20 rounded-full mb-4 md:mb-0 md:mr-5 " />
+                  <div className="text-center md:text-left">
+                    <h2 className="text-[#BB2632] text-2xl md:text-3xl font-bold">{testimonial.name}</h2>
+                    <p className="text-gray-600 italic text-sm md:text-base">{testimonial.profession}</p>
+                    {/* استخدام dir للنص فقط */}
+                    <p 
+                      dir={isRTL ? "rtl" : "ltr"} 
+                      className="text-lg md:text-2xl w-full md:w-[700px] pt-8 md:pt-16 pr-0 md:pr-32 text-center md:text-left"
+                    >
+                      {testimonial.text}
+                    </p>
+                  </div>
+                </div>
+                <img 
+                  src={Coma2} 
+                  alt="Coma 2" 
+                  className="absolute top-[330px] md:top-[300px] left-4 md:left-5 w-8 h-8 md:w-14 md:h-14" 
+                />
+                <div className="pl-0 md:pl-64 flex justify-center items-center mt-8 md:mt-0">
+                  <img src={testimonial.logo} alt="Company Logo" className="w-40 md:w-60 pb-10 pt-14" />
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
         <button className="custom-prev absolute left-[-60px] top-[190px] transform -translate-y-1/2 rounded-full p-3 bg-[#ea3c4b] transition-transform duration-300 ease-in-out hover:scale-110 hidden md:block">
           <MoveLeft className="w-5 h-5 text-white" />
         </button>
@@ -95,6 +126,7 @@ export default function Testimonials() {
         <div className="custom-pagination m-10 [&>.swiper-pagination-bullet]:bg-[#BB2632] [&>.swiper-pagination-bullet]:mx-5 [&>.swiper-pagination-bullet]:shadow-lg [&>.swiper-pagination-bullet]:shadow-[#BB2632]/100 transition-opacity duration-300 hover:opacity-75 text-center pr-24">
         
         </div>
+      </div>
       </div>
     </section>
   );

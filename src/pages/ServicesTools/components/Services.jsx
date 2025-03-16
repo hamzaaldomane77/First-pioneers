@@ -16,21 +16,9 @@ const servicesData = [
     title: "Market Assessment",
     description: "Test the waters before you dive in! Evaluate consumer response to new product ideas using both quantitative and qualitative methods."
   },
-  {
-    id: 2,
-    title: "Market Assessment",
-    description: "Test the waters before you dive in! Evaluate consumer response to new product ideas using both quantitative and qualitative methods."
-  },  
-  {
-    id: 2,
-    title: "Market Assessment",
-    description: "Test the waters before you dive in! Evaluate consumer response to new product ideas using both quantitative and qualitative methods."
-  },    
-  {
-    id: 2,
-    title: "Market Assessment",
-    description: "Test the waters before you dive in! Evaluate consumer response to new product ideas using both quantitative and qualitative methods."
-  },
+ 
+ 
+  
   {
     id: 3,
     title: "Customer Satisfaction Surveys",

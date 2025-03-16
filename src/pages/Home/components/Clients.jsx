@@ -22,6 +22,9 @@ export default function Clients() {
     triggerOnce: true,
   });
 
+  // تحديد ما إذا كانت اللغة هي العربية
+  const isRTL = document.documentElement.dir === 'rtl';
+
   return (
     <section
       className={`min-h-screen bg-cover bg-center transition-all duration-1000 p-6 lg:pl-28 overflow-x-hidden lg:pb-40 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
@@ -29,7 +32,7 @@ export default function Clients() {
       ref={ref}
     >
       <h1 className="text-[#BB2632] text-3xl md:text-5xl text-center pt-20 md:pt-44 pb-6 md:pb-11 lg:pr-5">Our Clients</h1>
-      <p className='text-center text-sm mb-8 md:mb-14 text-[#010203] leading-6 md:leading-8 pb-12 lg:pr-8'>
+      <p className="text-center text-sm mb-8 md:mb-14 text-[#010203] leading-6 md:leading-8 pb-12 lg:pr-8" dir={isRTL ? "rtl" : "ltr"}>
         Here are some of our clients, which we were proud to be able to help them achieve huge progress.
       </p>
 
@@ -38,36 +41,39 @@ export default function Clients() {
         animate={inView ? { opacity: 1 } : {}}
         transition={{ duration: 1, delay: 0.5 }}
       >
-        <Swiper
-          slidesPerView={5}
-          spaceBetween={20}
-          breakpoints={{
-            640: {
-              slidesPerView: 5,
-            },
-            1024: {
-              slidesPerView: 5,
-            },
-          }}
-          autoplay={{
-            delay: 2500,
-            disableOnInteraction: false,
-          }}
-          modules={[Autoplay]}
-          className="mySwiper"
-        >
-          {logos.map((logo, index) => (
-            <SwiperSlide key={index} className="flex justify-center items-center py-5">
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="w-20 h-20 md:w-12 md:h-12 lg:w-64 lg:h-[200px] flex justify-center items-center"
-              >
-                <img src={logo} alt={`Client Logo ${index + 1}`} className="w-full h-full object-contain" />
-              </motion.div>
-            </SwiperSlide>
-          ))}
-        </Swiper>   
+        {/* استبعاد Swiper من تنسيق RTL للحفاظ على نفس التخطيط */}
+        <div dir="ltr">
+          <Swiper
+            slidesPerView={5}
+            spaceBetween={20}
+            breakpoints={{
+              640: {
+                slidesPerView: 5,
+              },
+              1024: {
+                slidesPerView: 5,
+              },
+            }}
+            autoplay={{
+              delay: 2500,
+              disableOnInteraction: false,
+            }}
+            modules={[Autoplay]}
+            className="mySwiper"
+          >
+            {logos.map((logo, index) => (
+              <SwiperSlide key={index} className="flex justify-center items-center py-5">
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="w-20 h-20 md:w-12 md:h-12 lg:w-64 lg:h-[200px] flex justify-center items-center"
+                >
+                  <img src={logo} alt={`Client Logo ${index + 1}`} className="w-full h-full object-contain" />
+                </motion.div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
       </motion.div>
     </section>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
-import Whitebackground from "../../../assets/images/Whitebackground.png";
-import worksecimg from "../../../assets/images/worksecimg.png";
-import { useInView } from 'react-intersection-observer';
+    import Whitebackground from "../../../assets/images/Whitebackground.png";
+    import worksecimg from "../../../assets/images/worksecimg.png";
+    import { useInView } from 'react-intersection-observer';
 
 export default function Worksec() {
 

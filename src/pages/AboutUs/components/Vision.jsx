@@ -47,7 +47,7 @@ export default function Vision() {
           variants={fadeInUp}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          transition={{ delay: 0.6 }} // تأخير الأنيميشن
+          transition={{ delay: 0.6 }} 
         >
           Our Mission
         </motion.h1>
@@ -56,7 +56,7 @@ export default function Vision() {
           variants={fadeInUp}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          transition={{ delay: 0.9 }} // تأخير الأنيميشن
+          transition={{ delay: 0.9 }} 
         >
           We are dedicated to providing cutting-edge, integrated marketing research and studies that drive real results, and by combining creativity, innovation, and strategic expertise, we empower our clients to unlock their full potential, grow their businesses, and achieve their most ambitious marketing goals.
         </motion.p>
