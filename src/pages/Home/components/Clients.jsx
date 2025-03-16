@@ -4,6 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
+import '../../../styles/clients.css';
 
 import { motion } from 'framer-motion';
 
@@ -40,18 +41,33 @@ export default function Clients() {
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: 1 } : {}}
         transition={{ duration: 1, delay: 0.5 }}
+        className="max-w-[95%] mx-auto" 
       >
         {/* استبعاد Swiper من تنسيق RTL للحفاظ على نفس التخطيط */}
         <div dir="ltr">
           <Swiper
             slidesPerView={5}
-            spaceBetween={20}
+            spaceBetween={10}
             breakpoints={{
+              320: {
+                slidesPerView: 2,
+                spaceBetween: 8,
+              },
+              480: {
+                slidesPerView: 3,
+                spaceBetween: 12,
+              },
               640: {
+                slidesPerView: 4,
+                spaceBetween: 15,
+              },
+              768: {
                 slidesPerView: 5,
+                spaceBetween: 18,
               },
               1024: {
                 slidesPerView: 5,
+                spaceBetween: 25,
               },
             }}
             autoplay={{
@@ -59,16 +75,20 @@ export default function Clients() {
               disableOnInteraction: false,
             }}
             modules={[Autoplay]}
-            className="mySwiper"
+            className="clients-swiper px-2 py-4"
           >
             {logos.map((logo, index) => (
               <SwiperSlide key={index} className="flex justify-center items-center py-5">
                 <motion.div
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  className="w-20 h-20 md:w-12 md:h-12 lg:w-64 lg:h-[200px] flex justify-center items-center"
+                  className="logo-container flex justify-center items-center bg-white/80 rounded-lg shadow-sm p-2 mx-1"
                 >
-                  <img src={logo} alt={`Client Logo ${index + 1}`} className="w-full h-full object-contain" />
+                  <img 
+                    src={logo} 
+                    alt={`Client Logo ${index + 1}`} 
+                    className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 object-contain" 
+                  />
                 </motion.div>
               </SwiperSlide>
             ))}

@@ -1,0 +1,63 @@
+/* أنماط لشريط عرض الشعارات */
+.clients-swiper {
+  width: 100%;
+  padding: 1rem 0;
+  overflow: visible !important;
+}
+
+/* تنسيقات حاوية الشعار */
+.logo-container {
+  transition: all 0.3s ease;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* تأثير التحويم على الشعارات */
+.logo-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(187, 38, 50, 0.15);
+  background-color: white;
+}
+
+/* تعديلات للأجهزة المحمولة */
+@media (max-width: 640px) {
+  .clients-swiper {
+    padding: 0.5rem 0;
+  }
+  
+  .logo-container {
+    padding: 8px !important;
+    margin: 0 2px !important;
+  }
+}
+
+/* تعديلات للشاشات المتوسطة */
+@media (min-width: 641px) and (max-width: 768px) {
+  .logo-container {
+    padding: 10px !important;
+  }
+}
+
+/* تأكد من عدم انقطاع العرض */
+.swiper-wrapper {
+  align-items: center;
+}
+
+/* تنسيق الشرائح */
+.swiper-slide {
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* تعديلات لوضع RTL */
+[dir="rtl"] .clients-swiper {
+  direction: ltr; /* يحافظ على اتجاه Swiper من اليسار لليمين */
+} 
