@@ -8,6 +8,7 @@ import Research from "./components/Research";
 import Clients from "./components/Clients";
 import OurPartners from "./components/OurPartners";
 import Transform from "./components/Transform";
+import Agency from "./components/Agency";
 
 
 
@@ -15,7 +16,8 @@ const Home = () => {
     return (
 <>
 <Hero />
-<AboutusHome />
+<AboutusHome /> 
+<Agency />
 <Services />
 <Impact />
 <Testimonials />

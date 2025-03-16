@@ -1,6 +1,7 @@
 /* أنماط لشريط عرض الشعارات */
 .clients-swiper {
-  width: 100%;
+  width: 90%;
+  margin: 0 auto;
   padding: 1rem 0;
   overflow: visible !important;
   position: relative;
@@ -8,36 +9,36 @@
 
 /* تنسيقات حاوية الشعار */
 .logo-container {
-  transition: all 0.3s ease;
-  height: 100%;
-  width: 100%;
+  transition: transform 0.3s ease;
+  border-radius: 0.5rem;
+  padding: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
+  cursor: pointer;
 }
 
 /* تأثير التحويم على الشعارات */
 .logo-container:hover {
-  transform: translateY(-5px);
+  transform: scale(1.05);
 }
 
 /* تعديلات للأجهزة المحمولة */
 @media (max-width: 640px) {
   .clients-swiper {
+    width: 100%;
     padding: 0.5rem 0;
   }
   
   .logo-container {
-    padding: 4px !important;
-    margin: 0 1px !important;
+    padding: 0.5rem;
   }
 }
 
 /* تعديلات للشاشات المتوسطة */
-@media (min-width: 641px) and (max-width: 768px) {
-  .logo-container {
-    padding: 8px !important;
+@media (min-width: 768px) {
+  .clients-swiper {
+    width: 95%;
   }
 }
 
@@ -68,6 +69,58 @@
 }
 
 /* تعديلات لوضع RTL */
-[dir="rtl"] .clients-swiper {
+.rtl .clients-swiper {
   direction: ltr; /* يحافظ على اتجاه Swiper من اليسار لليمين */
+}
+
+/* أنماط قسم الشركاء */
+.partners-swiper {
+  width: 90%;
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+.partner-logo-container {
+  transition: transform 0.3s ease;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+.partner-logo-container:hover {
+  transform: scale(1.05);
+}
+
+/* تأكيد أن الشعارات تظهر في المنتصف في جميع أحجام الشاشات */
+.partners-swiper .swiper-wrapper {
+  align-items: center;
+  justify-content: center;
+}
+
+.partners-swiper .swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto !important;
+}
+
+@media (max-width: 640px) {
+  .partners-swiper {
+    width: 100%;
+    padding: 0.5rem 0;
+  }
+  
+  .partner-logo-container {
+    padding: 0.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .partners-swiper {
+    width: 95%;
+  }
 } 
