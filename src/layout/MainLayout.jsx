@@ -40,7 +40,7 @@ const MainLayout = () => {
             variants={pageVariants}
         >
             <header 
-                className="bg-white shadow-md border-b relative h-[80px]" 
+                className="bg-white shadow-md border-b relative h-[80px] " 
                 style={{ backgroundImage: `url(${header})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
             >
                 <div className="max-w-[1600px] px-4 md:px-16 py-2 flex items-center justify-between relative z-10">
