@@ -3,15 +3,20 @@ import { useState, useEffect } from 'react';
 import header from "../assets/images/header.png";
 import { CustomSvg } from '../components/custom-svg';
 import footerbackground from "../assets/images/footerbackground.png";
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import Language from '../components/Language';
+import LoadingAnimation from '../components/LoadingAnimation';
+import { useLoading } from '../context/LoadingContext';
 import '../styles/rtl.css';
+import '../styles/loading.css';
 
 const MainLayout = () => {
     const { t, i18n } = useTranslation();
     const location = useLocation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const { isGlobalLoading, setGlobalLoading } = useLoading();
 
     const isRTL = i18n.language === 'ar';
 
@@ -19,6 +24,20 @@ const MainLayout = () => {
         setIsMenuOpen(false); 
         document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
     }, [location.pathname, i18n.language]);  
+
+    useEffect(() => {
+        // عرض رسوم التحميل عند تغيير المسار
+        setIsLoading(true);
+        setGlobalLoading(true);
+        
+        // إخفاء رسوم التحميل بعد فترة قصيرة
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+            setGlobalLoading(false);
+        }, 1200);
+        
+        return () => clearTimeout(timer);
+    }, [location.pathname, setGlobalLoading]);
 
     const navLinks = [
         { to: "/", label: t('Home') },
@@ -39,6 +58,10 @@ const MainLayout = () => {
             animate="animate" 
             variants={pageVariants}
         >
+            <AnimatePresence>
+                <LoadingAnimation isLoading={isLoading || isGlobalLoading} />
+            </AnimatePresence>
+            
             <header 
                 className="bg-white shadow-md border-b relative h-[80px] " 
                 style={{ backgroundImage: `url(${header})`, backgroundSize: 'cover', backgroundPosition: 'center' }}

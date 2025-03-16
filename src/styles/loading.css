@@ -1,0 +1,107 @@
+/* أساسيات قالب التحميل */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(5px);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* الدوائر المتحركة */
+.loading-circle {
+  width: 20px;
+  height: 20px;
+  background-color: #BB2632;
+  border-radius: 50%;
+  margin: 0 5px;
+  display: inline-block;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.loading-circle:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-circle:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+/* النبض المتحرك */
+.loading-pulse {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(187, 38, 50, 0.1);
+  position: absolute;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* نص التحميل */
+.loading-text {
+  margin-top: 40px;
+  color: #BB2632;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* الرسوم المتحركة */
+@keyframes bounce {
+  0%, 80%, 100% { 
+    transform: scale(0);
+  } 
+  40% { 
+    transform: scale(1.0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.7;
+  }
+}
+
+/* تعديلات لوضع RTL */
+[dir="rtl"] .loading-text {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* تعديلات متوافقة مع الأجهزة المحمولة */
+@media (max-width: 768px) {
+  .loading-circle {
+    width: 15px;
+    height: 15px;
+  }
+  
+  .loading-pulse {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .loading-text {
+    font-size: 16px;
+    margin-top: 30px;
+  }
+} 
