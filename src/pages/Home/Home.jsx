@@ -1,6 +1,6 @@
 import React from "react";
 import Hero from "./components/Hero";
-import AboutusHome from "./components/aboutusHome";
+import AboutusHome from "./components/AboutusHome";
 import Services from "./components/Services";
 import Impact from "./components/Impact";
 import Testimonials from "./components/Testimonials";
