@@ -1,7 +1,7 @@
 import React from "react";
 import Redbackground from "../../../assets/images/Redbackground.png";
 import { useInView } from "react-intersection-observer";
-import Boxpost from '../../../assets/images/Boxpost.png';
+import Boxpost from '../../../assets/images/BoxPost.png';
 
 const BoxPost = () => {
     const { ref, inView } = useInView({
