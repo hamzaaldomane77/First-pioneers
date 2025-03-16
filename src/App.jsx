@@ -9,9 +9,9 @@ import Research from "./pages/Research/Research";
 import Markets from "./pages/Markets&Resources/Markets";
 import AllBlog from "./pages/Research/AllBlog";
 
-import Content from "./pages/Content/content";
+import Content from "./pages/Content/Content";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
-import Questions from "./pages/Questions/Questions.JSX";
+import Questions from "./pages/Questions/Questions.jsx";
 
 
 export default function App() {
