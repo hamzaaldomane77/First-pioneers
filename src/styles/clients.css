@@ -15,30 +15,22 @@
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 /* تأثير التحويم على الشعارات */
 .logo-container:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 15px -3px rgba(187, 38, 50, 0.15);
-  background-color: white;
 }
 
 /* تعديلات للأجهزة المحمولة */
 @media (max-width: 640px) {
   .clients-swiper {
-    padding: 0.5rem 0 2rem 0;
+    padding: 0.5rem 0;
   }
   
   .logo-container {
     padding: 4px !important;
     margin: 0 1px !important;
-  }
-  
-  .swiper-pagination {
-    bottom: 0 !important;
   }
 }
 
@@ -60,31 +52,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* تنسيق نقاط التنقل */
-.swiper-pagination {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-}
-
-.swiper-pagination-bullet {
-  width: 8px;
-  height: 8px;
-  display: inline-block;
-  border-radius: 50%;
-  background: #ccc;
-  opacity: 0.5;
-  transition: all 0.3s ease;
-  margin: 0 4px;
-}
-
-.swiper-pagination-bullet-active {
-  opacity: 1;
-  background: #BB2632;
-  transform: scale(1.2);
 }
 
 /* تحسينات للشعارات في الشاشات الصغيرة */
