@@ -24,17 +24,17 @@ export default function AboutusHome() {
        
        
 
-        <div className={`w-full md:w-1/2 text-white px-11 transition-all duration-1000 ${inView ? 'translate-x-0 opacity-100' : '-translate-x-40 opacity-0'}`}> 
-          <p className="text-lg leading-8 text-black sm:text-sm md:text-base">
+        <div className={`w-full md:w-1/2 text-white px-11 transition-all duration-1000  py-10 ${inView ? 'translate-x-0 opacity-100' : '-translate-x-40 opacity-0'}`}> 
+          <p className="text-2xl leading-8 text-black">
           First Pioneers Marketing Research with its Arabic official name
 (AL-MOBTAKIRON AL-AWAEL CO. LTD)
 is the only member from Syrian Arab Republic register in ESOMAR World Research
           </p>
         
-          <p className='text-xl font-bold cursor-pointer text-[#BB2632] pt-6 sm:text-base md:text-lg'>
+          <p className='text-xl font-bold cursor-pointer text-[#BB2632] pt-6 sm:text-base md:text-lg py-5'>
           Learn more about our team and expertise
           </p>
-        <button className='bg-red-700 text-white'>Find Us In ESOMAR Directory</button>
+        <button className='bg-red-700 text-white border-2 border-white rounded-full px-8 py-3 text-lg'>Find Us In ESOMAR Directory</button>
         </div>
         <div className="w-full md:w-1/2 flex flex-col items-center justify-center relative">
           
