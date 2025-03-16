@@ -87,7 +87,7 @@ export default function Clients() {
                   <img 
                     src={logo} 
                     alt={`Client Logo ${index + 1}`} 
-                    className="w-10 h-10 sm:w-12 sm:h-12 md:w-20 md:h-20 lg:w-24 lg:h-24 object-contain" 
+                    className="w-24 h-24 sm:w-12 sm:h-12 md:w-20 md:h-20 lg:w-24 lg:h-24 object-contain" 
                   />
                 </motion.div>
               </SwiperSlide>
