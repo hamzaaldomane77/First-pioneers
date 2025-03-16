@@ -3,6 +3,7 @@
   width: 100%;
   padding: 1rem 0;
   overflow: visible !important;
+  position: relative;
 }
 
 /* تنسيقات حاوية الشعار */
@@ -28,19 +29,23 @@
 /* تعديلات للأجهزة المحمولة */
 @media (max-width: 640px) {
   .clients-swiper {
-    padding: 0.5rem 0;
+    padding: 0.5rem 0 2rem 0;
   }
   
   .logo-container {
-    padding: 8px !important;
-    margin: 0 2px !important;
+    padding: 4px !important;
+    margin: 0 1px !important;
+  }
+  
+  .swiper-pagination {
+    bottom: 0 !important;
   }
 }
 
 /* تعديلات للشاشات المتوسطة */
 @media (min-width: 641px) and (max-width: 768px) {
   .logo-container {
-    padding: 10px !important;
+    padding: 8px !important;
   }
 }
 
@@ -55,6 +60,44 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* تنسيق نقاط التنقل */
+.swiper-pagination {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  border-radius: 50%;
+  background: #ccc;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+  margin: 0 4px;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  background: #BB2632;
+  transform: scale(1.2);
+}
+
+/* تحسينات للشعارات في الشاشات الصغيرة */
+@media (max-width: 360px) {
+  .logo-container {
+    padding: 2px !important;
+    margin: 0 !important;
+  }
+  
+  .logo-container img {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 /* تعديلات لوضع RTL */

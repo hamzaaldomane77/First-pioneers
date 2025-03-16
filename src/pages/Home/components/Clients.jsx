@@ -2,19 +2,23 @@ import React from 'react';
 import Redbackground from "../../../assets/images/Redbackground.png";
 import { useInView } from 'react-intersection-observer';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay } from 'swiper/modules';
+import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
+import 'swiper/css/pagination';
 import '../../../styles/clients.css';
 
 import { motion } from 'framer-motion';
 
+// زيادة عدد الشعارات لاختبار التمرير
 const logos = [
   "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
   "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Sass_Logo_Color.svg/1280px-Sass_Logo_Color.svg.png",
   "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/1024px-Tailwind_CSS_Logo.svg.png",
   "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1024px-Unofficial_JavaScript_logo_2.svg.png",
   "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/1024px-HTML5_logo_and_wordmark.svg.png",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/1024px-HTML5_logo_and_wordmark.svg.png", 
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/CSS3_logo.svg/800px-CSS3_logo.svg.png",
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png",
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/1200px-Node.js_logo.svg.png"
 ];
 
 export default function Clients() {
@@ -48,34 +52,40 @@ export default function Clients() {
           <Swiper
             slidesPerView={5}
             spaceBetween={10}
+            pagination={{
+              clickable: true,
+              dynamicBullets: true,
+              bulletClass: 'swiper-pagination-bullet',
+              bulletActiveClass: 'swiper-pagination-bullet-active',
+            }}
             breakpoints={{
               320: {
-                slidesPerView: 2,
-                spaceBetween: 8,
+                slidesPerView: 5,
+                spaceBetween: 5,
               },
               480: {
-                slidesPerView: 3,
-                spaceBetween: 12,
+                slidesPerView: 5,
+                spaceBetween: 8,
               },
               640: {
-                slidesPerView: 4,
-                spaceBetween: 15,
+                slidesPerView: 5,
+                spaceBetween: 10,
               },
               768: {
                 slidesPerView: 5,
-                spaceBetween: 18,
+                spaceBetween: 15,
               },
               1024: {
                 slidesPerView: 5,
-                spaceBetween: 25,
+                spaceBetween: 20,
               },
             }}
             autoplay={{
               delay: 2500,
               disableOnInteraction: false,
             }}
-            modules={[Autoplay]}
-            className="clients-swiper px-2 py-4"
+            modules={[Autoplay, Pagination]}
+            className="clients-swiper px-2 py-4 pb-12"
           >
             {logos.map((logo, index) => (
               <SwiperSlide key={index} className="flex justify-center items-center py-5">
@@ -87,7 +97,7 @@ export default function Clients() {
                   <img 
                     src={logo} 
                     alt={`Client Logo ${index + 1}`} 
-                    className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 object-contain" 
+                    className="w-8 h-8 sm:w-10 sm:h-10 md:w-16 md:h-16 lg:w-20 lg:h-20 object-contain" 
                   />
                 </motion.div>
               </SwiperSlide>
