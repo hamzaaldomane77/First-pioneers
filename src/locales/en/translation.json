@@ -18,5 +18,27 @@
     "address": "📍 8819 Ohio St. South Gate, CA 90280",
     "email_contact": "📧 Ourstudio@hello.com",
     "phone": "📞 +1 386-688-3295"
+  },
+  "coreValues": {
+    "title": "Our Core Values",
+    "description": "At First Pioneers, our values are the foundation of everything we do. They guide our decisions, shape our culture, and drive us to deliver exceptional results for our clients. We believe in the power of data to transform businesses, and we're committed to helping you achieve your goals with integrity, innovation, and excellence.",
+    "values": {
+      "beFirst": {
+        "title": "Be First, Be Bold, Be Unstoppable",
+        "description": "As the first authorised company to deliver cutting-edge market research and marketing services in a ten-tier retailer game (more in 5%), we've redefined what it means to look for possibilities. Our innovative approach ensures we remain the industry leader in delivering exceptional results."
+      },
+      "creativity": {
+        "title": "Creativity That Breaks Barriers",
+        "description": "We don't just think outside the box, we reinvent it. Our team thrives on crafting bold, groundbreaking concepts and pioneering research models that deliver exceptional, game-changing results. When you work with us, you're not just getting insights; you're unlocking a world of possibilities."
+      },
+      "powerfulInfo": {
+        "title": "Powerful Information That Drives Action",
+        "description": "Knowledge is power, and we deliver it in its most potent form. Through a dynamic mix of advanced tools and proven methodologies, we provide actionable, data-driven insights that empower you to tackle challenges head-on and make decisions with confidence. Your success is fueled by our expertise."
+      },
+      "clientCentric": {
+        "title": "Client-Centric to the Core",
+        "description": "Your goals are our mission. At First Pioneers, we don't just serve clients; we partner with them. Our client-first philosophy is woven into everything we do. Going above and beyond isn't just a promise; it's who we are. Your success is our legacy."
+      }
+    }
   }
 } 
