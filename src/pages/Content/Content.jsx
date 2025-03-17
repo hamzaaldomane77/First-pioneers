@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import Contact from "../../assets/images/Contact.png"
+import { useTranslation } from 'react-i18next'
 
 const Content = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -38,17 +40,17 @@ const Content = () => {
           <div className="flex flex-col md:flex-row">
        
             <div className="w-full md:w-2/5 bg-opacity-100 p-6 md:p-10 flex flex-col justify-stretch">
-              <h2 className="text-2xl md:text-3xl font-bold text-red-800">Get In Touch</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-red-800">{t('contactPage.getInTouch')}</h2>
               <p className="text-gray-700 py-4 md:py-6 text-sm md:text-base">
-              We'd love to hear from you! Whether you have a question about our services, need assistance with a project, or just want to learn more about how we can help your business, our team is here to support you.
+                {t('contactPage.description')}
               </p>
               <p className='py-3 md:py-5 text-[13px] md:text-[15px]'>
-                Working Hours
+                {t('contactPage.workingHours')}
                 <br />
-                - Sunday to Thursday: 9:00 AM – 6:00 PM (GMT+3)
+                {t('contactPage.workingDays')}
               </p>
               <p className='text-[12px] md:text-[13px] text-gray-800 py-2 md:py-3 w-full md:w-[450px]'>
-                We strive to respond to all inquiries within 24 hours during working days. If you reach out outside of these hours, we'll get back to you as soon as we're back in the office.
+                {t('contactPage.responseTime')}
               </p>
 
               <div className="space-y-3 md:space-y-4 text-gray-700 mt-2">
@@ -57,25 +59,25 @@ const Content = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  <p className="text-sm md:text-base">8819 Ohio St. South Gate, CA 90280</p>
+                  <p className="text-sm md:text-base">{t('contactPage.address')}</p>
                 </div>
                 <div className="flex items-start">
                   <svg className="h-5 w-5 md:h-6 md:w-6 text-red-800 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
-                  <p className="text-sm md:text-base">Ourstudio@hello.com</p>
+                  <p className="text-sm md:text-base">{t('contactPage.email')}</p>
                 </div>
                 <div className="flex items-start">
                   <svg className="h-5 w-5 md:h-6 md:w-6 text-red-800 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
-                  <p className="text-sm md:text-base">+1 386-688-3295</p>
+                  <p className="text-sm md:text-base">{t('contactPage.phone')}</p>
                 </div>
               </div>
               
               {/* إضافة قسم وسائل التواصل الاجتماعي */}
               <div className="mt-6 md:mt-8">
-                <h3 className="text-lg md:text-xl font-semibold text-red-800 mb-3">Social Media</h3>
+                <h3 className="text-lg md:text-xl font-semibold text-red-800 mb-3">{t('contactPage.socialMedia')}</h3>
                 <div className="flex space-x-4">
                   {/* أيقونة Facebook */}
                   <a href="#" className="text-gray-600 hover:text-red-800 transition-colors">
@@ -103,12 +105,12 @@ const Content = () => {
             <div className="w-full md:w-3/5 p-4 md:p-10">
               <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5 bg-white p-5 md:p-10 border-52 rounded-2xl ">
                 <div>
-                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">{t('contactPage.form.fullName')}</label>
                   <input 
                     type="text" 
                     id="fullName" 
                     name="fullName"
-                    placeholder='Your Full Name'
+                    placeholder={t('contactPage.form.fullNamePlaceholder')}
                     value={formData.fullName}
                     onChange={handleChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-800 bg-white bg-opacity-75"
@@ -117,12 +119,12 @@ const Content = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">{t('contactPage.form.email')}</label>
                   <input 
                     type="email" 
                     id="email" 
                     name="email"
-                    placeholder='Your Email'
+                    placeholder={t('contactPage.form.emailPlaceholder')}
                     value={formData.email}
                     onChange={handleChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-800 bg-white bg-opacity-75"
@@ -131,27 +133,29 @@ const Content = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone Number <span className='text-[10px]'>(optional)</span></label>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                    {t('contactPage.form.phone')} <span className='text-[10px]'>{t('contactPage.form.phoneOptional')}</span>
+                  </label>
                   <input 
                     type="tel" 
                     id="phone" 
                     name="phone"
-                    placeholder='e.g: +963*********(optional)'
+                    placeholder={t('contactPage.form.phonePlaceholder')}
                     value={formData.phone}
                     onChange={handleChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-800 bg-white bg-opacity-75"
                   />
-                  <p className='text-[10px] pt-2 leading-4'>Please add country code to your phone number.</p>
+                  <p className='text-[10px] pt-2 leading-4'>{t('contactPage.form.phoneNote')}</p>
                 </div>
                 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">{t('contactPage.form.message')}</label>
                   <textarea 
                     id="message" 
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    placeholder='Your message'
+                    placeholder={t('contactPage.form.messagePlaceholder')}
                     rows="5" 
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-800 bg-white bg-opacity-70"
                     required
@@ -163,7 +167,7 @@ const Content = () => {
                     type="submit" 
                     className="w-full sm:w-auto px-4 md:px-6 py-2 md:py-3 bg-red-800 text-white font-medium rounded-md hover:bg-red-900 transition-colors duration-300"
                   >
-                    Send Message
+                    {t('contactPage.form.sendMessage')}
                   </button>
                 </div>
               </form>

@@ -40,5 +40,29 @@
         "description": "Your goals are our mission. At First Pioneers, we don't just serve clients; we partner with them. Our client-first philosophy is woven into everything we do. Going above and beyond isn't just a promise; it's who we are. Your success is our legacy."
       }
     }
+  },
+  "contactPage": {
+    "getInTouch": "Get In Touch",
+    "description": "We'd love to hear from you! Whether you have a question about our services, need assistance with a project, or just want to learn more about how we can help your business, our team is here to support you.",
+    "workingHours": "Working Hours",
+    "workingDays": "- Sunday to Thursday: 9:00 AM – 6:00 PM (GMT+3)",
+    "responseTime": "We strive to respond to all inquiries within 24 hours during working days. If you reach out outside of these hours, we'll get back to you as soon as we're back in the office.",
+    "address": "8819 Ohio St. South Gate, CA 90280",
+    "email": "Ourstudio@hello.com",
+    "phone": "+1 386-688-3295",
+    "socialMedia": "Social Media",
+    "form": {
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Your Full Name",
+      "email": "Email Address",
+      "emailPlaceholder": "Your Email",
+      "phone": "Phone Number",
+      "phoneOptional": "(optional)",
+      "phonePlaceholder": "e.g: +963*********(optional)",
+      "phoneNote": "Please add country code to your phone number.",
+      "message": "Message",
+      "messagePlaceholder": "Your message",
+      "sendMessage": "Send Message"
+    }
   }
 } 
