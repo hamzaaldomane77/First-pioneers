@@ -23,7 +23,7 @@ export default function Clients() {
     triggerOnce: true,
   });
 
-  // تحديد ما إذا كانت اللغة هي العربية
+  // تحديد ما إذا كانت اللغة هي العربية باستخدام i18n
   const isRTL = document.documentElement.dir === 'rtl';
 
   return (
@@ -31,9 +31,10 @@ export default function Clients() {
       className={`min-h-screen bg-cover bg-center transition-all duration-1000 p-6 lg:pl-28 overflow-x-hidden lg:pb-40 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
       style={{ backgroundImage: `url(${Redbackground})` }}
       ref={ref}
+      dir={isRTL ? "rtl" : "ltr"}
     >
-      <h1 className="text-[#BB2632] text-3xl md:text-5xl text-center pt-20 md:pt-44 pb-6 md:pb-11 lg:pr-5">Our Clients</h1>
-      <p className="text-center text-sm mb-8 md:mb-14 text-[#010203] leading-6 md:leading-8 pb-12 lg:pr-8" dir={isRTL ? "rtl" : "ltr"}>
+      <h1 className={`text-[#BB2632] text-3xl md:text-5xl text-center pt-20 md:pt-44 pb-6 md:pb-11 lg:pr-5 ${isRTL ? 'font-medium' : ''}`}>Our Clients</h1>
+      <p className={`text-center text-sm mb-8 md:mb-14 text-[#010203] leading-6 md:leading-8 pb-12 lg:pr-8 ${isRTL ? 'leading-relaxed' : ''}`}>
         Here are some of our clients, which we were proud to be able to help them achieve huge progress.
       </p>
 
@@ -43,8 +44,8 @@ export default function Clients() {
         transition={{ duration: 1, delay: 0.5 }}
         className="max-w-[95%] mx-auto" 
       >
-        {/* استبعاد Swiper من تنسيق RTL للحفاظ على نفس التخطيط */}
-        <div dir="ltr">
+        {/* الآن نستخدم اتجاه RTL المناسب للغة العربية */}
+        <div dir={isRTL ? "rtl" : "ltr"}>
           <Swiper
             slidesPerView={5}
             spaceBetween={20}
@@ -76,6 +77,8 @@ export default function Clients() {
             }}
             modules={[Autoplay]}
             className="clients-swiper px-2 py-4"
+            dir={isRTL ? "rtl" : "ltr"}
+            rtl={isRTL}
           >
             {logos.map((logo, index) => (
               <SwiperSlide key={index} className="flex justify-center items-center py-5">
@@ -87,7 +90,7 @@ export default function Clients() {
                   <img 
                     src={logo} 
                     alt={`Client Logo ${index + 1}`} 
-                    className="w-24 h-24 sm:w-12 sm:h-12 md:w-20 md:h-20 lg:w-24 lg:h-24 object-contain" 
+                    className="w-8 h-8 sm:w-12 sm:h-12 md:w-20 md:h-20 lg:w-24 lg:h-24 object-contain" 
                   />
                 </motion.div>
               </SwiperSlide>
