@@ -10,14 +10,14 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { MoveLeft, MoveRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
-// أنماط CSS للغة العربية
 const comaArabicStyle = {
   left: '4px',
   right: 'auto'
 };
 
-// أنماط للشاشات المتوسطة
+
 const comaArabicMdStyle = {
   left: '340px'
 };
@@ -59,8 +59,9 @@ export default function Testimonials() {
     triggerOnce: true,
   });
 
-  // تحديد ما إذا كانت اللغة هي العربية
-  const isRTL = document.documentElement.dir === 'rtl';
+  // استخدام useTranslation للتعرف على اتجاه اللغة
+  const { i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
 
   return (
     <section
@@ -70,37 +71,37 @@ export default function Testimonials() {
     >
       <h1 className="text-[#BB2632] text-5xl text-center pt-44 pb-11">Testimonials</h1>
       <div className="relative max-w-[1120px] mx-auto">
-      <div dir="ltr">
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
           spaceBetween={50}
           slidesPerView={1}
-          navigation={{ nextEl: '.custom-next', prevEl: '.custom-prev' }}
+          navigation={{ 
+            nextEl: '.custom-next', 
+            prevEl: '.custom-prev' 
+          }}
           pagination={{ clickable: true, el: '.custom-pagination' }}
           autoplay={{ delay: 3000 }}
-          className="py-20"
+          rtl={isRTL}
+          className="py-20 testimonials-swiper"
         >
           {testimonials.map((testimonial, index) => (
             <SwiperSlide key={index}>
               <div className="w-full md:w-[1120px] h-auto md:h-[425px] mx-auto rounded-xl shadow-lg grid grid-cols-1 md:grid-cols-2 overflow-y-hidden relative"
                 style={{ backgroundImage: `url(${Testimonialsbg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                {/* استخدام فئات Tailwind شرطية */}
                 <img 
                   src={Coma1} 
                   alt="Coma 1" 
-                  className={`absolute top-[140px] md:top-[140px] w-10 h-10 md:w-16 md:h-16 lg:left-[700px] right-9
-                    ${isRTL ? 'left-[380px] md:left-[660px] ' : 'right-14 md:right-[640px] '}`}
+                  className={`absolute top-[140px] md:top-[140px] w-10 h-10 md:w-16 md:h-16 
+                    ${isRTL 
+                      ? 'right-9 md:right-4 lg:right-[680px]' 
+                      : 'right-9 md:right-4 lg:left-[700px]'}`}
                 />
-                <div className="p-5 md:p-10 md:pr-28 relative flex flex-col md:flex-row items-center md:items-start">
-                  <img src={testimonial.image} alt={testimonial.name} className="w-16 h-16 md:w-20 md:h-20 rounded-full mb-4 md:mb-0 md:mr-5 " />
+                <div className={`p-5 md:p-10 md:pr-28 relative flex flex-col md:flex-row items-center md:items-start`}>
+                  <img src={testimonial.image} alt={testimonial.name} className="w-16 h-16 md:w-20 md:h-20 rounded-full mb-4 md:mb-0 md:mr-5" />
                   <div className="text-center md:text-left">
                     <h2 className="text-[#BB2632] text-2xl md:text-3xl font-bold">{testimonial.name}</h2>
                     <p className="text-gray-600 italic text-sm md:text-base">{testimonial.profession}</p>
-                 
-                    <p 
-                      dir={isRTL ? "rtl" : "ltr"} 
-                      className="text-lg md:text-2xl w-full md:w-[700px] pt-8 md:pt-16 pr-0 md:pr-32 text-center md:text-left"
-                    >
+                    <p className="text-lg md:text-2xl w-full md:w-[700px] pt-8 md:pt-16 md:pr-32 text-center md:text-left">
                       {testimonial.text}
                     </p>
                   </div>
@@ -108,7 +109,8 @@ export default function Testimonials() {
                 <img 
                   src={Coma2} 
                   alt="Coma 2" 
-                  className="absolute top-[350px] md:top-[300px] left-4 md:left-5 w-8 h-8 md:w-14 md:h-14" 
+                  className={`absolute top-[350px] md:top-[300px] w-8 h-8 md:w-14 md:h-14 
+                    ${isRTL ? 'right-4 md:right-5' : 'left-4 md:left-5'}`} 
                 />
                 <div className="pl-0 md:pl-64 flex justify-center items-center mt-8 md:mt-0">
                   <img src={testimonial.logo} alt="Company Logo" className="w-40 md:w-60 pb-10 pt-16" />
@@ -117,16 +119,14 @@ export default function Testimonials() {
             </SwiperSlide>
           ))}
         </Swiper>
-        <button className="custom-prev absolute left-[-60px] top-[190px] transform -translate-y-1/2 rounded-full p-3 bg-[#ea3c4b] transition-transform duration-300 ease-in-out hover:scale-110 hidden md:block">
-          <MoveLeft className="w-5 h-5 text-white" />
+        <button className={`custom-prev absolute ${isRTL ? 'right-[-60px]' : 'left-[-60px]'} top-[190px] transform -translate-y-1/2 rounded-full p-3 bg-[#ea3c4b] transition-transform duration-300 ease-in-out hover:scale-110 hidden md:block`}>
+          {isRTL ? <MoveRight className="w-5 h-5 text-white" /> : <MoveLeft className="w-5 h-5 text-white" />}
         </button>
-        <button className="custom-next absolute right-[-60px] top-[190px] transform -translate-y-1/2 rounded-full p-3 bg-[#dd3d4a] transition-transform duration-300 ease-in-out hover:scale-110 hidden md:block">
-          <MoveRight className="w-5 h-5 text-white" />
+        <button className={`custom-next absolute ${isRTL ? 'left-[-60px]' : 'right-[-60px]'} top-[190px] transform -translate-y-1/2 rounded-full p-3 bg-[#dd3d4a] transition-transform duration-300 ease-in-out hover:scale-110 hidden md:block`}>
+          {isRTL ? <MoveLeft className="w-5 h-5 text-white" /> : <MoveRight className="w-5 h-5 text-white" />}
         </button>
-        <div className="custom-pagination m-10 [&>.swiper-pagination-bullet]:bg-[#BB2632] [&>.swiper-pagination-bullet]:mx-5 [&>.swiper-pagination-bullet]:shadow-lg [&>.swiper-pagination-bullet]:shadow-[#BB2632]/100 transition-opacity duration-300 hover:opacity-75 text-center pr-24">
-        
+        <div className="custom-pagination m-10 [&>.swiper-pagination-bullet]:bg-[#BB2632] [&>.swiper-pagination-bullet]:mx-5 [&>.swiper-pagination-bullet]:shadow-lg [&>.swiper-pagination-bullet]:shadow-[#BB2632]/100 transition-opacity duration-300 hover:opacity-75 text-center">
         </div>
-      </div>
       </div>
     </section>
   );

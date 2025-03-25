@@ -71,7 +71,8 @@
 /* تعديلات لوضع RTL - تحديث للدعم الأفضل */
 [dir="rtl"] .clients-swiper,
 [dir="rtl"] .partners-swiper,
-[dir="rtl"] .markets-swiper {
+[dir="rtl"] .markets-swiper,
+[dir="rtl"] .testimonials-swiper {
   direction: rtl;
 }
 
@@ -201,5 +202,51 @@
 @media (min-width: 768px) {
   .markets-swiper {
     width: 95%;
+  }
+}
+
+/* أنماط قسم الشهادات */
+.testimonials-swiper {
+  width: 100%;
+  margin: 0 auto;
+  overflow: visible !important;
+  position: relative;
+}
+
+/* تصحيح عرض المحتوى في وضع RTL */
+.testimonials-swiper.swiper-rtl .swiper-slide {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+.testimonials-swiper.swiper-rtl .swiper-slide * {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* إصلاح موضع أزرار التنقل في وضع RTL */
+.testimonials-swiper .custom-prev,
+.testimonials-swiper .custom-next {
+  z-index: 10;
+}
+
+/* تصحيح حركة السويبر في وضع RTL */
+.testimonials-swiper.swiper-rtl .swiper-wrapper {
+  direction: rtl;
+}
+
+/* إصلاح موضع نقاط الصفحات */
+.testimonials-swiper .custom-pagination {
+  text-align: center;
+  width: 100%;
+  padding-right: 0 !important;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .testimonials-swiper .swiper-slide-content {
+    padding: 10px;
   }
 } 
