@@ -16,7 +16,7 @@ import ResourcesPage from "./pages/Resources";
 import ResourceDetails from "./pages/Resources/ResourceDetails";
 import { LoadingProvider } from "./context/LoadingContext";
 import Toolsdetils from "./pages/ServicesTools/Toolsdetils.jsx";
-import Servicesdetils from "./pages/ServicesTools/servicesdetils.jsx";
+import Servicesdetils from "./pages/ServicesTools/Servicesdetils.jsx";
 import AllTrends from "./pages/Research/AllTrends.jsx";
 import TrendDetails from "./pages/Research/MarktsDetails.jsx";
 import ReportDetails from "./pages/Research/ReportDetails.jsx";
@@ -43,7 +43,7 @@ export default function App() {
             <Route path="/Blogdetails/:slug" element={<BlogDetails />} />
             <Route path="/resources" element={<ResourcesPage />} />
             <Route path="/resources/:id" element={<ResourceDetails />} />
-            <Route path="/servicesdetils" element={<Servicesdetils />} />
+         
             <Route path="/servicesdetils/:id" element={<Servicesdetils />} />
             <Route path="/all-trends" element={<AllTrends />} />
             <Route path="/trends/:id" element={<TrendDetails />} />
