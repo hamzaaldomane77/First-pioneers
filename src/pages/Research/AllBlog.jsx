@@ -1,385 +1,346 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Select from 'react-select';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Navigation } from 'swiper/modules';
-import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Pagination } from 'swiper/modules';
+import { Search, ArrowRight, ArrowLeft } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { getBlogs, setAPILanguage } from '../../services/api';
+import { Link } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import "./Blog.css"
-// توسيع بيانات المقالات مع المزيد من العلامات والتواريخ
-const blogData = [
-  {
-    id: 1,
-    image: "https://modo3.com/thumbs/fit630x300/38504/1637571438/%D9%85%D8%A7_%D9%87%D9%8A_%D8%A3%D9%86%D9%88%D8%A7%D8%B9_%D8%A7%D9%84%D8%B4%D8%A8%D9%83%D8%A7%D8%AA.jpg",
-    title: "How to Conduct Effective Market Research",
-    tag: "Market Research",
-    tags: ["markets", "research", "business"],
-    date: "2024-03-01",
-    views: 1500,
-    description: "Learn the essential steps and methodologies for conducting effective market research that drives business growth and innovation...",
-  },
-  {
-    id: 2,
-    image: "https://source.unsplash.com/600x400/?marketing",
-    title: "Understanding Consumer Behavior",
-    tag: "Consumers",
-    tags: ["consumers", "social_media", "sales"],
-    date: "2024-02-28",
-    views: 2000,
-    description: "Dive deep into the psychology of consumer behavior and learn how to leverage these insights for your business strategy...",
-  },
-  {
-    id: 3,
-    image: "https://source.unsplash.com/600x400/?social-media",
-    title: "Social Media Marketing Strategies",
-    tag: "Social Media",
-    tags: ["social_media", "marketing", "digital"],
-    date: "2024-02-25",
-    views: 1800,
-    description: "Explore effective social media marketing strategies that can help boost your brand's online presence and engagement...",
-  },
-  {
-    id: 4,
-    image: "https://source.unsplash.com/600x400/?sales",
-    title: "Boosting Sales Through Digital Channels",
-    tag: "Sales",
-    tags: ["sales", "digital", "business"],
-    date: "2024-02-20",
-    views: 2200,
-    description: "Learn how to leverage digital channels to increase your sales and reach a wider audience in today's competitive market...",
-  },
-  {
-    id: 5,
-    image: "https://source.unsplash.com/600x400/?consumer-research",
-    title: "Consumer Research Techniques",
-    tag: "Consumers",
-    tags: ["consumers", "research", "markets"],
-    date: "2024-02-15",
-    views: 1600,
-    description: "Discover modern techniques for conducting consumer research and gathering valuable insights about your target audience...",
-  },
-  {
-    id: 6,
-    image: "https://source.unsplash.com/600x400/?market-analysis",
-    title: "Market Analysis Fundamentals",
-    tag: "Market Research",
-    tags: ["markets", "analysis", "business"],
-    date: "2024-02-10",
-    views: 1900,
-    description: "Master the fundamentals of market analysis and learn how to make data-driven decisions for your business...",
-  },
-  {
-    id: 7,
-    image: "https://source.unsplash.com/600x400/?digital-marketing",
-    title: "Digital Marketing Trends 2024",
-    tag: "Social Media",
-    tags: ["social_media", "digital", "marketing"],
-    date: "2024-02-05",
-    views: 2500,
-    description: "Stay ahead of the curve with the latest digital marketing trends and strategies for 2024...",
-  },
-  {
-    id: 8,
-    image: "https://source.unsplash.com/600x400/?sales-strategy",
-    title: "Sales Strategy Optimization",
-    tag: "Sales",
-    tags: ["sales", "strategy", "business"],
-    date: "2024-02-01",
-    views: 1700,
-    description: "Learn how to optimize your sales strategy and increase conversion rates through proven methodologies...",
-  },
-  {
-    id: 9,
-    image: "https://source.unsplash.com/600x400/?market-trends",
-    title: "Emerging Market Trends",
-    tag: "Market Research",
-    tags: ["markets", "trends", "analysis"],
-    date: "2024-01-28",
-    views: 2100,
-    description: "Explore emerging market trends and learn how to position your business for future success...",
-  },
-  {
-    id: 10,
-    image: "https://source.unsplash.com/600x400/?consumer-behavior",
-    title: "Modern Consumer Behavior Analysis",
-    tag: "Consumers",
-    tags: ["consumers", "behavior", "research"],
-    date: "2024-01-25",
-    views: 1850,
-    description: "Understanding modern consumer behavior patterns and their impact on business strategies...",
-  },
-  {
-    id: 11,
-    image: "https://source.unsplash.com/600x400/?social-strategy",
-    title: "Social Media Success Stories",
-    tag: "Social Media",
-    tags: ["social_media", "success", "case_studies"],
-    date: "2024-01-20",
-    views: 2300,
-    description: "Real-world examples of successful social media marketing campaigns and what we can learn from them...",
-  },
-  {
-    id: 11,
-    image: "https://source.unsplash.com/600x400/?social-strategy",
-    title: "Social Media Success Stories",
-    tag: "Social Media",
-    tags: ["social_media", "success", "case_studies"],
-    date: "2024-01-20",
-    views: 2300,
-    description: "Real-world examples of successful social media marketing campaigns and what we can learn from them...",
-  },
-  {
-    id: 11,
-    image: "https://source.unsplash.com/600x400/?social-strategy",
-    title: "Social Media Success Stories",
-    tag: "Social Media",
-    tags: ["social_media", "success", "case_studies"],
-    date: "2024-01-20",
-    views: 2300,
-    description: "Real-world examples of successful social media marketing campaigns and what we can learn from them...",
-  },
-  {
-    id: 11,
-    image: "https://source.unsplash.com/600x400/?social-strategy",
-    title: "Social Media Success Stories",
-    tag: "Social Media",
-    tags: ["social_media", "success", "case_studies"],
-    date: "2024-01-20",
-    views: 2300,
-    description: "Real-world examples of successful social media marketing campaigns and what we can learn from them...",
-  },
-  {
-    id: 11,
-    image: "https://source.unsplash.com/600x400/?social-strategy",
-    title: "Social Media Success Stories",
-    tag: "Social Media",
-    tags: ["social_media", "success", "case_studies"],
-    date: "2024-01-20",
-    views: 2300,
-    description: "Real-world examples of successful social media marketing campaigns and what we can learn from them...",
-  },
+
+const BlogCard = ({ cover_image, title, categories, first_description, author_name, author_position, slug }) => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   
-  {
-    id: 12,
-    image: "https://source.unsplash.com/600x400/?sales-success",
-    title: "Building a Strong Sales Team",
-    tag: "Sales",
-    tags: ["sales", "team", "management"],
-    date: "2024-01-15",
-    views: 1950,
-    description: "Essential strategies for building and managing a high-performing sales team in today's market...",
-  }
-];
-
-const filterOptions = [
-  { value: 'newest', label: 'Newest First' },
-  { value: 'oldest', label: 'Oldest First' },
-  { value: 'most_read', label: 'Most Read' }
-];
-
-const tagOptions = [
-  { value: 'consumers', label: 'Consumers' },
-  { value: 'markets', label: 'Markets' },
-  { value: 'social_media', label: 'Social Media' },
-  { value: 'sales', label: 'Sales' }
-];
-
-// مكون البطاقة
-const BlogCard = ({ image, title, tag, description }) => (
-  <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-    {/* حاوية الصورة */}
-    <div className="w-full md:w-1/3 h-[200px] md:h-auto">
-      <img 
-        src={image} 
-        alt={title} 
-        className="w-full h-full object-cover"
-      />
-    </div>
-    
-    {/* حاوية المحتوى */}
-    <div className="w-full md:w-2/3 p-6 flex flex-col">
-      <div className="mb-3">
-        <span className="inline-block px-3 py-1 text-xs font-semibold text-[#BB2632] bg-red-50 rounded-full">
-          {tag}
-        </span>
+  return (
+    <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+      <div className="w-full md:w-1/3 h-[200px] md:h-auto">
+        <img 
+          src={cover_image} 
+          alt={title} 
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            e.target.src = t("blog.placeholderImage");
+          }}
+        />
       </div>
-      <h3 className="text-lg font-semibold mb-3 line-clamp-2">{title}</h3>
-      <p className="text-gray-600 text-sm mb-4 line-clamp-3">{description}</p>
-      <button className="mt-auto text-[#BB2632] font-semibold hover:text-red-700 transition-colors duration-300">
-        View Article
-      </button>
+      
+      <div className="w-full md:w-2/3 p-6 flex flex-col">
+        {categories && categories.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-3">
+            {categories.map((category, index) => (
+              <span
+                key={index}
+                className="text-sm text-[#BB2632] font-medium bg-red-50 px-3 py-1 rounded-full"
+              >
+                {category}
+              </span>
+            ))}
+          </div>
+        )}
+        <h3 className="text-lg font-semibold mb-3 line-clamp-2">{title}</h3>
+       
+        <div className="mt-auto flex justify-between items-center ">
+          <div className="text-sm text-gray-500">
+            {author_name && <span className="block pb-2">{author_name}</span>}
+            {author_position && <span className="block text-gray-400">{author_position}</span>}
+         
+
+          {first_description && (
+          <p className="text-gray-600 text-sm mb-4 py-5">
+            {first_description.split(' ').slice(0, 35).join(' ')}
+            {first_description.split(' ').length > 35 ? '...' : ''}
+          </p>
+        )}
+         </div>
+          <Link 
+            to={`/Blogdetails/${slug}`}
+            className="inline-flex items-center text-[#BB2632] font-semibold hover:text-red-700 transition-colors duration-300 pt-32"
+          >
+            {t("blog.viewBlog")}
+            {isRTL ? (
+              <ArrowLeft className="w-4 h-4 mr-2" />
+            ) : (
+              <ArrowRight className="w-4 h-4 ml-2" />
+            )}
+          </Link>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default function AllBlog() {
-  const [dateFilter, setDateFilter] = useState(null);
-  const [selectedTags, setSelectedTags] = useState([]);
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [dateFilter, setDateFilter] = useState({ value: 'newest', label: t('blog.filterOptions.newest') });
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredBlogData, setFilteredBlogData] = useState(blogData);
+  const [currentPage, setCurrentPage] = useState(0);
 
-  // وظيفة التصفية
-  const filterBlogs = () => {
-    let filtered = [...blogData];
+  // استخراج جميع التصنيفات الفريدة
+  const uniqueCategories = useMemo(() => {
+    if (!blogs.length) return [];
+    const categories = new Set();
+    blogs.forEach(blog => {
+      blog.categories.forEach(category => categories.add(category));
+    });
+    return Array.from(categories).map(category => ({
+      value: category,
+      label: category
+    }));
+  }, [blogs]);
 
-  
+  const filterOptions = useMemo(() => [
+    { value: 'newest', label: t('blog.filterOptions.newest') },
+    { value: 'oldest', label: t('blog.filterOptions.oldest') },
+    { value: 'category', label: t('blog.filterOptions.byCategory') }
+  ], [t]);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        // تحديث لغة API قبل جلب البيانات
+        setAPILanguage(i18n.language);
+        const data = await getBlogs();
+        setBlogs(data);
+        setCurrentPage(0); // إعادة تعيين الصفحة الحالية عند تحديث البيانات
+      } catch (err) {
+        console.error('Error fetching blogs:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, [i18n.language]);
+
+  // تحديث تسميات الفلترات عند تغيير اللغة
+  useEffect(() => {
+    setDateFilter(prev => ({
+      ...prev,
+      label: prev.value === 'newest' ? t('blog.filterOptions.newest') : prev.value === 'oldest' ? t('blog.filterOptions.oldest') : t('blog.filterOptions.byCategory')
+    }));
+  }, [t]);
+
+  const filteredBlogs = useMemo(() => {
+    let filtered = [...blogs];
+
+    // تطبيق البحث
     if (searchQuery) {
       filtered = filtered.filter(blog => 
         blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        blog.description.toLowerCase().includes(searchQuery.toLowerCase())
+        blog.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        blog.first_description?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
-
-    if (selectedTags.length > 0) {
+    // تطبيق فلتر التصنيفات
+    if (selectedCategories.length > 0) {
       filtered = filtered.filter(blog => 
-        selectedTags.some(tag => blog.tags.includes(tag.value))
+        selectedCategories.every(cat => 
+          blog.categories.includes(cat.value)
+        )
       );
     }
 
-    
-    if (dateFilter) {
-      switch (dateFilter.value) {
-        case 'newest':
-          filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
-          break;
-        case 'oldest':
-          filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
-          break;
-        case 'most_read':
-          filtered.sort((a, b) => b.views - a.views);
-          break;
-        default:
-          break;
+    // تطبيق الترتيب
+    filtered.sort((a, b) => {
+      if (dateFilter.value === 'newest') {
+        return b.id - a.id;
+      } else if (dateFilter.value === 'oldest') {
+        return a.id - b.id;
+      } else if (dateFilter.value === 'category') {
+        // ترتيب حسب اسم أول تصنيف
+        const categoryA = a.categories[0] || '';
+        const categoryB = b.categories[0] || '';
+        return categoryA.localeCompare(categoryB, i18n.language);
       }
-    }
+      return 0;
+    });
 
-    setFilteredBlogData(filtered);
-  };
+    return filtered;
+  }, [blogs, searchQuery, selectedCategories, dateFilter, i18n.language]);
 
-  
-  useEffect(() => {
-    filterBlogs();
-  }, [dateFilter, selectedTags, searchQuery]);
+  // حساب عدد الصفحات
+  const totalPages = Math.ceil(filteredBlogs.length / 6);
 
-  const customStyles = {
-    control: (base) => ({
-      ...base,
-      borderColor: '#e5e7eb',
-      '&:hover': {
-        borderColor: '#BB2632'
-      }
-    }),
-    option: (base, { isFocused, isSelected }) => ({
-      ...base,
-      backgroundColor: isSelected ? '#BB2632' : isFocused ? 'rgba(187, 38, 50, 0.1)' : null,
-      color: isSelected ? 'white' : '#374151'
-    }),
-    multiValue: (base) => ({
-      ...base,
-      backgroundColor: 'rgba(187, 38, 50, 0.1)'
-    }),
-    multiValueLabel: (base) => ({
-      ...base,
-      color: '#BB2632'
-    }),
-    multiValueRemove: (base) => ({
-      ...base,
-      color: '#BB2632',
-      ':hover': {
-        backgroundColor: '#BB2632',
-        color: 'white'
-      }
-    })
-  };
+  const currentBlogs = filteredBlogs.slice(currentPage * 6, (currentPage + 1) * 6);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#BB2632]"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-red-600">{error}</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-26">
-      <h1 className='text-center text-3xl py-8'>Stay Informed with Our Blog</h1>
+    <div className="max-w-6xl mx-auto px-4 py-12" dir={isRTL ? 'rtl' : 'ltr'}>
+      <h1 className="text-center text-3xl font-bold text-[#BB2632] mb-8">
+        {t('blog.stayInformed')}
+      </h1>
       
-      
-      <div className="bg-white rounded-lg shadow-md px-10  mb-8 ">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-24 relative  z-20">
-          
+      {/* فلترات البحث */}
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="relative">
-            <label className="block text-sm font-medium text-gray-700 mb-2 z-30">
-              Search Articles
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t('blog.searchArticles')}
             </label>
             <div className="relative">
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search..."
-                className="w-full p-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:border-[#BB2632]"
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setCurrentPage(0);
+                }}
+                placeholder={t('blog.searchPlaceholder')}
+                className={`w-full p-2 ${isRTL ? 'pr-4 pl-10' : 'pl-4 pr-10'} border border-gray-300 rounded-md focus:outline-none focus:border-[#BB2632]`}
               />
-              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <Search className={`absolute ${isRTL ? 'left-3' : 'right-3'} top-1/2 transform -translate-y-1/2 text-gray-400`} size={20} />
             </div>
           </div>
 
-        
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Sort By
+              {t('blog.filterOptions.byCategory')}
+            </label>
+            <Select
+              isMulti
+              options={uniqueCategories}
+              value={selectedCategories}
+              onChange={(selected) => {
+                setSelectedCategories(selected);
+                setCurrentPage(0);
+              }}
+             
+              noOptionsMessage={() => t('blog.filterOptions.noOptions')}
+              className={`basic-multi-select ${isRTL ? 'rtl-select' : ''}`}
+              classNamePrefix="select"
+              theme={(theme) => ({
+                ...theme,
+                direction: isRTL ? 'rtl' : 'ltr',
+              })}
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  padding: '2px',
+                  textAlign: isRTL ? 'right' : 'left',
+                }),
+                placeholder: (base) => ({
+                  ...base,
+                  textAlign: isRTL ? 'right' : 'left',
+                  marginLeft: isRTL ? 'auto' : '0',
+                  marginRight: isRTL ? '0' : 'auto',
+                }),
+                option: (base) => ({
+                  ...base,
+                  textAlign: isRTL ? 'right' : 'left',
+                  direction: isRTL ? 'rtl' : 'ltr',
+                }),
+                multiValue: (base) => ({
+                  ...base,
+                  direction: isRTL ? 'rtl' : 'ltr',
+                }),
+              }}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t('blog.sortBy')}
             </label>
             <Select
               options={filterOptions}
               value={dateFilter}
-              onChange={setDateFilter}
-              styles={customStyles}
-              placeholder="Select sorting option..."
-              isClearable
-            />
-          </div>
-
-        
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Filter by Tags
-            </label>
-            <Select
-              options={tagOptions}
-              value={selectedTags}
-              onChange={setSelectedTags}
-              styles={customStyles}
-              placeholder="Select tags..."
-              isMulti
+              onChange={(selected) => {
+                setDateFilter(selected);
+                setCurrentPage(0);
+              }}
+              placeholder={t('blog.filterOptions.selectSorting')}
+              className={`${isRTL ? 'rtl-select' : ''}`}
+              classNamePrefix="select"
+              theme={(theme) => ({
+                ...theme,
+                direction: isRTL ? 'rtl' : 'ltr',
+              })}
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  padding: '2px',
+                  textAlign: isRTL ? 'right' : 'left',
+                }),
+                placeholder: (base) => ({
+                  ...base,
+                  textAlign: isRTL ? 'right' : 'left',
+                  marginLeft: isRTL ? 'auto' : '0',
+                  marginRight: isRTL ? '0' : 'auto',
+                }),
+                option: (base) => ({
+                  ...base,
+                  textAlign: isRTL ? 'right' : 'left',
+                  direction: isRTL ? 'rtl' : 'ltr',
+                }),
+              }}
             />
           </div>
         </div>
       </div>
 
-   
-      {filteredBlogData.length === 0 ? (
+
+      {currentBlogs.length === 0 ? (
         <div className="text-center py-10 text-gray-500">
-          No articles found matching your criteria.
+          {t('blog.noArticles')}
         </div>
       ) : (
-        <div className="relative">
-          <Swiper
-            modules={[Pagination]}
-            pagination={{
-              clickable: true,
-              renderBullet: function (index, className) {
-                return `<span class="${className}">${index + 1}</span>`;
-              },
-            }}
-            slidesPerView={1}
-            spaceBetween={30}
-            className="blog-swiper"
-          >
-            {Array.from({ length: Math.ceil(filteredBlogData.length / 6) }).map((_, pageIndex) => (
-              <SwiperSlide key={pageIndex}>
-                <div className="grid grid-cols-1 gap-y-14">
-                  {filteredBlogData.slice(pageIndex * 6, (pageIndex + 1) * 6).map((blog) => (
-                    <BlogCard key={blog.id} {...blog} />
-                  ))}
-                </div>
-              </SwiperSlide>
+        <>
+          <div className="grid grid-cols-1 gap-6">
+            {currentBlogs.map((blog) => (
+              <BlogCard key={blog.id} {...blog} />
             ))}
-          </Swiper>
-        </div>
+          </div>
+
+          {/* ترقيم الصفحات */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-4 mt-8">
+              <div className="flex items-center gap-2">
+                {Array.from({ length: totalPages }).reverse().map((_, index) => {
+                  const pageNumber = totalPages - index;
+                  return (
+                    <button
+                      key={pageNumber}
+                      onClick={() => setCurrentPage(pageNumber - 1)}
+                      className={`w-10 h-10 rounded-full ${
+                        currentPage === pageNumber - 1
+                          ? 'bg-[#BB2632] text-white'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      } text-center flex items-center justify-center text-sm font-medium transition-colors duration-300`}
+                    >
+                      {pageNumber}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

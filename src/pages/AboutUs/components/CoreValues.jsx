@@ -7,37 +7,41 @@ import Client from "../../../assets/images/Client.png";
 import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
 
+import { useTranslation } from 'react-i18next';
+
 export default function CoreValues() {
   const { ref, inView } = useInView({
     threshold: 0.3,
     triggerOnce: true,
   });
+  
+  const { t } = useTranslation();
 
-  // مصفوفة تحتوي على البيانات الخاصة بكل قسم
+
   const coreValues = [
     {
       id: 1,
       image: befirst,
-      title: "Be First, Be Bold, Be Unstoppable",
-      description: "As the first authorised company to deliver cutting-edge market research and marketing services in a ten-tier retailer game (more in 5%), we’ve redefined what it means to look for possibilities. Our innovative approach ensures we remain the industry leader in delivering exceptional results.",
+      title: t('coreValues.values.beFirst.title'),
+      description: t('coreValues.values.beFirst.description'),
     },
     {
       id: 2,
       image: creativity,
-      title: "Creativity That Breaks Barriers",
-      description: "We don’t just think outside the box, we reinvent it. Our team thrives on crafting bold, groundbreaking concepts and pioneering research models that deliver exceptional, game-changing results. When you work with us, you’re not just getting insights; you’re unlocking a world of possibilities.",
+      title: t('coreValues.values.creativity.title'),
+      description: t('coreValues.values.creativity.description'),
     },
     {
       id: 3,
       image: Powerfulinformation,
-      title: "Powerful Information That Drives Action",
-      description: "Knowledge is power, and we deliver it in its most potent form. Through a dynamic mix of advanced tools and proven methodologies, we provide actionable, data-driven insights that empower you to tackle challenges head-on and make decisions with confidence. Your success is fueled by our expertise.",
+      title: t('coreValues.values.powerfulInfo.title'),
+      description: t('coreValues.values.powerfulInfo.description'),
     },
     {
       id: 4,
       image: Client,
-      title: "Client-Centric to the Core",
-      description: "Your goals are our mission. At First Pioneers, we don’t just serve clients; we partner with them. Our client-first philosophy is woven into everything we do. Going above and beyond isn’t just a promise; it’s who we are. Your success is our legacy.",
+      title: t('coreValues.values.clientCentric.title'),
+      description: t('coreValues.values.clientCentric.description'),
     },
   ];
 
@@ -49,10 +53,10 @@ export default function CoreValues() {
     >
       <div className="text-center">
         <h1 className="text-[#BB2632] text-center pt-32 pb-12 text-5xl md:text-4xl sm:text-3xl">
-          Our Core Values
+          {t('coreValues.title')}
         </h1>
         <p className="text-black px-6 lg:px-64">
-          At First Pioneers, our values are the foundation of everything we do. They guide our decisions, shape our culture, and drive us to deliver exceptional results for our clients. We believe in the power of data to transform businesses, and we’re committed to helping you achieve your goals with integrity, innovation, and excellence.
+          {t('coreValues.description')}
         </p>
       </div>
 

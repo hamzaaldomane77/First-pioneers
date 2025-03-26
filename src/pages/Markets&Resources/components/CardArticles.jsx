@@ -52,7 +52,7 @@ export default function CardArticles() {
                             <p className="text-sm text-[#333333] my-4">{service.description}</p>
                             <span className="text-[#BB2632] font-semibold relative inline-block pb-4  pr-6 pt-4 cursor-pointer">
                                 View Article
-                                <span className="absolute left-0 right-0 bottom-4 w-0 h-[2px] bg-[#BB2632] transition-all duration-500 group-hover:w-[95px]"></span>
+                                
                             </span>
                         </div>
                     </Link>

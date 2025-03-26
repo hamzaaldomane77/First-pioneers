@@ -4,7 +4,7 @@ import Usage from './components/Usage'
 import Worksec from './components/worksec'
 import WillGet from './components/WillGet'
 
-const Tools = () => {
+const Toolsdetils = () => {
   return (
     
     <>
@@ -16,4 +16,4 @@ const Tools = () => {
   )
 }
 
-export default Tools
+export default Toolsdetils

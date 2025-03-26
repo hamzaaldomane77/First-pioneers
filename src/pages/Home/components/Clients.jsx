@@ -1,30 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Redbackground from "../../../assets/images/Redbackground.png";
 import { useInView } from 'react-intersection-observer';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
+import { useTranslation } from 'react-i18next';
+import { getClients, setAPILanguage } from '../../../services/api';
 import 'swiper/css';
-import '../../../styles/clients.css';
-
-import { motion } from 'framer-motion';
-
-// تقليل عدد الشعارات إلى خمسة فقط
-const logos = [
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Sass_Logo_Color.svg/1280px-Sass_Logo_Color.svg.png",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/1024px-Tailwind_CSS_Logo.svg.png",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1024px-Unofficial_JavaScript_logo_2.svg.png",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/1024px-HTML5_logo_and_wordmark.svg.png"
-];
 
 export default function Clients() {
+  const [clientsData, setClientsData] = useState({
+    description: '',
+    images: []
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
+
   const { ref, inView } = useInView({
     threshold: 0.3,
     triggerOnce: true,
   });
 
-  // تحديد ما إذا كانت اللغة هي العربية باستخدام i18n
-  const isRTL = document.documentElement.dir === 'rtl';
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
+
+  useEffect(() => {
+    const fetchClientsData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        setAPILanguage(i18n.language);
+        
+        console.log('Fetching clients data (attempt', retryCount + 1, ')...');
+        const data = await getClients();
+        console.log('Received clients data:', data);
+        
+        setClientsData(data);
+        setRetryCount(0);
+      } catch (error) {
+        console.error('Error in Clients component:', error);
+        setError(error.message || t('common.error', 'Failed to load content'));
+        
+        if (retryCount < 3) {
+          console.log('Retrying in 2 seconds...');
+          setTimeout(() => {
+            setRetryCount(prev => prev + 1);
+          }, 2000);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchClientsData();
+  }, [i18n.language, retryCount, t]);
 
   return (
     <section
@@ -33,71 +62,76 @@ export default function Clients() {
       ref={ref}
       dir={isRTL ? "rtl" : "ltr"}
     >
-      <h1 className={`text-[#BB2632] text-3xl md:text-5xl text-center pt-20 md:pt-44 pb-6 md:pb-11 lg:pr-5 ${isRTL ? 'font-medium' : ''}`}>Our Clients</h1>
-      <p className={`text-center text-sm mb-8 md:mb-14 text-[#010203] leading-6 md:leading-8 pb-12 lg:pr-8 ${isRTL ? 'leading-relaxed' : ''}`}>
-        Here are some of our clients, which we were proud to be able to help them achieve huge progress.
-      </p>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 1, delay: 0.5 }}
-        className="max-w-[95%] mx-auto" 
-      >
-        {/* الآن نستخدم اتجاه RTL المناسب للغة العربية */}
-        <div dir={isRTL ? "rtl" : "ltr"}>
-          <Swiper
-            slidesPerView={5}
-            spaceBetween={20}
-            breakpoints={{
-              320: {
-                slidesPerView: 5,
-                spaceBetween: 10,
-              },
-              480: {
-                slidesPerView: 5,
-                spaceBetween: 15,
-              },
-              640: {
-                slidesPerView: 5,
-                spaceBetween: 20,
-              },
-              768: {
-                slidesPerView: 5,
-                spaceBetween: 25,
-              },
-              1024: {
-                slidesPerView: 5,
-                spaceBetween: 30,
-              },
-            }}
-            autoplay={{
-              delay: 2500,
-              disableOnInteraction: false,
-            }}
-            modules={[Autoplay]}
-            className="clients-swiper px-2 py-4"
-            dir={isRTL ? "rtl" : "ltr"}
-            rtl={isRTL}
-          >
-            {logos.map((logo, index) => (
-              <SwiperSlide key={index} className="flex justify-center items-center py-5">
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="logo-container flex justify-center items-center p-2 mx-1"
-                >
-                  <img 
-                    src={logo} 
-                    alt={`Client Logo ${index + 1}`} 
-                    className="w-8 h-8 sm:w-12 sm:h-12 md:w-20 md:h-20 lg:w-24 lg:h-24 object-contain" 
-                  />
-                </motion.div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+      <h1 className={`text-[#BB2632] text-3xl md:text-5xl text-center pt-20 md:pt-44 pb-6 md:pb-11 lg:pr-5 ${isRTL ? 'font-medium' : ''}`}>
+        {isRTL ? 'عملاؤنا' : 'Our Clients'}
+      </h1>
+      
+      {error ? (
+        <div className="bg-red-500 bg-opacity-75 p-4 rounded-lg mx-auto max-w-2xl mb-8">
+          <p className="text-white text-center">{error}</p>
+          {retryCount >= 3 && (
+            <p className="text-white mt-2 text-sm text-center">
+              {t('common.maxRetries', 'Maximum retry attempts reached')}
+            </p>
+          )}
         </div>
-      </motion.div>
+      ) : (
+        <div 
+          className={`text-center text-sm mb-8 md:mb-14 text-[#010203] leading-6 md:leading-8 pb-12 lg:pr-8 ${isRTL ? 'leading-relaxed' : ''} ${loading ? 'animate-pulse' : ''}`}
+          dangerouslySetInnerHTML={{ 
+            __html: loading ? t('loading', 'Loading...') : clientsData.description 
+          }}
+        />
+      )}
+
+      <div className="max-w-[95%] mx-auto">
+        <Swiper
+          slidesPerView={5}
+          spaceBetween={20}
+          breakpoints={{
+            320: {
+              slidesPerView: 5,
+              spaceBetween: 10,
+            },
+            480: {
+              slidesPerView: 5,
+              spaceBetween: 15,
+            },
+            640: {
+              slidesPerView: 4,
+              spaceBetween: 20,
+            },
+            768: {
+              slidesPerView: 5,
+              spaceBetween: 25,
+            },
+            1024: {
+              slidesPerView: 5,
+              spaceBetween: 30,
+            },
+          }}
+          autoplay={{
+            delay: 2500,
+            disableOnInteraction: false,
+          }}
+          modules={[Autoplay]}
+          className="clients-swiper px-2 py-4"
+          dir={isRTL ? "rtl" : "ltr"}
+          rtl={isRTL}
+        >
+          {clientsData.images.map((image) => (
+            <SwiperSlide key={image.id} className="flex justify-center items-center py-5">
+              <div className="logo-container flex justify-center items-center p-2 mx-1">
+                <img 
+                  src={image.url} 
+                  alt={t('clients.logo_alt', 'Client Logo')}
+                  className="w-9 h-9 sm:w-12 sm:h-12 md:w-20 md:h-20 lg:w-24 lg:h-24 object-contain" 
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
     </section>
   );
 }

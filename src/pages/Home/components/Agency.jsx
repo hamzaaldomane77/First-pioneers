@@ -3,6 +3,7 @@ import Whitebackground from "../../../assets/images/Whitebackground.png"
 import Agency from "../../../assets/images/Agency.png"
 
 import { useInView } from 'react-intersection-observer'
+import { Link } from 'react-router-dom';
 
 export default function AboutusHome() {
 
@@ -34,7 +35,7 @@ is the only member from Syrian Arab Republic register in ESOMAR World Research
           <p className='text-xl font-bold cursor-pointer text-[#BB2632] pt-6 sm:text-base md:text-lg py-5'>
           Learn more about our team and expertise
           </p>
-        <button className='bg-red-700 text-white border-2 border-white rounded-full px-8 py-3 text-lg'>Find Us In ESOMAR Directory</button>
+        <Link to="https://directory.esomar.org/"><button className='bg-red-700 text-white border-2 border-white rounded-full px-8 py-3 text-lg'>Find Us In ESOMAR Directory</button></Link>
         </div>
         <div className="w-full md:w-1/2 flex flex-col items-center justify-center relative">
           

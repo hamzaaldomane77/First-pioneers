@@ -5,17 +5,17 @@
   "Research & Insights": "Research & Insights",
   "Contact Us": "Contact Us",
   "search": {
-    "placeholder": "Search text"
+    "placeholder": "Search here"
   },
   "footer": {
-    "newsletter": "Join Our Newsletter Box",
+    "newsletter": "Subscribe to our newsletter",
     "subscribe": "Subscribe",
-    "email": "Enter Your Email",
+    "email": "Enter your email",
     "privacy": "Privacy Policy",
     "terms": "Terms & Conditions",
-    "faq": "FAQs",
-    "copyright": "Copyright preserved for First Pioneers",
-    "address": "📍 8819 Ohio St. South Gate, CA 90280",
+    "faq": "FAQ",
+    "copyright": "All rights reserved First Pioneers",
+    "address": "📍 8819 Ohio St. South Gate, California 90280",
     "email_contact": "📧 Ourstudio@hello.com",
     "phone": "📞 +1 386-688-3295"
   },
@@ -24,45 +24,94 @@
     "description": "At First Pioneers, our values are the foundation of everything we do. They guide our decisions, shape our culture, and drive us to deliver exceptional results for our clients. We believe in the power of data to transform businesses, and we're committed to helping you achieve your goals with integrity, innovation, and excellence.",
     "values": {
       "beFirst": {
-        "title": "Be First, Be Bold, Be Unstoppable",
-        "description": "As the first authorised company to deliver cutting-edge market research and marketing services in a ten-tier retailer game (more in 5%), we've redefined what it means to look for possibilities. Our innovative approach ensures we remain the industry leader in delivering exceptional results."
+        "title": "Be First, Be Bold, Be Unbeatable",
+        "description": "As the first certified company to deliver advanced market research and marketing services in a ten-tiered retail game (over 5%), we've redefined what it means to explore possibilities. Our innovative approach ensures we remain at the forefront of the industry in delivering exceptional results."
       },
       "creativity": {
-        "title": "Creativity That Breaks Barriers",
-        "description": "We don't just think outside the box, we reinvent it. Our team thrives on crafting bold, groundbreaking concepts and pioneering research models that deliver exceptional, game-changing results. When you work with us, you're not just getting insights; you're unlocking a world of possibilities."
+        "title": "Creativity that Breaks Barriers",
+        "description": "We don't just think outside the box; we reinvent it. Our team thrives on crafting bold, pioneering concepts and innovative research models that deliver exceptional, game-changing results. When you work with us, you don't just get insights; you unlock a world of possibilities."
       },
       "powerfulInfo": {
-        "title": "Powerful Information That Drives Action",
-        "description": "Knowledge is power, and we deliver it in its most potent form. Through a dynamic mix of advanced tools and proven methodologies, we provide actionable, data-driven insights that empower you to tackle challenges head-on and make decisions with confidence. Your success is fueled by our expertise."
+        "title": "Powerful Information that Drives Action",
+        "description": "Knowledge is power, and we deliver it in its most potent form. Through a dynamic blend of advanced tools and proven methodologies, we provide actionable, data-driven insights that empower you to face challenges with confidence and make decisions with certainty. Your success is powered by our expertise."
       },
       "clientCentric": {
-        "title": "Client-Centric to the Core",
-        "description": "Your goals are our mission. At First Pioneers, we don't just serve clients; we partner with them. Our client-first philosophy is woven into everything we do. Going above and beyond isn't just a promise; it's who we are. Your success is our legacy."
+        "title": "Client-Centricity at Our Core",
+        "description": "Your goals are our mission. At First Pioneers, we don't just serve clients; we partner with them. Our client-first philosophy is embedded in everything we do. Exceeding expectations isn't just a promise; it's who we are. Your success is our legacy."
       }
     }
   },
   "contactPage": {
-    "getInTouch": "Get In Touch",
-    "description": "We'd love to hear from you! Whether you have a question about our services, need assistance with a project, or just want to learn more about how we can help your business, our team is here to support you.",
+    "getInTouch": "Get in Touch",
+    "description": "We'd love to hear from you! Whether you have a question about our services, need help with a project, or just want to learn more about how we can help your business, our team is here to support you.",
     "workingHours": "Working Hours",
-    "workingDays": "- Sunday to Thursday: 9:00 AM – 6:00 PM (GMT+3)",
-    "responseTime": "We strive to respond to all inquiries within 24 hours during working days. If you reach out outside of these hours, we'll get back to you as soon as we're back in the office.",
-    "address": "8819 Ohio St. South Gate, CA 90280",
+    "workingDays": "- Sunday to Thursday: 9:00 AM - 6:00 PM (GMT+3)",
+    "responseTime": "We strive to respond to all inquiries within 24 hours during business days. If you contact us outside of these hours, we'll get back to you as soon as we return to the office.",
+    "address": "8819 Ohio St. South Gate, California 90280",
     "email": "Ourstudio@hello.com",
     "phone": "+1 386-688-3295",
     "socialMedia": "Social Media",
     "form": {
       "fullName": "Full Name",
-      "fullNamePlaceholder": "Your Full Name",
-      "email": "Email Address",
-      "emailPlaceholder": "Your Email",
+      "fullNamePlaceholder": "Your full name",
+      "email": "Email",
+      "emailPlaceholder": "Your email",
       "phone": "Phone Number",
-      "phoneOptional": "(optional)",
-      "phonePlaceholder": "e.g: +963*********(optional)",
-      "phoneNote": "Please add country code to your phone number.",
+      "phoneOptional": "(Optional)",
+      "phonePlaceholder": "e.g., +1***********(Optional)",
+      "phoneNote": "Please add your country code to your phone number.",
       "message": "Message",
       "messagePlaceholder": "Your message",
       "sendMessage": "Send Message"
     }
+  },
+  "markets": {
+    "title": "Words on Markets",
+    "viewArticle": "View Article",
+    "viewAllMarkets": "View All Markets",
+    "services": {
+      "feasibilityStudies": {
+        "title": "Feasibility Studies",
+        "description": "Make smarter decisions! Analyze risks and potential outcomes to assess the viability of your projects so you can invest with confidence."
+      },
+      "marketAssessment": {
+        "title": "Market Assessment",
+        "description": "Test the waters before you dive in! Evaluate consumer response to new product ideas using both quantitative and qualitative methods."
+      },
+      "customerSatisfaction": {
+        "title": "Customer Satisfaction Surveys",
+        "description": "Gain critical insights into satisfaction levels to improve service quality and boost business performance."
+      }
+    }
+  },
+  "blog": {
+    "stayInformed": "Stay Informed with Our Blog",
+    "searchArticles": "Search Articles",
+    "searchPlaceholder": "Search for an article...",
+    "sortBy": "Sort By",
+    "selectSorting": "Select sorting method",
+    "noArticles": "No articles found",
+    "viewBlog": "View Blog",
+    "filterOptions": {
+      "newest": "Newest First",
+      "oldest": "Oldest First",
+      "byCategory": "By Category",
+      "viewAllBlogs": "View All Blogs"
+    },
+    "pagination": {
+      "page": "Page",
+      "of": "of"
+    }
+  },
+  "vision": {
+    "title": "Our Vision",
+    "defaultText": "To become the MENA region's most innovative and trusted leader in market research and studies, setting new standards of excellence and reliability."
+  },
+  "mission": {
+    "title": "Our Mission",
+    "defaultText": "We are dedicated to providing cutting-edge, integrated marketing research and studies that drive real results, empowering our clients to achieve their goals."
+  },
+  "common": {
+    "error": "Error loading content"
   }
 } 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Redbackground from "../../../assets/images/Redbackground.png";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -8,37 +8,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { MoveLeft, MoveRight } from "lucide-react";
-
-const testimonials = [
-  {
-    name: "George Ryner",
-    profession: "Business man",
-    text: "It was really great doing my house with you guys !!!!!! you really are PROFESSIONAL.",
-    logo: "https://casamedia.com/wp-content/uploads/2023/04/adidas-1024x683.png",
-    image: "https://randomuser.me/api/portraits/men/32.jpg"
-  },
-  {
-    name: "Maria Johnson",
-    profession: "CEO Company",
-    text: "Excellent service and very professional team. Highly recommended for anyone looking for quality services!Excellent service and very professional team. Highly recommended for anyone looking for quality services!",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/1200px-Logo_NIKE.svg.png",
-    image: "https://randomuser.me/api/portraits/women/44.jpg"
-  },
-  {
-    name: "Maria Johnson",
-    profession: "CEO Company",
-    text: "Excellent service and very professional team. Highly recommended for anyone looking for quality services!Excellent service and very professional team. Highly recommended for anyone looking for quality services!",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/1200px-Logo_NIKE.svg.png",
-    image: "https://randomuser.me/api/portraits/women/44.jpg"
-  },
-  {
-    name: "Ahmed Ali",
-    profession: "Project Manager",
-    text: "A very satisfying experience! The team was cooperative and attentive to all our needs.",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/1200px-Logo_NIKE.svg.png",
-    image: "https://randomuser.me/api/portraits/men/45.jpg"
-  }
-];
+import { useTranslation } from 'react-i18next';
+import { getTrendsInMarkets, setAPILanguage } from '../../../services/api';
 
 export default function Testimonials() {
   const { ref, inView } = useInView({
@@ -46,13 +17,78 @@ export default function Testimonials() {
     triggerOnce: true,
   });
 
+  const [trendsInMarkets, setTrendsInMarkets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
+
+  useEffect(() => {
+    const fetchTrendsInMarkets = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        setAPILanguage(i18n.language);
+        const data = await getTrendsInMarkets();
+        setTrendsInMarkets(data);
+      } catch (err) {
+        console.error('Error fetching trends in markets:', err);
+        setError(err.message || (isRTL ? 'فشل تحميل المحتوى' : 'Failed to load content'));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTrendsInMarkets();
+  }, [i18n.language, isRTL]);
+
+  if (loading) {
+    return (
+      <section
+        className="min-h-screen bg-cover bg-center flex items-center justify-center"
+        style={{ backgroundImage: `url(${Redbackground})` }}
+      >
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#BB2632]"></div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section
+        className="min-h-screen bg-cover bg-center flex items-center justify-center"
+        style={{ backgroundImage: `url(${Redbackground})` }}
+      >
+        <div className="bg-white bg-opacity-75 p-4 rounded-lg">
+          <p className="text-red-600">{error}</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (trendsInMarkets.length === 0) {
+    return (
+      <section
+        className="min-h-screen bg-cover bg-center flex items-center justify-center"
+        style={{ backgroundImage: `url(${Redbackground})` }}
+      >
+        <div className="bg-white bg-opacity-75 p-4 rounded-lg">
+          <p className="text-gray-600">{isRTL ? 'لا توجد اتجاهات متاحة' : 'No Trends In Markets available'}</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
       <section
         className={`min-h-screen bg-cover bg-center transition-all duration-1000 p-6 h-[1000px] overflow-hidden ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
         style={{ backgroundImage: `url(${Redbackground})` }}
         ref={ref}
+        dir={isRTL ? 'rtl' : 'ltr'}
       >
-        <h1 className="text-[#BB2632] text-5xl text-center pt-32 pb-11">Trends In Markets</h1>
+        <h1 className={`text-[#BB2632] text-5xl text-center pt-32 pb-11 ${isRTL ? 'font-medium' : ''}`}>
+          {isRTL ? 'الإتجاهات في الأسواق'  : 'Trends In Markets'}
+        </h1>
       <div className="relative max-w-[1120px] mx-auto">
         <Swiper
           spaceBetween={20}
@@ -77,13 +113,18 @@ export default function Testimonials() {
           modules={[Navigation, Pagination, Autoplay]}
           className="flex justify-center"
         >
-          {testimonials.map((testimonial, index) => (
+          {trendsInMarkets.map((item, index) => (
             <SwiperSlide key={index} className="flex justify-center w-[500px] py-10">
               <div className="w-full max-w-[550px] p-5 flex flex-col items-center text-center">
-                <img src={testimonial.image} alt={testimonial.name} className="w-[605px] h-[350px] mb-4 rounded-xl" />
-                <h2 className="text-[#BB2632] text-xl font-bold">{testimonial.name}</h2>
-                <p className="text-gray-600 italic text-sm">{testimonial.profession}</p>
-                <p className="text-gray-800 text-base mt-4">{testimonial.text}</p>
+                {item.image && (
+                  <img 
+                    src={item.image} 
+                    alt={item.title} 
+                    className="w-[605px] h-[350px] mb-4 rounded-xl object-cover" 
+                  />
+                )}
+                <h2 className="text-[#BB2632] text-xl font-bold">{item.title}</h2>
+                <p className="text-gray-800 text-base mt-4">{item.description}</p>
               </div>
             </SwiperSlide>
           ))}

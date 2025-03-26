@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getWordsInMarkets, setAPILanguage } from '../../../services/api';
 
-export default function Markets() {
+export default function Words() {
     const [words, setWords] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -18,7 +18,6 @@ export default function Markets() {
     
     const { t, i18n } = useTranslation();
     const isRTL = i18n.language === 'ar';
-    
     
     const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
 
@@ -32,15 +31,15 @@ export default function Markets() {
                 const data = await getWordsInMarkets();
                 setWords(data);
             } catch (error) {
-                console.error('Error in Markets component:', error);
-                setError(error.message || t('common.error', isRTL ? 'فشل تحميل المحتوى' : 'Failed to load content'));
+                console.error('Error in Words component:', error);
+                setError(error.message || (isRTL ? 'فشل تحميل المحتوى' : 'Failed to load content'));
             } finally {
                 setLoading(false);
             }
         };
 
         fetchWords();
-    }, [i18n.language, t]);
+    }, [i18n.language, isRTL]);
 
     if (loading) {
         return (
@@ -99,7 +98,7 @@ export default function Markets() {
                         <div key={word.id} className="flex justify-center">
                             <Link 
                                 to={`/words/${word.id}`} 
-                                className="overflow-hidden shadow-lg rounded-lg transition-all duration-500 hover:scale-105 cursor-pointer group block h-full bg-white max-w-4xl"
+                                className="overflow-hidden shadow-lg rounded-lg transition-all duration-500 hover:scale-105 cursor-pointer group block h-full bg-white max-w-sm"
                             >
                                 <div className="relative">
                                     {word.image && <img src={word.image} alt={word.title} className="w-full h-60 object-cover transition-transform duration-500 group-hover:scale-110" />}
@@ -126,4 +125,4 @@ export default function Markets() {
             </div>
         </section>
     );
-}
+} 

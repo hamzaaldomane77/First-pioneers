@@ -4,7 +4,7 @@ import Vision from './components/Vision'
 import CoreValues from './components/CoreValues'
 import OurPartners from '../Home/components/OurPartners'
 import CardTeam from './components/CardTeam'
-
+  import Agency from '../Home/components/Agency'
 
 const Abouts = () => {
   return (
@@ -12,8 +12,10 @@ const Abouts = () => {
    <Hero/>
    <Vision />
    <CoreValues />
+   <Agency />
    <OurPartners />
    <CardTeam />
+   
    </>
   )
 }

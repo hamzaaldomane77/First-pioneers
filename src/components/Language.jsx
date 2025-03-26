@@ -1,6 +1,8 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomSvg } from './custom-svg';
 import { useEffect } from 'react';
+import { setAPILanguage } from '../services/api';
 
 export default function Language() {
   const { i18n } = useTranslation();
@@ -11,8 +13,9 @@ export default function Language() {
   }, [i18n.language]);
 
   const toggleLanguage = () => {
-    const newLang = i18n.language === 'ar' ? 'en' : 'ar';
+    const newLang = i18n.language === 'en' ? 'ar' : 'en';
     i18n.changeLanguage(newLang);
+    setAPILanguage(newLang); // تحديث لغة API
     
     // تحديث اتجاه الصفحة
     document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';

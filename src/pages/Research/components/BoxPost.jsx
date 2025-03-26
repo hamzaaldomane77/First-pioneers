@@ -19,8 +19,8 @@ const BoxPost = () => {
         >
             <div className="container mx-auto px-4 flex items-center justify-center h-full py-8">
                 <div className="max-w-5xl w-full bg-white rounded-xl shadow-lg overflow-hidden">
-                    <div className="flex flex-col md:flex-row"> {/* Removed fixed height, added flex-col for mobile */}
-                        {/* Image Side - Will appear at top on mobile */}
+                    <div className="flex flex-col md:flex-row"> 
+                     
                         <div className="w-full md:w-1/3 h-[200px] md:h-[300px]"> {/* Added specific heights for mobile/desktop */}
                             <div className="h-full relative">
                                 <img
