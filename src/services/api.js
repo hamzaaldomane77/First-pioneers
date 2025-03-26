@@ -4,7 +4,7 @@ import axios from 'axios';
 const isClient = typeof window !== 'undefined';
 const API_URL = isClient && window.location.hostname === 'localhost' 
   ? 'http://localhost:5173' 
-  : 'https://first.pioneers.admin.techpundits.net';
+  : 'http://first.pioneers.admin.techpundits.net';
 
 // إنشاء متغير عام للغة الحالية مع التحقق من وجود localStorage
 let currentLanguage = 'en';
@@ -130,8 +130,8 @@ export const fixImageUrl = (url) => {
     return url;
   }
   
-  // استخدام نفس نطاق الخادم الأصلي للصور
-  return `https://first.pioneers.admin.techpundits.net${url.startsWith('/') ? url : `/${url}`}`;
+  // استخدام نفس نطاق الخادم الأصلي للصور مع HTTP
+  return `http://first.pioneers.admin.techpundits.net${url.startsWith('/') ? url : `/${url}`}`;
 };
 
 // وظائف API

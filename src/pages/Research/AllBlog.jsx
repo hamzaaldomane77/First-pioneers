@@ -14,19 +14,19 @@ const BlogCard = ({ cover_image, title, categories, first_description, author_na
   const isRTL = i18n.language === 'ar';
   
   return (
-    <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      <div className="w-full md:w-1/3 h-[200px] md:h-auto">
-        <img 
+  <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div className="w-full md:w-1/3 h-[200px] md:h-auto">
+      <img 
           src={cover_image} 
-          alt={title} 
-          className="w-full h-full object-cover"
+        alt={title} 
+        className="w-full h-full object-cover"
           onError={(e) => {
             e.target.src = t("blog.placeholderImage");
           }}
-        />
-      </div>
-      
-      <div className="w-full md:w-2/3 p-6 flex flex-col">
+      />
+    </div>
+    
+    <div className="w-full md:w-2/3 p-6 flex flex-col">
         {categories && categories.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-3">
             {categories.map((category, index) => (
@@ -35,7 +35,7 @@ const BlogCard = ({ cover_image, title, categories, first_description, author_na
                 className="text-sm text-[#BB2632] font-medium bg-red-50 px-3 py-1 rounded-full"
               >
                 {category}
-              </span>
+        </span>
             ))}
           </div>
         )}
@@ -66,9 +66,9 @@ const BlogCard = ({ cover_image, title, categories, first_description, author_na
             )}
           </Link>
         </div>
-      </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default function AllBlog() {
@@ -217,7 +217,7 @@ export default function AllBlog() {
               <Search className={`absolute ${isRTL ? 'left-3' : 'right-3'} top-1/2 transform -translate-y-1/2 text-gray-400`} size={20} />
             </div>
           </div>
-
+        
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {t('blog.filterOptions.byCategory')}
@@ -262,7 +262,7 @@ export default function AllBlog() {
               }}
             />
           </div>
-
+        
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {t('blog.sortBy')}
@@ -304,7 +304,7 @@ export default function AllBlog() {
         </div>
       </div>
 
-
+   
       {currentBlogs.length === 0 ? (
         <div className="text-center py-10 text-gray-500">
           {t('blog.noArticles')}
@@ -313,9 +313,9 @@ export default function AllBlog() {
         <>
           <div className="grid grid-cols-1 gap-6">
             {currentBlogs.map((blog) => (
-              <BlogCard key={blog.id} {...blog} />
-            ))}
-          </div>
+                    <BlogCard key={blog.id} {...blog} />
+                  ))}
+                </div>
 
           {/* ترقيم الصفحات */}
           {totalPages > 1 && (
@@ -338,7 +338,7 @@ export default function AllBlog() {
                   );
                 })}
               </div>
-            </div>
+        </div>
           )}
         </>
       )}

@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://first.pioneers.admin.techpundits.net',
+        target: 'http://first.pioneers.admin.techpundits.net',
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path
