@@ -1,16 +1,13 @@
 import axios from 'axios';
 
-// تحديد عنوان API المناسب بناءً على البيئة
-const isClient = typeof window !== 'undefined';
-const API_URL = isClient && window.location.hostname === 'localhost' 
-  ? 'http://localhost:5173' 
-  : 'http://first.pioneers.admin.techpundits.net';
+// تحديد عنوان API المناسب
+const API_URL = 'https://first.pioneers.admin.techpundits.net';
 
 // إنشاء متغير عام للغة الحالية مع التحقق من وجود localStorage
 let currentLanguage = 'en';
 
 // فقط استخدام localStorage في بيئة المتصفح (client-side)
-if (isClient) {
+if (typeof window !== 'undefined') {
   try {
     currentLanguage = localStorage.getItem('i18nextLng') || 'en';
   } catch (error) {
@@ -22,7 +19,7 @@ if (isClient) {
 export const setAPILanguage = (lang) => {
   currentLanguage = lang;
   
-  if (isClient) {
+  if (typeof window !== 'undefined') {
     try {
       localStorage.setItem('i18nextLng', lang);
     } catch (error) {
@@ -33,34 +30,34 @@ export const setAPILanguage = (lang) => {
 
 const api = axios.create({
   baseURL: API_URL,
-  timeout: 60000,
+  timeout: 15000, // خفض قيمة المهلة للتعامل السريع مع أخطاء الاتصال
   headers: {
     'Content-Type': 'application/json',
-  },
-  // إضافة إعادة المحاولة التلقائية
-  retry: 3,
-  retryDelay: (retryCount) => {
-    return retryCount * 1000; // زيادة التأخير مع كل محاولة
   }
 });
 
 // إضافة معترض لإعادة المحاولة
-api.interceptors.response.use(response => response, async (err) => {
-  const { config } = err;
+api.interceptors.response.use(undefined, async (err) => {
+  // التعامل مع أخطاء CORS
+  if (err.message && (err.message.includes('Network Error') || err.code === 'ERR_NETWORK')) {
+    console.warn('Network error encountered, might be a CORS issue');
+  }
+  
+  const config = err.config;
   if (!config || !config.retry) {
     return Promise.reject(err);
   }
 
   config.__retryCount = config.__retryCount || 0;
 
-  if (config.__retryCount >= config.retry) {
+  if (config.__retryCount >= 3) { // استخدم حد ثابت لعدد إعادة المحاولات
     return Promise.reject(err);
   }
 
   config.__retryCount += 1;
 
   // تأخير قبل إعادة المحاولة
-  await new Promise(resolve => setTimeout(resolve, config.retryDelay(config.__retryCount)));
+  await new Promise(resolve => setTimeout(resolve, 1000 * config.__retryCount));
 
   // إعادة المحاولة
   return api(config);
@@ -71,7 +68,7 @@ api.interceptors.request.use(
     let token = null;
     
     // فقط الوصول إلى localStorage في بيئة المتصفح
-    if (isClient) {
+    if (typeof window !== 'undefined') {
       try {
         token = localStorage.getItem('token');
       } catch (error) {
@@ -88,35 +85,21 @@ api.interceptors.request.use(
     config.headers['Content-Language'] = currentLanguage;
     
     // إضافة معلمة اللغة للاستعلام
-    if (!config.params) {
-      config.params = {};
-    }
-    config.params.lang = currentLanguage;
+    config.params = {
+      ...config.params,
+      lang: currentLanguage
+    };
     
     // إضافة معلمات لمنع التخزين المؤقت
-    if (isClient) {
-      config.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
-      config.headers['Pragma'] = 'no-cache';
-      config.headers['Expires'] = '0';
-    }
+    config.headers['Cache-Control'] = 'no-cache';
+    config.headers['Pragma'] = 'no-cache';
+    
+    // إضافة محاولة إعادة
+    config.retry = 3;
     
     return config;
   },
   (error) => {
-    return Promise.reject(error);
-  }
-);
-
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401 && isClient) {
-      try {
-        localStorage.removeItem('token');
-      } catch (err) {
-        console.error('Error removing token from localStorage:', err);
-      }
-    }
     return Promise.reject(error);
   }
 );
@@ -130,8 +113,8 @@ export const fixImageUrl = (url) => {
     return url;
   }
   
-  // استخدام نفس نطاق الخادم الأصلي للصور مع HTTP
-  return `http://first.pioneers.admin.techpundits.net${url.startsWith('/') ? url : `/${url}`}`;
+  // استخدام نفس نطاق الخادم الأصلي للصور مع HTTPS
+  return `${API_URL}${url.startsWith('/') ? url : `/${url}`}`;
 };
 
 // وظائف API

@@ -5,21 +5,24 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+    port: 3000,
+    open: true,
+    cors: true,
     proxy: {
       '/api': {
-        target: 'http://first.pioneers.admin.techpundits.net',
+        target: 'https://first.pioneers.admin.techpundits.net',
         changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path
+        secure: true
       }
     }
   },
   build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom']
-        }
+    outDir: 'dist',
+    sourcemap: false,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true
       }
     }
   },
