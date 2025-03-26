@@ -1,18 +1,38 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://first.pioneers.admin.techpundits.net';
+// تحديد عنوان API المناسب بناءً على البيئة
+const isClient = typeof window !== 'undefined';
+const API_URL = isClient && window.location.hostname === 'localhost' 
+  ? 'http://localhost:5173' 
+  : 'https://first.pioneers.admin.techpundits.net';
 
-// إنشاء متغير عام للغة الحالية
-let currentLanguage = localStorage.getItem('i18nextLng') || 'en';
+// إنشاء متغير عام للغة الحالية مع التحقق من وجود localStorage
+let currentLanguage = 'en';
+
+// فقط استخدام localStorage في بيئة المتصفح (client-side)
+if (isClient) {
+  try {
+    currentLanguage = localStorage.getItem('i18nextLng') || 'en';
+  } catch (error) {
+    console.error('Error accessing localStorage:', error);
+  }
+}
 
 // تحديث اللغة الحالية
 export const setAPILanguage = (lang) => {
   currentLanguage = lang;
-  localStorage.setItem('i18nextLng', lang);
+  
+  if (isClient) {
+    try {
+      localStorage.setItem('i18nextLng', lang);
+    } catch (error) {
+      console.error('Error setting language in localStorage:', error);
+    }
+  }
 };
 
 const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: API_URL,
   timeout: 60000,
   headers: {
     'Content-Type': 'application/json',
@@ -25,7 +45,7 @@ const api = axios.create({
 });
 
 // إضافة معترض لإعادة المحاولة
-api.interceptors.response.use(undefined, async (err) => {
+api.interceptors.response.use(response => response, async (err) => {
   const { config } = err;
   if (!config || !config.retry) {
     return Promise.reject(err);
@@ -48,7 +68,17 @@ api.interceptors.response.use(undefined, async (err) => {
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    let token = null;
+    
+    // فقط الوصول إلى localStorage في بيئة المتصفح
+    if (isClient) {
+      try {
+        token = localStorage.getItem('token');
+      } catch (error) {
+        console.error('Error accessing token from localStorage:', error);
+      }
+    }
+    
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -63,6 +93,13 @@ api.interceptors.request.use(
     }
     config.params.lang = currentLanguage;
     
+    // إضافة معلمات لمنع التخزين المؤقت
+    if (isClient) {
+      config.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+      config.headers['Pragma'] = 'no-cache';
+      config.headers['Expires'] = '0';
+    }
+    
     return config;
   },
   (error) => {
@@ -73,14 +110,29 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      
-      localStorage.removeItem('token');
-    
+    if (error.response?.status === 401 && isClient) {
+      try {
+        localStorage.removeItem('token');
+      } catch (err) {
+        console.error('Error removing token from localStorage:', err);
+      }
     }
     return Promise.reject(error);
   }
 );
+
+// إضافة وظيفة مساعدة لإصلاح روابط الصور
+export const fixImageUrl = (url) => {
+  if (!url) return '';
+  
+  // التحقق مما إذا كان الرابط يحتوي على العنوان الكامل بالفعل
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  
+  // استخدام نفس نطاق الخادم الأصلي للصور
+  return `https://first.pioneers.admin.techpundits.net${url.startsWith('/') ? url : `/${url}`}`;
+};
 
 // وظائف API
 
@@ -255,7 +307,7 @@ export const getBlogs = async (limit = null) => {
       return {
         id: blog.id,
         slug: blog.id.toString(),
-        cover_image: blog.cover_image || '',
+        cover_image: fixImageUrl(blog.cover_image) || '',
         title: blog.title || '',
         content: blog.content || '',
         excerpt: blog.excerpt || '',
@@ -266,7 +318,10 @@ export const getBlogs = async (limit = null) => {
         second_description: blog.second_description || '',
         third_description: blog.third_description || '',
         created_at: blog.created_at,
-        images: blog.images || []
+        images: blog.images ? blog.images.map(img => ({
+          ...img,
+          image: fixImageUrl(img.image)
+        })) : []
       };
     })
     .filter(blog => blog.title);
@@ -296,7 +351,11 @@ export const getPartners = async () => {
     }
 
     const partners = response.data.data.our_partners;
-    return partners;
+    // إصلاح روابط الصور
+    return partners.map(partner => ({
+      ...partner,
+      logo: fixImageUrl(partner.logo)
+    }));
     
   } catch (error) {
     throw error;
@@ -405,7 +464,7 @@ export const getHomePageData = async () => {
     const result = {
       title: data.video_title || '',
       description: data.video_description || '',
-      video: data.video || '',
+      video: fixImageUrl(data.video) || '',
       video_alt: data.video_alt_text || '',
       button_text: currentLanguage === 'ar' ? 'اتصل بنا' : 'Contact Us'
     };
@@ -440,7 +499,7 @@ export const getClients = async () => {
       images: clients.reduce((allImages, client) => {
         return allImages.concat(client.images.map(img => ({
           id: img.id,
-          url: img.image
+          url: fixImageUrl(img.image)
         })));
       }, [])
     };
@@ -471,8 +530,18 @@ export const getEducationResources = async (page = 1, perPage = 10, sortDirectio
       throw new Error('No resources found or invalid response');
     }
 
+    // إصلاح روابط الصور للموارد
+    const resources = response.data.data.education_resources.map(resource => ({
+      ...resource,
+      image: fixImageUrl(resource.image),
+      images: resource.images ? resource.images.map(img => ({
+        ...img,
+        image: fixImageUrl(img.image)
+      })) : []
+    }));
+
     return {
-      resources: response.data.data.education_resources,
+      resources,
       pagination: response.data.data.pagination
     };
 
@@ -515,7 +584,17 @@ export const getEducationResourceById = async (id) => {
       throw new Error('Resource not found or invalid response');
     }
 
-    return response.data.data;
+    const resource = response.data.data;
+    
+    // إصلاح روابط الصور
+    return {
+      ...resource,
+      image: fixImageUrl(resource.image),
+      images: resource.images ? resource.images.map(img => ({
+        ...img,
+        image: fixImageUrl(img.image)
+      })) : []
+    };
 
   } catch (error) {
     throw error;
@@ -555,7 +634,17 @@ export const getWordsInMarkets = async () => {
       throw new Error('No words in markets found or invalid response');
     }
 
-    return response.data.data.items;
+    const items = response.data.data.items;
+    
+    // إصلاح روابط الصور
+    return items.map(item => ({
+      ...item,
+      image: fixImageUrl(item.image),
+      images: item.images ? item.images.map(img => ({
+        ...img,
+        image: fixImageUrl(img.image)
+      })) : []
+    }));
     
   } catch (error) {
     throw error;
@@ -742,7 +831,17 @@ export const getFeaturedReports = async () => {
       throw new Error('No featured reports found or invalid response');
     }
 
-    return response.data.data.reports;
+    const reports = response.data.data.reports;
+    
+    // إصلاح روابط الصور
+    return reports.map(report => ({
+      ...report,
+      image: fixImageUrl(report.image),
+      images: report.images ? report.images.map(img => ({
+        ...img,
+        image: fixImageUrl(img.image)
+      })) : []
+    }));
     
   } catch (error) {
     throw error;
@@ -761,7 +860,17 @@ export const getFeaturedReportById = async (reportId) => {
       throw new Error('Featured report not found or invalid response');
     }
     
-    return response.data.data;
+    const report = response.data.data;
+    
+    // إصلاح روابط الصور
+    return {
+      ...report,
+      image: fixImageUrl(report.image),
+      images: report.images ? report.images.map(img => ({
+        ...img,
+        image: fixImageUrl(img.image)
+      })) : []
+    };
     
   } catch (error) {
     throw error;
@@ -801,7 +910,17 @@ export const getToolsWeUse = async () => {
       throw new Error('No tools found or invalid response');
     }
 
-    return response.data.data.tool_we_use;
+    const tools = response.data.data.tool_we_use;
+    
+    // إصلاح روابط الصور
+    return tools.map(tool => ({
+      ...tool,
+      image: fixImageUrl(tool.image),
+      images: tool.images ? tool.images.map(img => ({
+        ...img,
+        image: fixImageUrl(img.image)
+      })) : []
+    }));
     
   } catch (error) {
     throw error;
@@ -840,7 +959,13 @@ export const getSocialMediaLinks = async () => {
       throw new Error('No social media links found or invalid response');
     }
 
-    return response.data.data.social_medias;
+    const socialMedias = response.data.data.social_medias;
+    
+    // إصلاح روابط الأيقونات
+    return socialMedias.map(sm => ({
+      ...sm,
+      icon: fixImageUrl(sm.icon)
+    }));
     
   } catch (error) {
     return []; // إرجاع مصفوفة فارغة في حالة حدوث خطأ

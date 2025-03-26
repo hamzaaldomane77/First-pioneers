@@ -243,7 +243,7 @@ const ToolDetails = () => {
             <section className="py-8">
                 <div className="container mx-auto px-4 text-center">
                     <Link 
-                        to="/services-tools" 
+                        to="/ServicesTools" 
                         className="bg-[#BB2632] text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition-all duration-300 inline-block"
                     >
                         {isRTL ? 'العودة إلى جميع الأدوات' : 'Back to All Tools'}
