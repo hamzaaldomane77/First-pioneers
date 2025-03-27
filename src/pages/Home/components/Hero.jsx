@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import ReactPlayer from 'react-player';
 import { getHomePageData, setAPILanguage } from '../../../services/api';
+import { Link } from 'react-router-dom';
 
 export default function Hero() {
   const [homeData, setHomeData] = useState({
@@ -40,12 +41,12 @@ export default function Hero() {
         
         setIsImage(!isVideoContent);
         setHomeData(data);
-        setRetryCount(0); // إعادة تعيين عداد المحاولات عند النجاح
+        setRetryCount(0); 
       } catch (error) {
         console.error('Error in Hero component:', error);
         setError(error.message || t('common.error', 'Failed to load content'));
         
-        // محاولة إعادة الاتصال حتى 3 مرات كحد أقصى
+       
         if (retryCount < 3) {
           const nextRetry = retryCount + 1;
           console.log(`Retrying connection (${nextRetry}/3) in 2 seconds...`);
@@ -86,17 +87,17 @@ export default function Hero() {
       className="h-screen w-full relative overflow-hidden"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
-      {/* خلفية الفيديو أو الصورة */}
+      
       <div className="absolute inset-0 w-full h-full">
         {isImage ? (
-          // عرض صورة كخلفية
+          
           <div 
             className="absolute inset-0 w-full h-full bg-cover bg-center" 
             style={{ backgroundImage: `url(${homeData.video})` }}
             aria-label={homeData.video_alt || ''}
           />
         ) : (
-          // عرض فيديو كخلفية
+         
           <div className={`absolute inset-0 w-full h-full ${!isVideoReady ? 'bg-black' : ''}`}>
             {homeData.video && (
               <ReactPlayer
@@ -131,7 +132,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
       </div>
 
-      {/* المحتوى */}
+      
       <div className="relative z-10 h-full flex flex-col items-center justify-center text-center text-white px-4 md:px-16 space-y-6">
         {error ? (
           <div className="bg-red-500 bg-opacity-75 p-4 rounded-lg">
@@ -152,22 +153,23 @@ export default function Hero() {
             >
               {homeData.title || t('home.defaultTitle', 'Welcome')}
             </motion.h1>
-            <motion.p 
+            <motion.h2 
               initial={{ opacity: 0, y: 50 }} 
               animate={{ opacity: 1, y: 0 }} 
               transition={{ duration: 1.2, delay: 0.3 }} 
               className="text-xl md:text-2xl max-w-[900px] leading-relaxed"
             >
               {homeData.description || t('home.defaultDescription', 'Loading description...')}
-            </motion.p>
-            <motion.button 
+            </motion.h2>
+        <Link to="/contact">
+        <motion.button 
               initial={{ opacity: 0, scale: 0.5 }} 
               animate={{ opacity: 1, scale: 1 }} 
               transition={{ duration: 1.5, delay: 0.6 }} 
-              className="mt-8 px-8 py-4 bg-red-600 text-white text-lg rounded-full hover:bg-red-700 transition-colors duration-300 transform hover:scale-105"
+              className="mt-8 px-8 py-4 bg-[#BB2632] text-white text-lg rounded-full hover:bg-red-700 transition-colors duration-300 transform hover:scale-105"
             >
               {homeData.button_text}
-            </motion.button>
+            </motion.button></Link>
           </>
         )}
       </div>

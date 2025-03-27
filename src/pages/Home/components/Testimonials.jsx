@@ -129,12 +129,12 @@ export default function Testimonials() {
                       className="w-16 h-16 md:w-20 md:h-20 rounded-full mb-4 md:mb-0 md:mr-5 object-cover"
                     />
                     <div className="text-center md:text-left">
-                      <h2 className="text-[#BB2632] text-2xl md:text-3xl font-bold">{testimonial.name}</h2>
+                      <h2 className="text-[#000000] text-2xl md:text-3xl font-bold">{testimonial.name}</h2>
                       <p className="text-gray-600 italic text-sm md:text-base">{testimonial.position}</p>
-                      <p className="text-gray-500 text-xs md:text-sm">{testimonial.company_name}</p>
+                      
                       <p 
                         dir={isRTL ? "rtl" : "ltr"} 
-                        className="text-lg md:text-2xl w-full md:w-[700px] pt-8 md:pt-16 pr-0 md:pr-32 text-center md:text-left"
+                        className="text-lg md:text-2xl w-full md:w-[700px] pt-8 md:pt-16 pr-0 md:pr-32 text-center md:text-left bahnschrift"
                       >
                         {testimonial.content}
                       </p>
@@ -143,13 +143,13 @@ export default function Testimonials() {
                   <img 
                     src={Coma2} 
                     alt="Coma 2" 
-                    className="absolute top-[350px] md:top-[300px] left-4 md:left-5 w-8 h-8 md:w-14 md:h-14" 
+                    className="absolute top-[350px] md:top-[350px] left-4 md:left-5 w-8 h-8 md:w-14 md:h-14" 
                   />
                   <div className="pl-0 md:pl-64 flex justify-center items-center mt-8 md:mt-0">
                     <img 
                       src={testimonial.company_logo} 
                       alt={`${testimonial.company_name} Logo`} 
-                      className="w-40 md:w-60 pb-10 pt-16 object-contain max-h-40" 
+                      className="w-40 md:w-60 pb-10 pt-16 object-contain max-h-100" 
                     />
                   </div>
                 </div>

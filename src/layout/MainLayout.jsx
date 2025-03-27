@@ -113,7 +113,7 @@ const MainLayout = () => {
         setShowResults(false);
         setSearchQuery('');
         
-        // التنقل إلى الصفحة المناسبة بناءً على نوع النتيجة
+     
         if (result.type === 'blog') {
             navigate(`/blog/${result.id}`);
         } else if (result.type === 'service') {
@@ -127,7 +127,7 @@ const MainLayout = () => {
         } else if (result.type === 'trend') {
             navigate(`/trends/${result.id}`);
         } else {
-            // التنقل إلى الصفحة الرئيسية إذا كان النوع غير معروف
+           
             navigate('/');
         }
     };
@@ -194,7 +194,7 @@ const MainLayout = () => {
                                 )}
                             </div>
                             
-                            {/* نتائج البحث */}
+                           
                             {showResults && (
                                 <div 
                                     ref={searchResultsRef}
@@ -232,10 +232,10 @@ const MainLayout = () => {
                         <button className="flex items-center space-x-2 lg:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                             <CustomSvg name="menu" className="w-6 h-6 text-red-800" />
                         </button>
-                        {/* <Language /> */}
+                         <Language /> 
                         <Link 
                             to="/contact" 
-                            className='hidden lg:block text-[#FFFFFF] border-2 rounded-3xl bg-red-800 p-3 py-3 font-headers hover:bg-red-900 transition-colors'
+                            className='hidden lg:block text-[#FFFFFF] border-2 rounded-3xl bg-[#BB2632] p-3 py-3 font-headers hover:bg-red-900 transition-colors'
                         >
                             {t('Contact Us')}
                         </Link>

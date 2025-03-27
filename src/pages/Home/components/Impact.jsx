@@ -87,11 +87,11 @@ export default function Impact() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.2 }}
           >
-            <div className="relative h-64">
+            <div className="relative">
               <img 
                 src={impact.image} 
                 alt={impact.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full"
               />
             </div>
             
@@ -100,7 +100,7 @@ export default function Impact() {
                 {impact.title}
               </h2>
               
-              <p className="text-gray-600 text-center">
+              <p className="text-gray-600 text-center bahnschrift">
                 {impact.description}
               </p>
               
@@ -111,7 +111,7 @@ export default function Impact() {
                     {impact.services.map((service) => (
                       <div
                         key={service.id}
-                        className=" px-4 py-2 text-center"
+                        className=" px-4  text-center bahnschrift"
                       >
                         {service.title}
                       </div>

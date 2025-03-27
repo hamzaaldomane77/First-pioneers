@@ -3,7 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getToolsWeUse, setAPILanguage } from '../../../services/api';
-import companyLogo from '../../../assets/images/logo.png'; // تأكد من تحديث المسار الصحيح لشعار الشركة
+
 
 export default function Tools() {
   const { ref, inView } = useInView({
@@ -98,35 +98,35 @@ export default function Tools() {
         {isRTL ? 'أدواتنا' : 'Our Tools'}
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 px-4 sm:px-5 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 sm:px-5 max-w-7xl mx-auto ">
         {tools.map((tool, index) => (
           <div
             key={tool.id}
-            className={`bg-white group transition-all duration-500 hover:shadow-xl p-6 sm:p-8 lg:pb-24 ${
+            className={`bg-white group transition-all duration-500 hover:shadow-xl sm:p-8 lg:pb-24 ${
               index % 2 !== 0 ? 'md:transform md:translate-y-28' : ''
             }`}
           >
-            <div className="flex flex-col sm:flex-row items-center">
-              {/* قسم الصورة */}
-              <div className="flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32 mb-4 sm:mb-0 sm:mr-6">
+            <div className="flex flex-col sm:flex-row items-center ">
+             
+              <div className="flex-shrink-0 w-24 h-20 sm:w-32 sm:h-32 mb-4 sm:mb-0 sm:mr-6">
                 <img
-                  src={tool.image || companyLogo}
+                  src={tool.image}
                   alt={tool.name}
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
 
-              {/* قسم النص */}
+             
               <div className={`text-center sm:text-left ${isRTL ? 'sm:text-right sm:mr-6' : ''}`}>
                 <h3 className="text-xl sm:text-2xl text-[#000000] mb-2 sm:mb-4">
                   {tool.name}
                 </h3>
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="text-sm text-gray-600 mb-4 bahnschrift ">
                   {tool.description}
                 </p>
                 <Link 
                   to={`/tools/${tool.id}`} 
-                  className="text-[#BB2632] font-semibold relative inline-block"
+                  className="text-[#BB2632] font-semibold relative inline-block "
                 >
                   {isRTL ? 'استكشاف الأداة' : 'Explore Tool'}
                   <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#BB2632] transition-all duration-500 group-hover:w-full"></span>

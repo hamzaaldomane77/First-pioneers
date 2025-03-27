@@ -77,7 +77,7 @@ export default function Clients() {
         </div>
       ) : (
         <div 
-          className={`text-center text-sm mb-8 md:mb-14 text-[#010203] leading-6 md:leading-8 pb-12 lg:pr-8 ${isRTL ? 'leading-relaxed' : ''} ${loading ? 'animate-pulse' : ''}`}
+          className={`text-center text-lg mb-8 md:mb-14 text-[#010203] leading-6 md:leading-8 pb-12 lg:pr-8 bahnschrift${isRTL ? 'leading-relaxed' : ''} ${loading ? 'animate-pulse' : ''}`}
           dangerouslySetInnerHTML={{ 
             __html: loading ? t('loading', 'Loading...') : clientsData.description 
           }}
@@ -125,7 +125,7 @@ export default function Clients() {
                 <img 
                   src={image.url} 
                   alt={t('clients.logo_alt', 'Client Logo')}
-                  className="w-9 h-9 sm:w-12 sm:h-12 md:w-20 md:h-20 lg:w-24 lg:h-24 object-contain" 
+                  className="w-9 h-9 sm:w-12 sm:h-12 md:w-20 md:h-20 lg:w-32 lg:h-32 object-contain" 
                 />
               </div>
             </SwiperSlide>
