@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-// تحديد عنوان API المناسب
+
 const API_URL = 'https://first.pioneers.admin.techpundits.net';
 
-// إنشاء متغير عام للغة الحالية مع التحقق من وجود localStorage
+
 let currentLanguage = 'en';
 
-// فقط استخدام localStorage في بيئة المتصفح (client-side)
+
 if (typeof window !== 'undefined') {
   try {
     currentLanguage = localStorage.getItem('i18nextLng') || 'en';
