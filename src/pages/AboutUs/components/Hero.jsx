@@ -59,7 +59,7 @@ export default function Hero() {
             ${inView ? 'translate-x-0 opacity-100' : '-translate-x-40 opacity-0'}
             ${loading ? 'animate-pulse' : ''}`}
         >
-          <h1 className={`text-[#BB2632] text-[50px] py-6 ${isRTL ? 'text-right' : 'text-left'}`}>
+          <h1 className={`text-[#BB2632] text-[50px] py-6 `}>
             {isRTL ? 'من نحن' : 'About Us'}
           </h1>
           
@@ -74,8 +74,7 @@ export default function Hero() {
             </div>
           ) : (
             <div 
-              className={`text-lg leading-8 text-black sm:text-sm md:text-base whitespace-pre-line
-                ${isRTL ? 'text-right' : 'text-left'}`}
+              className={`text-lg leading-8 text-black sm:text-sm md:text-base whitespace-pre-line`}
               dangerouslySetInnerHTML={{ 
                 __html: loading ? t('loading', 'Loading...') : description 
               }}

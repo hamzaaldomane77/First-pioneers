@@ -5,7 +5,8 @@
   "Research & Insights": "Research & Insights",
   "Contact Us": "Contact Us",
   "search": {
-    "placeholder": "Search here"
+    "placeholder": "Search here...",
+    "inSection": "in {{section}} section"
   },
   "footer": {
     "newsletter": "Subscribe to our newsletter",
@@ -147,5 +148,30 @@
     "title": "Ready To Transform Your Business?",
     "description": "Let's turn your data into actionable insights!",
     "button": "Contact Us"
+  },
+  "sections": {
+    "hero": "Home",
+    "about-section": "About Us",
+    "services-section": "Services",
+    "research-section": "Research & Insights",
+    "clients-section": "Our Clients",
+    "partners-section": "Our Partners",
+    "vision-section": "Our Vision",
+    "mission-section": "Our Mission",
+    "values-section": "Our Values",
+    "team-section": "Our Team",
+    "tools-section": "Tools",
+    "blog-section": "Blog",
+    "reports-section": "Reports",
+    "words-section": "Words in Markets",
+    "contact-section": "Contact Us"
+  },
+  "newsletter": {
+    "title": "Subscribe to Our Newsletter",
+    "description": "Get the latest news and updates delivered directly to your inbox. Subscribe now to stay informed about our latest developments and insights.",
+    "email_label": "Your Email Address",
+    "email_placeholder": "Enter your email",
+    "subscribe_button": "Subscribe",
+    "image_alt": "Mailbox illustration"
   }
 } 

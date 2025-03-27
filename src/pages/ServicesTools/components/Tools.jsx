@@ -98,11 +98,11 @@ export default function Tools() {
         {isRTL ? 'أدواتنا' : 'Our Tools'}
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 sm:px-5 max-w-7xl mx-auto ">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 px-4 sm:px-5 max-w-7xl mx-auto ">
         {tools.map((tool, index) => (
           <div
             key={tool.id}
-            className={`bg-white group transition-all duration-500 hover:shadow-xl sm:p-8 lg:pb-24 ${
+            className={`bg-white group transition-all duration-500 shadow-xl sm:p-8 lg:pb-24 py-5 rounded-xl${
               index % 2 !== 0 ? 'md:transform md:translate-y-28' : ''
             }`}
           >

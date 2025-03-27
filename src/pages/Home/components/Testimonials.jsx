@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Redbackground from "../../../assets/images/Redbackground.png";
 import Testimonialsbg from "../../../assets/images/Testimonialsbg.png";
-import Coma1 from "../../../assets/images/Coma1.png";
-import Coma2 from "../../../assets/images/Coma2.png";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { useInView } from "react-intersection-observer";
@@ -114,14 +113,9 @@ export default function Testimonials() {
           >
             {testimonials.map((testimonial, index) => (
               <SwiperSlide key={index}>
-                <div className="w-full md:w-[1120px] h-auto md:h-[425px] mx-auto rounded-xl shadow-lg grid grid-cols-1 md:grid-cols-2 overflow-y-hidden relative"
+                <div className="w-full md:w-[1120px] h-auto md:h-[425px] mx-auto rounded-xl shadow-2xl grid grid-cols-1 md:grid-cols-2 overflow-y-hidden relative"
                   style={{ backgroundImage: `url(${Testimonialsbg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                  <img 
-                    src={Coma1} 
-                    alt="Coma 1" 
-                    className={`absolute top-[140px] md:top-[140px] w-10 h-10 md:w-16 md:h-16 lg:left-[700px] right-9
-                      ${isRTL ? 'left-[380px] md:left-[660px] ' : 'right-14 md:right-[640px] '}`}
-                  />
+                
                   <div className="p-5 md:p-10 md:pr-28 relative flex flex-col md:flex-row items-center md:items-start">
                     <img 
                       src={testimonial.avatar}
@@ -140,11 +134,7 @@ export default function Testimonials() {
                       </p>
                     </div>
                   </div>
-                  <img 
-                    src={Coma2} 
-                    alt="Coma 2" 
-                    className="absolute top-[350px] md:top-[350px] left-4 md:left-5 w-8 h-8 md:w-14 md:h-14" 
-                  />
+                 
                   <div className="pl-0 md:pl-64 flex justify-center items-center mt-8 md:mt-0">
                     <img 
                       src={testimonial.company_logo} 

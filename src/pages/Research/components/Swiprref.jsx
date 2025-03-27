@@ -80,23 +80,24 @@ export default function Testimonials() {
   }
 
   return (
-      <section
-        className={`min-h-screen bg-cover bg-center transition-all duration-1000 p-6 h-[1000px] overflow-hidden ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
-        style={{ backgroundImage: `url(${Redbackground})` }}
-        ref={ref}
-        dir={isRTL ? 'rtl' : 'ltr'}
-      >
-        <h1 className={`text-[#BB2632] text-5xl text-center pt-32 pb-11 ${isRTL ? 'font-medium' : ''}`}>
-          {isRTL ? 'الإتجاهات في الأسواق'  : 'Trends In Markets'}
-        </h1>
+    <section
+      className={`min-h-screen bg-cover bg-center transition-all duration-1000 p-6 h-[1000px] overflow-hidden ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      style={{ backgroundImage: `url(${Redbackground})` }}
+      ref={ref}
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
+      <h1 className={`text-[#BB2632] text-5xl text-center pt-32 pb-11 ${isRTL ? 'font-medium' : ''}`}>
+        {t('trends.title')}
+      </h1>
       <div className="relative max-w-[1120px] mx-auto">
         <Swiper
+          dir={isRTL ? 'rtl' : 'ltr'}
           spaceBetween={20}
-          slidesPerView={1} // يعرض شريحة واحدة افتراضيًا
+          slidesPerView={1}
           breakpoints={{
             640: { slidesPerView: 1 },
             768: { slidesPerView: 1 },
-            1024: { slidesPerView: 2 } 
+            1024: { slidesPerView: 2 }
           }}
           navigation={{
             prevEl: '.custom-prev',
@@ -107,15 +108,16 @@ export default function Testimonials() {
             clickable: true,
           }}
           autoplay={{
-            delay: 3000, // الانتقال التلقائي كل 3 ثوانٍ
-            disableOnInteraction: false, // لا يتوقف عند التفاعل مع السويبر
+            delay: 3000,
+            disableOnInteraction: false,
+            reverseDirection: isRTL
           }}
           modules={[Navigation, Pagination, Autoplay]}
           className="flex justify-center"
         >
           {trendsInMarkets.map((item, index) => (
             <SwiperSlide key={index} className="flex justify-center w-[500px] py-10">
-              <div className="w-full max-w-[550px] p-5 flex flex-col items-center text-center">
+              <div className={`w-full max-w-[550px] p-5 flex flex-col items-center text-center ${isRTL ? 'rtl' : 'ltr'}`}>
                 {item.image && (
                   <img 
                     src={item.image} 
@@ -130,11 +132,11 @@ export default function Testimonials() {
           ))}
         </Swiper>
 
-        <button className="custom-prev absolute left-[-60px] top-[250px] transform -translate-y-1/2 rounded-full p-3 bg-[#ea3c4b] transition-transform duration-300 ease-in-out hover:scale-110 hidden md:block">
-          <MoveLeft className="w-5 h-5 text-white" />
+        <button className={`custom-prev absolute ${isRTL ? 'right-[-60px]' : 'left-[-60px]'} top-[250px] transform -translate-y-1/2 rounded-full p-3 bg-[#ea3c4b] transition-transform duration-300 ease-in-out hover:scale-110 hidden md:block`}>
+          {isRTL ? <MoveRight className="w-5 h-5 text-white" /> : <MoveLeft className="w-5 h-5 text-white" />}
         </button>
-        <button className="custom-next absolute right-[-60px] top-[250px] transform -translate-y-1/2 rounded-full p-3 bg-[#dd3d4a] transition-transform duration-300 ease-in-out hover:scale-110 hidden md:block">
-          <MoveRight className="w-5 h-5 text-white" />
+        <button className={`custom-next absolute ${isRTL ? 'left-[-60px]' : 'right-[-60px]'} top-[250px] transform -translate-y-1/2 rounded-full p-3 bg-[#dd3d4a] transition-transform duration-300 ease-in-out hover:scale-110 hidden md:block`}>
+          {isRTL ? <MoveLeft className="w-5 h-5 text-white" /> : <MoveRight className="w-5 h-5 text-white" />}
         </button>
         <div className="custom-pagination m-10 [&>.swiper-pagination-bullet]:bg-[#BB2632] [&>.swiper-pagination-bullet]:mx-5 [&>.swiper-pagination-bullet]:shadow-lg [&>.swiper-pagination-bullet]:shadow-[#BB2632]/100 transition-opacity duration-300 hover:opacity-75 text-center pr-24 pb-9"></div>
       </div>

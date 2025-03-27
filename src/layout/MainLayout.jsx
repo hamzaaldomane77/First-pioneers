@@ -9,6 +9,7 @@ import Language from '../components/Language';
 import LoadingAnimation from '../components/LoadingAnimation';
 import { useLoading } from '../context/LoadingContext';
 import { getSocialMediaLinks, setAPILanguage, searchWebsite } from '../services/api';
+import { FaPhone, FaFax, FaEnvelope } from 'react-icons/fa';
 import '../styles/rtl.css';
 import '../styles/loading.css';
 
@@ -26,6 +27,7 @@ const MainLayout = () => {
     const [showResults, setShowResults] = useState(false);
     const searchTimeoutRef = useRef(null);
     const searchResultsRef = useRef(null);
+    const [pendingScroll, setPendingScroll] = useState(null);
 
     const isRTL = i18n.language === 'ar';
 
@@ -77,58 +79,119 @@ const MainLayout = () => {
         };
     }, []);
 
-    // وظيفة البحث مع تأخير
+    // تعريف جميع الأقسام القابلة للبحث في الموقع
+    const searchableSections = [
+        // الصفحة الرئيسية
+        { id: 'hero', title: { ar: 'الصفحة الرئيسية', en: 'Home' }, path: '/', section: 'hero' },
+        { id: 'about-home', title: { ar: 'من نحن', en: 'About Us' }, path: '/', section: 'about-section' },
+        { id: 'services-home', title: { ar: 'خدماتنا', en: 'Our Services' }, path: '/', section: 'services-section' },
+        { id: 'research-home', title: { ar: 'البحوث والرؤى', en: 'Research & Insights' }, path: '/', section: 'research-section' },
+        { id: 'clients', title: { ar: 'عملاؤنا', en: 'Our Clients' }, path: '/', section: 'clients-section' },
+        { id: 'partners', title: { ar: 'شركاؤنا', en: 'Our Partners' }, path: '/', section: 'partners-section' },
+        
+        // صفحة من نحن
+        { id: 'about-vision', title: { ar: 'رؤيتنا', en: 'Our Vision' }, path: '/AboutUs', section: 'vision-section' },
+        { id: 'about-mission', title: { ar: 'مهمتنا', en: 'Our Mission' }, path: '/AboutUs', section: 'mission-section' },
+        { id: 'about-values', title: { ar: 'قيمنا', en: 'Our Values' }, path: '/AboutUs', section: 'values-section' },
+        { id: 'about-team', title: { ar: 'فريقنا', en: 'Our Team' }, path: '/AboutUs', section: 'team-section' },
+        
+        // صفحة الخدمات والأدوات
+        { id: 'services', title: { ar: 'الخدمات', en: 'Services' }, path: '/ServicesTools', section: 'services-section' },
+        { id: 'tools', title: { ar: 'الأدوات', en: 'Tools' }, path: '/ServicesTools', section: 'tools-section' },
+        
+        // صفحة البحوث والرؤى
+        { id: 'research-blog', title: { ar: 'المدونة', en: 'Blog' }, path: '/research-and-insights', section: 'blog-section' },
+        { id: 'research-reports', title: { ar: 'التقارير', en: 'Reports' }, path: '/research-and-insights', section: 'reports-section' },
+        { id: 'research-words', title: { ar: 'كلمات في الأسواق', en: 'Words in Markets' }, path: '/research-and-insights', section: 'words-section' },
+        
+        // صفحة الاتصال
+        { id: 'contact', title: { ar: 'تواصل معنا', en: 'Contact Us' }, path: '/contact', section: 'contact-section' }
+    ];
+
+    // تحديث وظيفة التمرير إلى القسم
+    const scrollToSection = (sectionId, delay = 100) => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    const headerOffset = 100;
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            }, delay);
+        });
+    };
+
+    // وظيفة البحث المحدثة
     const handleSearchChange = (e) => {
-        const query = e.target.value;
+        const query = e.target.value.toLowerCase();
         setSearchQuery(query);
         
-        // إلغاء المؤقت السابق إذا كان موجودًا
         if (searchTimeoutRef.current) {
             clearTimeout(searchTimeoutRef.current);
         }
         
-        if (query.trim().length > 2) {
-            setIsSearching(true);
-            // تأخير البحث لتحسين الأداء
-            searchTimeoutRef.current = setTimeout(async () => {
-                try {
-                    const data = await searchWebsite(query);
-                    setSearchResults(data.results);
-                    setShowResults(true);
-                } catch (error) {
-                    setSearchResults([]);
-                } finally {
-                    setIsSearching(false);
-                }
-            }, 500);
+        if (query.trim().length > 1) {
+            searchTimeoutRef.current = setTimeout(() => {
+                const currentLang = i18n.language;
+                const matchedSections = searchableSections.filter(section => {
+                    const sectionTitle = section.title[currentLang].toLowerCase();
+                    return sectionTitle.includes(query);
+                });
+                
+                setSearchResults(matchedSections);
+                setShowResults(matchedSections.length > 0);
+            }, 300);
         } else {
             setShowResults(false);
             setSearchResults([]);
-            setIsSearching(false);
         }
     };
 
-    // التنقل إلى صفحة النتيجة عند النقر عليها
-    const handleResultClick = (result) => {
+    // مراقبة تغيرات المسار للتمرير بعد تحميل الصفحة
+    useEffect(() => {
+        if (pendingScroll) {
+            const attemptScroll = async () => {
+                // محاولة أولى بعد تحميل الصفحة مباشرة
+                let success = await scrollToSection(pendingScroll, 100);
+                
+                // إذا فشلت المحاولة الأولى، حاول مرة أخرى بعد فترة أطول
+                if (!success) {
+                    success = await scrollToSection(pendingScroll, 500);
+                }
+                
+                // إذا فشلت المحاولة الثانية، حاول مرة أخيرة بعد فترة أطول
+                if (!success) {
+                    await scrollToSection(pendingScroll, 1000);
+                }
+                
+                setPendingScroll(null);
+            };
+
+            attemptScroll();
+        }
+    }, [location.pathname, pendingScroll]);
+
+    // تحديث وظيفة معالجة النقر على نتيجة البحث
+    const handleResultClick = async (result) => {
         setShowResults(false);
         setSearchQuery('');
         
-     
-        if (result.type === 'blog') {
-            navigate(`/blog/${result.id}`);
-        } else if (result.type === 'service') {
-            navigate(`/ServicesTools/service/${result.id}`);
-        } else if (result.type === 'tool') {
-            navigate(`/ServicesTools/tool/${result.id}`);
-        } else if (result.type === 'report') {
-            navigate(`/research-and-insights/reports/${result.id}`);
-        } else if (result.type === 'word') {
-            navigate(`/words/${result.id}`);
-        } else if (result.type === 'trend') {
-            navigate(`/trends/${result.id}`);
+        if (location.pathname === result.path) {
+            // إذا كنا في نفس الصفحة، نقوم بالتمرير مباشرة
+            await scrollToSection(result.section);
         } else {
-           
-            navigate('/');
+            // إذا كنا في صفحة مختلفة، نحفظ القسم المستهدف ثم ننتقل
+            setPendingScroll(result.section);
+            navigate(result.path);
         }
     };
 
@@ -184,46 +247,30 @@ const MainLayout = () => {
                                 className="w-full h-full px-4 rounded-full border-2 bg-white bg-opacity-70 text-gray-700 placeholder-gray-500 outline-none focus:ring-2 focus:ring-gray-300 transition" 
                                 value={searchQuery}
                                 onChange={handleSearchChange}
-                                onFocus={() => searchQuery.trim().length > 2 && setShowResults(true)}
                             />
                             <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                                {isSearching ? (
-                                    <div className="animate-spin h-5 w-5 border-2 border-red-800 rounded-full border-t-transparent" />
-                                ) : (
-                                    <CustomSvg name="search" className="w-5 h-5" />
-                                )}
+                                <CustomSvg name="search" className="w-5 h-5" />
                             </div>
                             
-                           
                             {showResults && (
                                 <div 
                                     ref={searchResultsRef}
                                     className="absolute top-full left-0 right-0 mt-1 bg-white shadow-lg rounded-md max-h-[300px] overflow-y-auto z-50"
                                 >
-                                    {searchResults.length > 0 ? (
-                                        <div>
-                                            <div className="p-2 border-b">
-                                                <span className="text-sm text-gray-500">
-                                                    {t('search.results', { count: searchResults.length })}
-                                                </span>
-                                            </div>
-                                            {searchResults.map((result) => (
-                                                <div 
-                                                    key={`${result.type}-${result.id}`}
-                                                    className="p-3 border-b hover:bg-gray-100 cursor-pointer"
-                                                    onClick={() => handleResultClick(result)}
-                                                >
-                                                    <h4 className="font-medium text-gray-800">{result.title}</h4>
-                                                    <p className="text-sm text-gray-600 truncate">{result.description}</p>
-                                                    <span className="text-xs text-red-600 mt-1 inline-block">
-                                                        {t(`search.types.${result.type}`, result.type)}
-                                                    </span>
-                                                </div>
-                                            ))}
+                                    {searchResults.map((result) => (
+                                        <div 
+                                            key={result.id}
+                                            className="p-3 border-b hover:bg-gray-100 cursor-pointer"
+                                            onClick={() => handleResultClick(result)}
+                                        >
+                                            <h4 className="font-medium text-gray-800">
+                                                {result.title[i18n.language]}
+                                            </h4>
+                                            <p className="text-xs text-gray-500">
+                                                {t('search.inSection', { section: t(`sections.${result.section}`) })}
+                                            </p>
                                         </div>
-                                    ) : (
-                                        <div className="p-4 text-center text-gray-500">{t('search.noResults')}</div>
-                                    )}
+                                    ))}
                                 </div>
                             )}
                         </div>
@@ -275,20 +322,15 @@ const MainLayout = () => {
                 <Outlet />
             </main>
 
-            <motion.footer 
+            <footer 
                 className="bg-orange-200 py-20 px-6 md:px-16 h-auto font-footer text-[#363636] footer-enhanced"
                 style={{ backgroundImage: `url(${footerbackground})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-                initial={{ opacity: 0, x: -100 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, ease: 'easeOut' }}
-                viewport={{ once: true, amount: 0.5 }}
             >
                 <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-12 text-center md:text-left">
                     <div className='h-auto md:h-[170px]'>
                         <img src="/Logo.svg" alt="Logo" className='h-[146px] w-[150px] mx-auto md:mx-0' />
-                        <div className="flex justify-center md:justify-start gap-2 mt-4">
+                        <div className="flex justify-center md:justify-start gap-2 mt-4 text-center">
                             {socialMedia.length > 0 ? (
-                                // عرض أيقونات وسائل التواصل الاجتماعي من API
                                 socialMedia.map((item) => (
                                     <a 
                                         key={item.id} 
@@ -306,7 +348,6 @@ const MainLayout = () => {
                                     </a>
                                 ))
                             ) : (
-                                // أيقونات احتياطية في حالة فشل تحميل البيانات
                                 <>
                                     <CustomSvg name="facebook" className="w-6 h-6 hover:scale-110 transition-transform" />
                                     <CustomSvg name="instagram" className="w-6 h-6 hover:scale-110 transition-transform" />
@@ -318,43 +359,62 @@ const MainLayout = () => {
                     </div>
                     <div className="hidden md:block mb-4 py-7 p-0">
                         <ul className="space-y-5 text-lg">
-                            <li className="hover:text-[#BB2632] transition-colors">{t('Home')}</li>
-                            <li className="hover:text-[#BB2632] transition-colors">{t('Services & Tools')}</li>
-                            <li className="hover:text-[#BB2632] transition-colors">{t('About Us')}</li>
-                            <li className="hover:text-[#BB2632] transition-colors">{t('Research & Insights')}</li>
-                            <li className="hover:text-[#BB2632] transition-colors">{t('Contact Us')}</li>
+                            <li><Link to="/" className="hover:text-[#BB2632] transition-colors">{t('Home')}</Link></li>
+                            <li><Link to="/ServicesTools" className="hover:text-[#BB2632] transition-colors">{t('Services & Tools')}</Link></li>
+                            <li><Link to="/AboutUs" className="hover:text-[#BB2632] transition-colors">{t('About Us')}</Link></li>
+                            <li><Link to="/research-and-insights" className="hover:text-[#BB2632] transition-colors">{t('Research & Insights')}</Link></li>
+                            <li><Link to="/contact" className="hover:text-[#BB2632] transition-colors">{t('Contact Us')}</Link></li>
                         </ul>
                     </div>
                     <div className='py-7 mb-4'>
                         <ul className="space-y-5 text-lg">
                             <li><Link to='/PrivacyPolicy' className="hover:text-[#BB2632] transition-colors">{t('footer.privacy')}</Link></li>
-                            <li className="hover:text-[#BB2632] transition-colors">{t('footer.terms')}</li>
+                            <li><Link to='/terms' className="hover:text-[#BB2632] transition-colors">{t('footer.terms')}</Link></li>
                             <li><Link to='/Questions' className="hover:text-[#BB2632] transition-colors">{t('footer.faq')}</Link></li>
                         </ul>
                     </div>
                     <div>
-                        <h3 className="mb-4 text-red-700 text-xl font-semibold">{t('footer.newsletter')}</h3>
-                        <div className="flex rounded-3xl overflow-hidden border border-red-600 shadow-md">
-                            <input type="email" placeholder={t('footer.email')} className="p-3 w-full outline-none text-base" />
-                            <button className="bg-red-600 text-white px-6 flex items-center justify-center text-base font-medium hover:bg-red-700 transition-colors" style={{ borderRadius: '0 25px 25px 0' }}>{t('footer.subscribe')}</button>
+                        <h3 className="mb-4 text-red-700 text-xl font-semibold text-center">{t('footer.newsletter')}</h3>
+                        <div className={`flex rounded-3xl overflow-hidden border border-red-600 shadow-md ${isRTL ? 'flex-row-reverse' : ''}`}>
+                            <input 
+                                type="email" 
+                                placeholder={t('footer.email')} 
+                                className={`p-3 w-full outline-none text-base ${isRTL ? 'text-right' : 'text-left'}`} 
+                            />
+                            <button 
+                                className={`bg-red-600 text-white px-6 flex items-center justify-center text-base font-medium hover:bg-red-700 transition-colors ${
+                                    isRTL ? 'rounded-r-3xl' : 'rounded-l-3xl'
+                                }`}
+                                style={{
+                                    borderRadius: isRTL ? '1.5rem 0 0 1.5rem' : '0 1.5rem 1.5rem 0'
+                                }}
+                            >
+                                {t('footer.subscribe')}
+                            </button>
                         </div>
-                        <div className="mt-6 text-base space-y-4 md:space-y-9">
-                            <p className="flex items-center">
-                                <CustomSvg name="location" className="w-5 h-5 ml-0 mr-2 rtl:ml-2 rtl:mr-0" />
-                                {t('footer.address', { defaultValue: '8819 Ohio St. South Gate, CA 90280' })}
-                            </p>
-                            <p className="flex items-center">
-                                <CustomSvg name="email" className="w-5 h-5 ml-0 mr-2 rtl:ml-2 rtl:mr-0" />
-                                {t('footer.email_contact', { defaultValue: 'Ourstudio@hello.com' })}
-                            </p>
-                            <p className="flex items-center">
-                                <CustomSvg name="phone" className="w-5 h-5 ml-0 mr-2 rtl:ml-2 rtl:mr-0" />
-                                {t('footer.phone', { defaultValue: '+1 386-688-3295' })}
-                            </p>
+                        <div className="mt-6 text-base space-y-4">
+                            <div className="flex items-center gap-2">
+                                <div className="flex items-center justify-center bg-red-600 p-2 rounded-full">
+                                    <FaPhone className="w-5 h-5 text-white" />
+                                </div>
+                                <a href="tel:+963112322014" className="hover:text-[#BB2632] transition-colors">+963 11 2322 014</a>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="flex items-center justify-center bg-red-600 p-2 rounded-full">
+                                    <FaFax className="w-5 h-5 text-white" />
+                                </div>
+                                <a href="tel:+963112322015" className="hover:text-[#BB2632] transition-colors">+963 11 2322 015</a>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="flex items-center justify-center bg-red-600 p-2 rounded-full">
+                                    <FaEnvelope className="w-5 h-5 text-white" />
+                                </div>
+                                <a href="mailto:info@first-pioneers.com" className="hover:text-[#BB2632] transition-colors">info@first-pioneers.com</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </motion.footer>
+            </footer>
         </motion.div>
     );
 }

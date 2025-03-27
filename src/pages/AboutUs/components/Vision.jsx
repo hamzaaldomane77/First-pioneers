@@ -68,7 +68,7 @@ export default function Vision() {
     >
       <div className="text-center">
         <motion.h1
-          className="text-[#BB2632] text-center pt-32 pb-12 text-3xl md:text-4xl sm:text-3xl"
+          className="text-[#BB2632] text-center pt-32 pb-12 text-5xl md:text-4xl sm:text-3xl"
           variants={fadeInUp}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
@@ -110,7 +110,7 @@ export default function Vision() {
           {t('mission.title', 'Our Mission')}
         </motion.h1>
         <motion.div
-          className="max-w-3xl mx-auto px-4"
+          className="max-w-3xl mx-auto px-4 text-lg "
           variants={fadeInUp}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}

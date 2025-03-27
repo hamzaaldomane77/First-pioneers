@@ -120,12 +120,12 @@ export default function Clients() {
           rtl={isRTL}
         >
           {clientsData.images.map((image) => (
-            <SwiperSlide key={image.id} className="flex justify-center items-center py-5">
+            <SwiperSlide key={image.id} className="flex justify-center items-center py-3">
               <div className="logo-container flex justify-center items-center p-2 mx-1">
                 <img 
                   src={image.url} 
                   alt={t('clients.logo_alt', 'Client Logo')}
-                  className="w-9 h-9 sm:w-12 sm:h-12 md:w-20 md:h-20 lg:w-32 lg:h-32 object-contain" 
+                  className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-32 lg:h-32 object-contain" 
                 />
               </div>
             </SwiperSlide>
