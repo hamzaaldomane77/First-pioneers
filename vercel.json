@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://first.pioneers.backend.techpundits.net/api/:path*"
+    }
+  ]
+} 
