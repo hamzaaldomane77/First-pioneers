@@ -38,12 +38,6 @@ const api = axios.create({
 
 // إضافة معترض لإعادة المحاولة
 api.interceptors.response.use(undefined, async (err) => {
-  // التعامل مع أخطاء SSL
-  if (err.message && err.message.includes('CERT_COMMON_NAME_INVALID')) {
-    console.warn('SSL Certificate Error: Please check the SSL configuration');
-    // يمكنك إضافة معالجة إضافية هنا
-  }
-  
   // التعامل مع أخطاء CORS
   if (err.message && (err.message.includes('Network Error') || err.code === 'ERR_NETWORK')) {
     console.warn('Network error encountered, might be a CORS issue');
@@ -56,7 +50,7 @@ api.interceptors.response.use(undefined, async (err) => {
 
   config.__retryCount = config.__retryCount || 0;
 
-  if (config.__retryCount >= 3) {
+  if (config.__retryCount >= 3) { // استخدم حد ثابت لعدد إعادة المحاولات
     return Promise.reject(err);
   }
 
