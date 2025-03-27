@@ -113,5 +113,39 @@
   },
   "common": {
     "error": "Error loading content"
+  },
+  "agency": {
+    "title": "Proud To Be An Authorized Agency",
+    "description": "First Pioneers Marketing Research with its Arabic official name (AL-MOBTAKIRON AL-AWAEL CO. LTD) is the only member from Syrian Arab Republic register in ESOMAR World Research",
+    "learnMore": "Learn more about our team and expertise",
+    "findUs": "Find Us In ESOMAR Directory"
+  },
+  "research": {
+    "title": "Our Research And Insights",
+    "subtitle": "Dive into a world of actionable intelligence with our Research & Insights hub—your go-to resource for market trends, expert analysis, and data-driven discoveries. Here, you'll find:",
+    "items": {
+      "blog": {
+        "title": "Explore Our Blog",
+        "text": "Stay informed with the latest trends, insights, and expert perspectives in market research. Our blog features thought-provoking articles, industry updates, and practical tips to help you make smarter, data-driven decisions."
+      },
+      "reports": {
+        "title": "Read and Download Our Reports",
+        "text": "Access in-depth research reports tailored to your industry. From market trends to consumer behavior, our downloadable resources provide the insights you need to stay ahead of the competition."
+      },
+      "learn": {
+        "title": "Learn How Research Work",
+        "text": "Expand your knowledge with our collection of educational articles. Whether you're new to market research or a seasoned professional, these resources offer valuable guidance on methodologies, tools, and best practices."
+      }
+    },
+    "button": "More Research and Insights"
+  },
+  "partners": {
+    "title": "Our Partners",
+    "description": "Get to know more about our partners"
+  },
+  "transform": {
+    "title": "Ready To Transform Your Business?",
+    "description": "Let's turn your data into actionable insights!",
+    "button": "Contact Us"
   }
 } 
