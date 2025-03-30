@@ -94,16 +94,16 @@ export default function OurPartners() {
             }}
           >
             {partners.map((partner) => (
-              <SwiperSlide key={partner.id} className="flex justify-center items-center py-5 px-4 relative z-20">
+              <SwiperSlide key={partner.id} className="flex justify-center items-center py-5 ">
                 <motion.div
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  className="partner-logo-container flex justify-center items-center rounded-lg mx-auto bg-white p-4 shadow-md"
+                  className="logo-container flex justify-center items-center mx-auto rounded-lg p-4 "
                 >
                   <img 
                     src={partner.image} 
                     alt={`Partner ${partner.id}`} 
-                    className="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 object-contain px-5" 
+                    className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 object-contain " 
                   />
                 </motion.div>
               </SwiperSlide>
