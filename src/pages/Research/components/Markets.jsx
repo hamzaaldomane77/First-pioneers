@@ -106,7 +106,7 @@ export default function Markets() {
                                 </div>
                                 <div className={`p-6 ${isRTL ? 'text-right' : 'text-left'}`}>
                                     <h3 className={`text-lg font-semibold transition-all duration-500 group-hover:text-[#BB2632] ${isRTL ? 'mb-2' : ''}`}>{word.title}</h3>
-                                    <p className={`text-sm text-[#333333] my-4 ${isRTL ? 'leading-relaxed' : ''}`}>{word.description}</p>
+                                    <p className={`text-sm text-[#333333] my-4 bahnschrift text-[16px]${isRTL ? 'leading-relaxed' : ''}`}>{word.description}</p>
                                     <span className={`text-[#BB2632] font-semibold relative inline-block pb-4 ${isRTL ? 'pr-0 pl-6' : 'pl-0 pr-6'} pt-4 cursor-pointer`}>
                                         {isRTL ? 'عرض المزيد' : 'Read More'}
                                         <span className={`absolute ${isRTL ? 'right-2 left-auto' : 'left-0 right-4 '} bottom-4 w-0 h-[2px] bg-[#BB2632] transition-all duration-500 group-hover:w-[75px]`}></span>
@@ -118,8 +118,8 @@ export default function Markets() {
                 </div>
             </div>
             
-            <div className={`text-[#BB2632] text-center mt-8 p-12`}>
-                <Link to="/words" className="hover:text-[#BB2632] inline-flex justify-center items-center gap-2 transition-all duration-500 group">
+            <div className={`text-[#BB2632] text-center mt-8 p-12 text-xl`}>
+                <Link to="/words"  className="inline-flex items-center text-[#ec3a49] font-semibold hover:opacity-80 transition-opacity duration-300 text-center group">
                     {isRTL ? 'عرض جميع الكلمات' : 'View All Words'}
                     <ArrowIcon className={`w-5 h-5 text-[#BB2632] transition-all duration-500 ${isRTL ? 'mr-1' : 'ml-1'}`} />
                 </Link>

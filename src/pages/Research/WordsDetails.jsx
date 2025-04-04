@@ -122,7 +122,6 @@ const WordsDetails = () => {
                     </div>
                 </div>
                 
-                {/* محتوى العنوان */}
                 <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16 text-white">
                     <div className="container mx-auto">
                         <div className={`${isRTL ? 'text-right' : 'text-left'}`}>
@@ -163,7 +162,7 @@ const WordsDetails = () => {
                     <h2 className={`text-2xl mb-6 text-[#BB2632] font-bold ${isRTL ? 'text-right font-medium' : ''}`}>
                         {isRTL ? 'الوصف' : 'Description'}
                     </h2>
-                    <div className={`text-gray-800 leading-relaxed ${isRTL ? 'text-right' : ''}`}>
+                    <div className={`text-gray-800 leading-relaxed bahnschrift text-[16px]${isRTL ? 'text-right' : ''}`}>
                         <p className={`${isRTL ? 'leading-loose text-lg' : ''}`}>{word.description}</p>
                     </div>
                 </div>

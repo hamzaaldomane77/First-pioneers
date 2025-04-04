@@ -5,11 +5,12 @@ import Tools from './components/Tools'
 
 const ServicesTools = () => {
   return (
-   <>
-   <HeroServices />
+  
+  <section className='pb-12'>
+      <HeroServices />
   <Services />
   <Tools />
-   </>
+  </section>
   )
 }
 

@@ -83,7 +83,7 @@ export default function Services() {
             </div>
             <div className="p-6 text-center">
               <h3 className="text-lg font-semibold transition-all duration-500 group-hover:text-[#BB2632]">{service.title}</h3>
-              <p className="text-sm text-[#333333] my-4">{service.excerpt}</p>
+              <p className="text-sm text-[#333333] my-4 text-[16px]">{service.excerpt}</p>
               <span className="text-[#BB2632] font-semibold relative inline-block">
                 {isRTL ? 'استكشاف الخدمة' : 'Explore Service'}
                 <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#BB2632] transition-all duration-500 group-hover:w-full"></span>

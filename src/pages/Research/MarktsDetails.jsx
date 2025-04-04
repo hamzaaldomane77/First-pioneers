@@ -140,7 +140,7 @@ const TrendDetails = () => {
                             <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${isRTL ? 'font-medium leading-relaxed' : ''}`}>
                                 {trend.title}
                             </h1>
-                            <p className={`text-lg md:text-xl max-w-3xl ${isRTL ? 'leading-10' : ''}`}>
+                            <p className={`text-lg md:text-xl max-w-3xl bahnschrift text-[16px]${isRTL ? 'leading-10' : ''}`}>
                                 {trend.description}
                             </p>
                             <p className="text-gray-300 text-sm mt-4">

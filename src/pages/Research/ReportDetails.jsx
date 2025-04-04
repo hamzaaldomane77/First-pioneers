@@ -106,7 +106,7 @@ const ReportDetails = () => {
 
           {/* المحتوى الكامل */}
           {report.content && (
-            <div className="mb-6 text-lg text-gray-700 leading-relaxed">
+            <div className="mb-6 text-lg text-gray-700 leading-relaxed bahnschrift ">
               <p className={isRTL ? 'leading-loose' : ''}>{report.content}</p>
             </div>
           )}

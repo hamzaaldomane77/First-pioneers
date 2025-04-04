@@ -161,7 +161,7 @@ export default function ServicesDetails() {
                       className="w-full h-auto rounded-lg shadow-lg"
                     />
                   </div>
-                  <div className="w-full md:w-1/2 text-center py-6  bg-opacity-50 rounded-lg p-8">
+                  <div className="w-full md:w-1/2 text-center py-6 text-[16px] bg-opacity-50 rounded-lg p-8 bahnschrift">
                     <h3 className="text-2xl font-bold mb-4 text-red-900">{explore.title}</h3>
                     <p className="text-gray-600">{explore.description}</p>
                   </div>

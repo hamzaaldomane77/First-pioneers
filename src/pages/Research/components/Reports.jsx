@@ -147,7 +147,7 @@ function Card({ id, logo, title, description, isRTL }) {
                             : 'opacity-100'
                     }`}
                 >
-                    <button className="px-6 py-2 text-red-700 font-medium">{viewText}</button>
+                    <button className="px-6 py-2 text-red-700 font-medium bahnschrift text-[16px]">{viewText}</button>
                 </div>
                 
                 {/* Overlay with title and description that appears on hover */}
@@ -159,8 +159,8 @@ function Card({ id, logo, title, description, isRTL }) {
                     }`}
                 >
                     <h3 className="text-xl font-bold mb-4 text-center text-red-700">{title}</h3>
-                    <p className="text-sm text-center mb-6 line-clamp-4">{description}</p>
-                    <button className="px-12 py-2 text-red-700 font-medium">{viewText}</button>
+                    <p className="text-sm text-center mb-6 line-clamp-4 bahnschrift text-[16px]">{description}</p>
+                    <button className="px-12 py-2 text-red-700 font-medium bahnschrift text-[16px]">{viewText}</button>
                 </div>
             </div>
         </Link>

@@ -76,7 +76,7 @@ const BlogDetails = () => {
               {blog.categories.map((category, index) => (
                 <span
                   key={index}
-                        className="bg-white text-[#BB2632] border border-[#BB2632] px-4 py-1 rounded-full text-sm font-medium hover:bg-[#BB2632] hover:text-white "
+                        className="bg-white text-[#BB2632] border border-[#BB2632] px-4 py-1 rounded-full text-sm font-medium hover:bg-[#BB2632] hover:text-white bahnschrift text-[16px]"
                 >
                   {category}
                 </span>
@@ -97,7 +97,7 @@ const BlogDetails = () => {
 
           {/* الوصف الأول */}
           {blog.first_description && (
-            <div className="mb-12 text-lg text-gray-700 leading-relaxed">
+            <div className="mb-12 text-lg text-gray-700 leading-relaxed bahnschrift text-[16px]">
               <p>{blog.first_description}</p>
             </div>
           )}

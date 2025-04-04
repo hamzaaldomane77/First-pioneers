@@ -126,7 +126,7 @@ export default function Testimonials() {
                   />
                 )}
                 <h2 className="text-[#BB2632] text-xl font-bold">{item.title}</h2>
-                <p className="text-gray-800 text-base mt-4">{item.description}</p>
+                <p className="text-gray-800 text-base mt-4 bahnschrift text-[16px]">{item.description}</p>
               </div>
             </SwiperSlide>
           ))}

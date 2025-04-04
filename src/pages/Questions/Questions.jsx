@@ -123,7 +123,7 @@ export default function Questions() {
               {question.category?.name || t('questions.uncategorized', isRTL ? 'غير مصنف' : 'Uncategorized')}
             </span>
             <h3 className="text-xl font-semibold mb-3 text-gray-800">{question.title}</h3>
-            <p className="text-gray-600">{question.description}</p>
+            <p className="text-gray-600 bahnschrift text-[16px]">{question.description}</p>
           </div>
         ))}
       </div>

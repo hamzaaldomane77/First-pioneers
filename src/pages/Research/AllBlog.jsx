@@ -48,7 +48,7 @@ const BlogCard = ({ cover_image, title, categories, first_description, author_na
          
 
           {first_description && (
-          <p className="text-gray-600 text-sm mb-4 py-5">
+          <p className="text-gray-600 text-sm mb-4 py-5 bahnschrift text-[16px]">
             {first_description.split(' ').slice(0, 35).join(' ')}
             {first_description.split(' ').length > 35 ? '...' : ''}
           </p>

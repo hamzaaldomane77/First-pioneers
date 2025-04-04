@@ -120,7 +120,7 @@ const ToolDetails = () => {
                 <div className="absolute top-4 left-4 right-4 z-10">
                     <div className="container mx-auto">
                         <Link 
-                            to="/services-tools" 
+                            to="/ServicesTools" 
                             className={`inline-flex items-center text-white hover:text-[#BB2632] transition-colors bg-black/20 px-4 py-2 rounded-lg ${isRTL ? 'flex-row-reverse' : ''}`}
                         >
                             <BackArrowIcon className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
@@ -190,8 +190,8 @@ const ToolDetails = () => {
             
             {/* قسم الاستكشاف مع صورتين - يظهر دائمًا في النهاية */}
             {doubleImageExplores.length > 0 && (
-                <section className="py-16 ">
-                    <div className="container mx-auto px-4">
+                <section className="">
+                    <div className="container ">
                        
                         
                         {doubleImageExplores.map((explore, index) => {
@@ -240,16 +240,7 @@ const ToolDetails = () => {
             )}
             
             {/* قسم العودة */}
-            <section className="py-8">
-                <div className="container mx-auto px-4 text-center">
-                    <Link 
-                        to="/ServicesTools" 
-                        className="bg-[#BB2632] text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition-all duration-300 inline-block"
-                    >
-                        {isRTL ? 'العودة إلى جميع الأدوات' : 'Back to All Tools'}
-                    </Link>
-                </div>
-            </section>
+            
         </div>
     );
 };

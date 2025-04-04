@@ -94,7 +94,7 @@ export default function Blog() {
                       {blog.categories.map((category, index) => (
                         <span
                           key={index}
-                          className="text-sm text-[#BB2632] font-medium bg-red-50 px-3 py-1 rounded-full"
+                          className="text-sm text-[#BB2632] font-medium bg-red-50 px-3 py-1 rounded-full bahnschrift text-[16px]"
                         >
                           {category}
                         </span>
@@ -117,7 +117,7 @@ export default function Blog() {
                   </div>
 
                   {blog.first_description && (
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2 py-4">
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2 py-4 bahnschrift text-[16px]">
                       {blog.first_description}
                     </p>
                   )}

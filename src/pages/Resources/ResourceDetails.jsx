@@ -111,7 +111,7 @@ export default function ResourceDetails() {
               <h1 className="text-3xl font-bold text-[#BB2632] mb-4">
                 {resource.title}
               </h1>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-gray-700 leading-relaxed bahnschrift text-[16px]">
                 {resource.description}
               </p>
             </div>
@@ -135,7 +135,7 @@ export default function ResourceDetails() {
                         </h4>
                       </div>
                       {category.description && (
-                        <p className="text-gray-600 text-sm">
+                        <p className="text-gray-600 text-sm bahnschrift text-[16px]">
                           {category.description}
                         </p>
                       )}

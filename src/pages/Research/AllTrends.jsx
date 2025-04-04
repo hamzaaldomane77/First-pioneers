@@ -100,7 +100,7 @@ const AllTrends = () => {
                                 <h3 className={`text-lg font-semibold transition-all duration-500 group-hover:text-[#BB2632] ${isRTL ? 'mb-2' : ''}`}>
                                     {trend.title}
                                 </h3>
-                                <p className={`text-sm text-[#333333] my-4 ${isRTL ? 'leading-relaxed' : ''}`}>
+                                <p className={`text-sm text-[#333333] my-4 bahnschrift text-[16px]${isRTL ? 'leading-relaxed' : ''}`}>
                                     {trend.description}
                                 </p>
                                 <div className="flex items-center justify-between">

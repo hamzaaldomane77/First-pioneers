@@ -108,10 +108,10 @@ export default function Resources() {
               />
             </div>
             <div className="p-6">
-              <h3 className="text-xl font-semibold mb-3 text-[#BB2632] group-hover:opacity-80 transition-opacity">
+              <h3 className="text-xl font-semibold mb-3  group-hover:text-[#BB2632] group-hover:opacity-80 transition-opacity">
                 {resource.title}
               </h3>
-              <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+              <p className="text-sm text-gray-600 mb-4 line-clamp-3 bahnschrift text-[16px]">
                 {resource.description}
               </p>
               {resource.categories && resource.categories.length > 0 && (
@@ -138,10 +138,10 @@ export default function Resources() {
         ))}
       </div>
 
-      <div className='text-[#BB2632] text-center mt-8 p-12'>
+      <div className={`text-[#BB2632] text-center mt-8 p-12 text-xl`}>
         <Link 
           to="/resources" 
-          className="hover:text-[#BB2632] flex justify-center items-center gap-2 transition-all duration-500 group"
+          className="inline-flex items-center text-[#ec3a49] font-semibold hover:opacity-80 transition-opacity duration-300 text-center group"
         >
           {isRTL ? 'عرض جميع الموارد' : 'View All Resources'}
           <ArrowRight className={`w-5 h-5 text-[#BB2632] transition-all duration-500 ${isRTL ? 'rotate-180' : ''}`} />

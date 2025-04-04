@@ -60,7 +60,7 @@ export default function PrivacyPolicy() {
   return (
     <section className="min-h-screen flex flex-col justify-center items-center px-4" dir={isRTL ? 'rtl' : 'ltr'}>
       <h1 className='text-center text-black py-12 text-[30px] pb-10'>{policy.title}</h1>
-      <div className='text-start leading-7 mx-auto max-w-[1200px] w-full text-sm py-10' 
+      <div className='text-start leading-7 mx-auto max-w-[1200px] w-full text-sm py-10 bahnschrift text-[16px]' 
         dangerouslySetInnerHTML={{ __html: policy.description }}
       />
     </section>

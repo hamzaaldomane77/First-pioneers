@@ -173,5 +173,8 @@
     "email_placeholder": "Enter your email",
     "subscribe_button": "Subscribe",
     "image_alt": "Mailbox illustration"
+  },
+  "trends": {
+    "title": "Trends In Markets"
   }
 } 
