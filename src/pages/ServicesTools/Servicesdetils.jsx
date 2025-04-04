@@ -90,7 +90,7 @@ export default function ServicesDetails() {
             <img
               src={serviceDetails.image}
               alt={serviceDetails.title}
-              className="w-full h-full object-cover opacity-70"
+              className="w-full h-full object-cover opacity-40"
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-b from-gray-700 to-gray-900"></div>
@@ -163,7 +163,7 @@ export default function ServicesDetails() {
                   </div>
                   <div className="w-full md:w-1/2 text-center py-6  bg-opacity-50 rounded-lg p-8">
                     <h3 className="text-2xl font-bold mb-4 text-red-900">{explore.title}</h3>
-                    <p className="text-gray-100">{explore.description}</p>
+                    <p className="text-gray-600">{explore.description}</p>
                   </div>
                   <div className="w-full md:w-1/4">
                     <img 
@@ -179,12 +179,7 @@ export default function ServicesDetails() {
         </section>
       )}
 
-      {/* زر العودة في نهاية الصفحة */}
-      <div className="container mx-auto px-4 py-8 text-center">
-        <Link to="/ServicesTools" className="inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
-          {isRtl ? 'استكشف جميع خدماتنا' : 'Explore All Our Services'}
-        </Link>
-      </div>
+     
     </div>
   );
 }

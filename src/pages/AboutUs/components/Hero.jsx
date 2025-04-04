@@ -64,7 +64,7 @@ export default function Hero() {
           </h1>
           
           {error ? (
-            <div className="bg-red-500 bg-opacity-75 p-4 rounded-lg mb-4">
+            <div className="bg-red-500 bg-opacity-75 rounded-lg mb-4">
               <p className="text-white">{error}</p>
               {retryCount >= 3 && (
                 <p className="text-white mt-2 text-sm">
@@ -74,7 +74,7 @@ export default function Hero() {
             </div>
           ) : (
             <div 
-              className={`text-lg leading-8 text-black sm:text-sm md:text-base whitespace-pre-line`}
+              className={`text-lg leading-8 text-black sm:text-sm md:text-base whitespace-pre-line about-us`}
               dangerouslySetInnerHTML={{ 
                 __html: loading ? t('loading', 'Loading...') : description 
               }}

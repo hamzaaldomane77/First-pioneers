@@ -60,7 +60,7 @@ export default function CoreValues() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8 px-10 lg:px-20 py-20">
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8 px-5 lg:px-20 py-20">
         {coreValues.map((value) => (
           <motion.div
             key={value.id}

@@ -113,7 +113,7 @@ export default function Testimonials() {
           >
             {testimonials.map((testimonial, index) => (
               <SwiperSlide key={index}>
-                <div className="w-full md:w-[1120px] h-auto md:h-[425px] mx-auto rounded-xl shadow-2xl grid grid-cols-1 md:grid-cols-2 overflow-y-hidden relative"
+                <div className="w-full md:w-[1120px] h-auto md:h-[425px] mx-auto rounded-2xl shadow-xl grid grid-cols-1 md:grid-cols-2 overflow-y-hidden relative z-20"
                   style={{ backgroundImage: `url(${Testimonialsbg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 
                   <div className="p-5 md:p-10 md:pr-28 relative flex flex-col md:flex-row items-center md:items-start">

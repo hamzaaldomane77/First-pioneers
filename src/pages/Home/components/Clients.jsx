@@ -57,7 +57,7 @@ export default function Clients() {
 
   return (
     <section
-      className={`min-h-screen bg-cover bg-center transition-all duration-1000 p-6 lg:pl-28 overflow-x-hidden lg:pb-40 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      className={`min-h-screen bg-cover bg-center transition-all duration-1000 p-6 lg:pl-28 overflow-x-hidden lg:pb-20 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
       style={{ backgroundImage: `url(${Redbackground})` }}
       ref={ref}
       dir={isRTL ? "rtl" : "ltr"}
@@ -81,7 +81,7 @@ export default function Clients() {
           dangerouslySetInnerHTML={{ 
             __html: loading ? t('loading', 'Loading...') : clientsData.description 
           }}
-        />
+        />  
       )}
 
       <div className="max-w-[95%] mx-auto">
@@ -90,11 +90,11 @@ export default function Clients() {
           spaceBetween={20}
           breakpoints={{
             320: {
-              slidesPerView: 5,
+              slidesPerView: 4,
               spaceBetween: 10,
             },
             480: {
-              slidesPerView: 5,
+              slidesPerView: 4,
               spaceBetween: 15,
             },
             640: {
@@ -125,7 +125,7 @@ export default function Clients() {
                 <img 
                   src={image.url} 
                   alt={t('clients.logo_alt', 'Client Logo')}
-                  className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-32 lg:h-32 object-contain" 
+                  className="w-20 h-20 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-32 lg:h-32 object-contain" 
                 />
               </div>
             </SwiperSlide>

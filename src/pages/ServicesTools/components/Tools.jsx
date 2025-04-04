@@ -102,7 +102,7 @@ export default function Tools() {
         {tools.map((tool, index) => (
           <div
             key={tool.id}
-            className={`bg-white group transition-all duration-500 shadow-xl sm:p-8 lg:pb-24 py-5 rounded-xl${
+            className={`bg-white group transition-all duration-500 hover:shadow-xl sm:p-8 lg:pb-24 items-center rounded-xl ${
               index % 2 !== 0 ? 'md:transform md:translate-y-28' : ''
             }`}
           >
