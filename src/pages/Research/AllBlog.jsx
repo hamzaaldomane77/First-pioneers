@@ -54,17 +54,20 @@ const BlogCard = ({ cover_image, title, categories, first_description, author_na
           </p>
         )}
          </div>
-          <Link 
+        
+         <Link 
             to={`/Blogdetails/${slug}`}
-            className="inline-flex items-center text-[#BB2632] font-semibold hover:text-red-700 transition-colors duration-300 pt-32"
+            className="inline-flex items-center text-[#BB2632] font-semibold hover:text-red-700 transition-colors duration-300 pt-32 text-[15px]"
           >
-          {t("blog.viewarticle")}
+              {t("blog.viewarticle")}
             {isRTL ? (
               <ArrowLeft className="w-4 h-4 mr-2" />
             ) : (
               <ArrowRight className="w-4 h-4 ml-2" />
             )}
           </Link>
+     
+      
         </div>
     </div>
   </div>

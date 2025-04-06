@@ -110,7 +110,7 @@ function Card({ id, logo, title, description, isRTL }) {
     return (
         <Link to={`/reports/${id}`}>
             <div 
-                className="relative overflow-hidden rounded-s-3xl shadow-lg bg-white h-96 cursor-pointer"
+                className="relative overflow-hidden rounded-ss-3xl shadow-lg bg-white h-96 cursor-pointer"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >

@@ -161,7 +161,7 @@ export default function Hero() {
             >
               {homeData.description || t('home.defaultDescription', 'Loading description...')}
             </motion.h2>
-        <Link to="/contact">
+        <Link to="/contact" className='shad'>
         <motion.button 
               initial={{ opacity: 0, scale: 0.5 }} 
               animate={{ opacity: 1, scale: 1 }} 
