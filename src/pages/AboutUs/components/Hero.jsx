@@ -53,13 +53,13 @@ export default function Hero() {
       ref={ref}
       dir={isRTL ? 'rtl' : 'ltr'}
     >
-      <div className="w-full flex flex-col-reverse md:flex-row items-center justify-center px-11 py-32">
+      <div className="w-full flex flex-col-reverse md:flex-row items-center justify-center px-0 md:px-11 py-32">
         <div 
-          className={`w-full md:w-1/2 px-11 transition-all duration-1000 
+          className={`w-full md:w-1/2 px-4 md:px-11 transition-all duration-1000 
             ${inView ? 'translate-x-0 opacity-100' : '-translate-x-40 opacity-0'}
             ${loading ? 'animate-pulse' : ''}`}
         >
-          <h1 className={`text-[#BB2632] text-[50px] py-6 `}>
+          <h1 className={`text-[#BB2632] text-[50px] py-6`}>
             {isRTL ? 'من نحن' : 'About Us'}
           </h1>
           
@@ -74,7 +74,7 @@ export default function Hero() {
             </div>
           ) : (
             <div 
-              className={`text-lg leading-8 text-black sm:text-sm md:text-base whitespace-pre-line about-us`}
+              className={`text-lg leading-8 text-black sm:text-sm md:text-base whitespace-pre-line about-us px-0`}
               dangerouslySetInnerHTML={{ 
                 __html: loading ? t('loading', 'Loading...') : description 
               }}

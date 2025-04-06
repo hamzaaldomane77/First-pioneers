@@ -66,7 +66,7 @@ export default function Services() {
 
   return (
     <section
-      className={`min-h-screen bg-cover bg-center transition-all duration-1000 p-6 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      className={`min-h-screen bg-cover bg-center transition-all duration-1000 px-2 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
       style={{ backgroundImage: `url(${Redbackground})` }}
       ref={ref}
       dir={isRTL ? 'rtl' : 'ltr'}
@@ -81,11 +81,11 @@ export default function Services() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-5 rounded-lg">
         {servicesData.map(service => (
           <Link to={`/servicesdetils/${service.id}`} key={service.id} className=" shadow-lg rounded-lg transition-all duration-500 hover:scale-105 cursor-pointer ">
             <div className="relative">
-              <img src={service.image} alt={service.title} className="w-full h-60  transition-transform duration-500 group-hover:scale-110" />
+              <img src={service.image} alt={service.title} className="w-full h-full  transition-transform duration-500 group-hover:scale-110" />
             </div>
             <div className="p-6 text-center">
               <h3 className="text-lg font-semibold transition-all duration-500 group-hover:text-[#BB2632]">{service.title}</h3>

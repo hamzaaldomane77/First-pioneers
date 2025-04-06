@@ -81,7 +81,7 @@ export default function Testimonials() {
 
   return (
     <section
-      className={`min-h-screen bg-cover bg-center transition-all duration-1000 p-6 h-[1000px] overflow-hidden ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      className={`min-h-screen bg-cover bg-center transition-all duration-1000 px-2 h-[1000px] overflow-hidden ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
       style={{ backgroundImage: `url(${Redbackground})` }}
       ref={ref}
       dir={isRTL ? 'rtl' : 'ltr'}
@@ -138,7 +138,7 @@ export default function Testimonials() {
         <button className={`custom-next absolute ${isRTL ? 'left-[-60px]' : 'right-[-60px]'} top-[250px] transform -translate-y-1/2 rounded-full p-3 bg-[#dd3d4a] transition-transform duration-300 ease-in-out hover:scale-110 hidden md:block`}>
           {isRTL ? <MoveLeft className="w-5 h-5 text-white" /> : <MoveRight className="w-5 h-5 text-white" />}
         </button>
-        <div className="custom-pagination m-10 [&>.swiper-pagination-bullet]:bg-[#BB2632] [&>.swiper-pagination-bullet]:mx-5 [&>.swiper-pagination-bullet]:shadow-lg [&>.swiper-pagination-bullet]:shadow-[#BB2632]/100 transition-opacity duration-300 hover:opacity-75 text-center pr-24 pb-9"></div>
+        <div className={`custom-pagination flex justify-center items-center mt-10 mb-4 [&>.swiper-pagination-bullet]:bg-[#BB2632] [&>.swiper-pagination-bullet]:mx-2 [&>.swiper-pagination-bullet]:w-3 [&>.swiper-pagination-bullet]:h-3 [&>.swiper-pagination-bullet]:rounded-full [&>.swiper-pagination-bullet]:cursor-pointer [&>.swiper-pagination-bullet]:transition-all [&>.swiper-pagination-bullet]:duration-300 [&>.swiper-pagination-bullet-active]:bg-[#BB2632] [&>.swiper-pagination-bullet-active]:scale-125`}></div>
       </div>
     </section>
   );

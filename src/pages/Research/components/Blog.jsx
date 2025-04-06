@@ -54,7 +54,7 @@ export default function Blog() {
   }
 
   return (
-    <section className="container mx-auto px-4 py-12" dir={isRTL ? 'rtl' : 'ltr'}>
+    <section className="container mx-auto px-3 sm:px-5 py-12 lg:px-0" dir={isRTL ? 'rtl' : 'ltr'}>
       <div ref={ref}>
         <h2 className="text-center text-3xl font-bold text-[#BB2632] mb-2 py-9">
           {t("blog.stayInformed")}
@@ -80,7 +80,7 @@ export default function Blog() {
                     <img
                       src={blog.cover_image}
                       alt={blog.title}
-                      className="absolute inset-0 w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-cover "
                       onError={(e) => {
                         e.target.src = t("blog.placeholderImage");
                       }}
@@ -127,7 +127,7 @@ export default function Blog() {
                       to={`/Blogdetails/${blog.slug}`}
                       className="inline-flex items-center text-[#BB2632] font-semibold hover:opacity-80 transition-opacity duration-300"
                     >
-                      {t("blog.viewBlog")}
+                      {t("blog.viewarticle")}
                       
                     </Link>
                   </div>

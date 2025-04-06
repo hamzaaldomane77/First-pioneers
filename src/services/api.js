@@ -354,44 +354,19 @@ export const getMissions = async () => {
       }
     });
 
-    // تحقق من وجود البيانات في الاستجابة
-    if (response.data?.data) {
-      const missionsData = response.data.data;
-      
-      // إذا كانت البيانات موجودة في our_missions
-      if (missionsData.our_missions) {
-        return {
-          vision: missionsData.our_missions.vision || '',
-          mission: missionsData.our_missions.mission || ''
-        };
-      }
-      
-      // إذا كانت البيانات موجودة مباشرة في data
-      if (missionsData.vision || missionsData.mission) {
-        return {
-          vision: missionsData.vision || '',
-          mission: missionsData.mission || ''
-        };
-      }
-
-      // إذا كانت البيانات موجودة في items
-      if (missionsData.items && missionsData.items.length > 0) {
-        const item = missionsData.items[0];
-        return {
-          vision: item.vision || '',
-          mission: item.mission || ''
-        };
-      }
+    // التحقق من وجود البيانات في الاستجابة
+    if (response.data?.success && response.data?.data) {
+      return {
+        mission: response.data.data.description || ''
+      };
     }
 
     return {
-      vision: '',
       mission: ''
     };
     
   } catch (error) {
     return {
-      vision: '',
       mission: ''
     };
   }

@@ -42,7 +42,7 @@ export default function Tools() {
     return (
       <section
         ref={ref}
-        className={`min-h-screen transition-all duration-1000 p-6 py-20 overflow-clip  ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+        className={`min-h-screen transition-all duration-1000 px-3 py-20 overflow-clip  ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
       >
         <h1 className="text-[#BB2632] text-3xl sm:text-4xl md:text-5xl text-center pt-12 sm:pt-24 pb-8 sm:pb-16">
           {isRTL ? 'أدواتنا' : 'Our Tools'}
@@ -92,13 +92,13 @@ export default function Tools() {
     <section
       dir={isRTL ? 'rtl' : 'ltr'}
       ref={ref}
-      className={`min-h-screen transition-all duration-1000 p-6 py-20 overflow-clip ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      className={`min-h-screen transition-all duration-1000 px-1 py-20 overflow-clip ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
     >
       <h1 className={`text-[#BB2632] text-3xl sm:text-4xl md:text-5xl text-center pt-12 sm:pt-24 pb-8 sm:pb-16 ${isRTL ? 'font-medium' : ''}`}>
         {isRTL ? 'أدواتنا' : 'Our Tools'}
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 px-4 sm:px-5 max-w-7xl mx-auto ">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 px-4 sm:px-5 max-w-7xl mx-auto space-y-10">
         {tools.map((tool, index) => (
           <div
             key={tool.id}

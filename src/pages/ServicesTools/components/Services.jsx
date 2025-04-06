@@ -64,7 +64,7 @@ export default function Services() {
 
   return (
     <section
-      className={`min-h-screen bg-cover bg-center transition-all duration-1000 p-6 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      className={`min-h-screen bg-cover bg-center transition-all duration-1000 px-4 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
       style={{ backgroundImage: `url(${Redbackground})` }}
       ref={ref}
       dir={isRTL ? 'rtl' : 'ltr'}
@@ -75,16 +75,16 @@ export default function Services() {
         </h1>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 md:px-4 max-w-7xl mx-auto space-y-10">
         {servicesData.map(service => (
-          <Link to={`/servicesdetils/${service.id}`} key={service.id} className="overflow-hidden shadow-lg rounded-lg transition-all duration-500 hover:scale-105 cursor-pointer group block">
+          <Link to={`/servicesdetils/${service.id}`} key={service.id} className="overflow-hidden shadow-lg rounded-lg transition-all duration-500 hover:scale-105 cursor-pointer group block bg-white">
             <div className="relative">
               <img src={service.image} alt={service.title} className="w-full h-60 object-cover transition-transform duration-500 group-hover:scale-110" />
             </div>
-            <div className="p-6 text-center">
+            <div className="p-3 md:p-6 text-center">
               <h3 className="text-lg font-semibold transition-all duration-500 group-hover:text-[#BB2632]">{service.title}</h3>
               <p className="text-sm text-[#333333] my-4 text-[16px]">{service.excerpt}</p>
-              <span className="text-[#BB2632] font-semibold relative inline-block">
+              <span className="text-[#BB2632] font-semibold relative inline-block pb-2">
                 {isRTL ? 'استكشاف الخدمة' : 'Explore Service'}
                 <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#BB2632] transition-all duration-500 group-hover:w-full"></span>
               </span>

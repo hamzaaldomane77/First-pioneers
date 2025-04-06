@@ -84,7 +84,7 @@ export default function Markets() {
 
     return (
         <section 
-            className={`min-h-screen bg-cover bg-center transition-all duration-1000 p-6 overflow-hidden ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`} 
+            className={`min-h-screen bg-cover bg-center transition-all duration-1000 px-1 overflow-hidden ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`} 
             style={{ backgroundImage: `url(${Redbackground})` }} 
             ref={ref}
             dir={isRTL ? 'rtl' : 'ltr'}

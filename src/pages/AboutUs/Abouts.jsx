@@ -14,7 +14,7 @@ const Abouts = () => {
    <CoreValues />
    <Agency />
    <OurPartners />
-   <CardTeam />
+   {/* <CardTeam /> */}
    
    </>
   )

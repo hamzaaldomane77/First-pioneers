@@ -51,7 +51,7 @@ export default function AboutusHome() {
         {isRTL ? 'من نحن' : 'Who We Are'}
       </h1>
 
-      <div className="w-full flex flex-col-reverse md:flex-row items-center justify-center px-11">
+      <div className="w-full flex flex-col-reverse md:flex-row items-center justify-center px-0">
        
         <div className={`w-full md:w-1/2 px-11 transition-all duration-1000 ${inView ? 'translate-x-0 opacity-100' : '-translate-x-40 opacity-0'} ${loading ? 'animate-pulse' : ''}`}> 
           {error ? (

@@ -84,7 +84,7 @@ export default function Resources() {
 
   return (
     <section 
-      className={`min-h-screen bg-cover bg-center transition-all duration-1000 p-6 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`} 
+      className={`min-h-screen bg-cover bg-center transition-all duration-1000 px-0 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`} 
       style={{ backgroundImage: `url(${Whitebackground})` }} 
       ref={ref}
       dir={isRTL ? 'rtl' : 'ltr'}
@@ -93,7 +93,7 @@ export default function Resources() {
         {isRTL ? 'الموارد التعليمية' : 'Educational Resources'}
       </h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
         {resources.map(resource => (
           <Link 
             to={`/resources/${resource.id}`} 

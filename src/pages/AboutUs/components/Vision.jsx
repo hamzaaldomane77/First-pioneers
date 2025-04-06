@@ -7,7 +7,6 @@ import { getMissions, getVisions, setAPILanguage } from '../../../services/api';
 
 export default function Vision() {
   const [missions, setMissions] = useState({
-    vision: '',
     mission: ''
   });
   const [visionDescription, setVisionDescription] = useState('');
@@ -39,7 +38,7 @@ export default function Vision() {
           getVisions()
         ]);
         
-        setMissions(missionsData || { vision: '', mission: '' });
+        setMissions(missionsData || { mission: '' });
         setVisionDescription(visionsData || '');
       } catch (error) {
         setError(error.message || 'Failed to load content');
@@ -87,13 +86,8 @@ export default function Vision() {
           ) : (
             <>
               <p className="text-lg leading-relaxed mb-6">
-                {missions.vision}
+                {visionDescription}
               </p>
-              {visionDescription && (
-                <p className="text-lg leading-relaxed">
-                  {visionDescription}
-                </p>
-              )}
             </>
           )}
         </motion.div>
@@ -110,7 +104,7 @@ export default function Vision() {
           {t('mission.title', 'Our Mission')}
         </motion.h1>
         <motion.div
-          className="max-w-3xl mx-auto px-4 text-lg "
+          className="max-w-3xl mx-auto px-4 text-lg"
           variants={fadeInUp}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
