@@ -1,121 +1,35 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import Select from 'react-select';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination } from 'swiper/modules';
-import { Search, ArrowRight, ArrowLeft } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getBlogs, setAPILanguage } from '../../services/api';
 import { Link } from 'react-router-dom';
-import 'swiper/css';
-import 'swiper/css/pagination';
+import { getBlogs, setAPILanguage } from '../../services/api';
 
-const BlogCard = ({ cover_image, title, categories, first_description, author_name, author_position, slug }) => {
-  const { t, i18n } = useTranslation();
-  const isRTL = i18n.language === 'ar';
-  
-  return (
-  <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-    <div className="w-full md:w-1/3 h-[200px] md:h-auto">
-      <img 
-          src={cover_image} 
-        alt={title} 
-        className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.src = t("blog.placeholderImage");
-          }}
-      />
-    </div>
-    
-    <div className="w-full md:w-2/3 p-6 flex flex-col">
-        {categories && categories.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-3">
-            {categories.map((category, index) => (
-              <span
-                key={index}
-                className="text-sm text-[#BB2632] font-medium bg-red-50 px-3 py-1 rounded-full"
-              >
-                {category}
-        </span>
-            ))}
-          </div>
-        )}
-        <h3 className="text-lg font-semibold mb-3 line-clamp-2">{title}</h3>
-       
-        <div className="mt-auto flex justify-between items-center ">
-          <div className="text-sm text-gray-500">
-            {author_name && <span className="block pb-2">{author_name}</span>}
-            {author_position && <span className="block text-gray-400">{author_position}</span>}
-         
-
-          {first_description && (
-          <p className="text-gray-600 text-sm mb-4 py-5 bahnschrift text-[16px]">
-            {first_description.split(' ').slice(0, 35).join(' ')}
-            {first_description.split(' ').length > 35 ? '...' : ''}
-          </p>
-        )}
-         </div>
-        
-         <Link 
-            to={`/Blogdetails/${slug}`}
-            className="inline-flex items-center text-[#BB2632] font-semibold hover:text-red-700 transition-colors duration-300 pt-32 text-[15px]"
-          >
-              {t("blog.viewarticle")}
-            {isRTL ? (
-              <ArrowLeft className="w-4 h-4 mr-2" />
-            ) : (
-              <ArrowRight className="w-4 h-4 ml-2" />
-            )}
-          </Link>
-     
-      
-        </div>
-    </div>
-  </div>
-);
-};
-
-export default function AllBlog() {
+const AllBlog = () => {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [dateFilter, setDateFilter] = useState({ value: 'newest', label: t('blog.filterOptions.newest') });
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(0);
-
-  // استخراج جميع التصنيفات الفريدة
-  const uniqueCategories = useMemo(() => {
-    if (!blogs.length) return [];
-    const categories = new Set();
-    blogs.forEach(blog => {
-      blog.categories.forEach(category => categories.add(category));
-    });
-    return Array.from(categories).map(category => ({
-      value: category,
-      label: category
-    }));
-  }, [blogs]);
-
-  const filterOptions = useMemo(() => [
-    { value: 'newest', label: t('blog.filterOptions.newest') },
-    { value: 'oldest', label: t('blog.filterOptions.oldest') },
-    { value: 'category', label: t('blog.filterOptions.byCategory') }
-  ], [t]);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
         setLoading(true);
         setError(null);
-        // تحديث لغة API قبل جلب البيانات
         setAPILanguage(i18n.language);
-        const data = await getBlogs();
-        setBlogs(data);
-        setCurrentPage(0); // إعادة تعيين الصفحة الحالية عند تحديث البيانات
+        const blogsData = await getBlogs();
+        setBlogs(blogsData);
+
+        // استخراج جميع الفئات الفريدة من المدونات
+        const allCategories = new Set();
+        blogsData.forEach(blog => {
+          if (blog.categories && blog.categories.length > 0) {
+            blog.categories.forEach(category => allCategories.add(category));
+          }
+        });
+        setCategories(Array.from(allCategories));
       } catch (err) {
-        console.error('Error fetching blogs:', err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -125,61 +39,20 @@ export default function AllBlog() {
     fetchBlogs();
   }, [i18n.language]);
 
-  // تحديث تسميات الفلترات عند تغيير اللغة
-  useEffect(() => {
-    setDateFilter(prev => ({
-      ...prev,
-      label: prev.value === 'newest' ? t('blog.filterOptions.newest') : prev.value === 'oldest' ? t('blog.filterOptions.oldest') : t('blog.filterOptions.byCategory')
-    }));
-  }, [t]);
-
-  const filteredBlogs = useMemo(() => {
-    let filtered = [...blogs];
-
-    // تطبيق البحث
-    if (searchQuery) {
-      filtered = filtered.filter(blog => 
-        blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        blog.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        blog.first_description?.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+  const filterBlogsByCategory = () => {
+    if (selectedCategory === 'all') {
+      return blogs;
     }
+    return blogs.filter(blog => 
+      blog.categories && blog.categories.includes(selectedCategory)
+    );
+  };
 
-    // تطبيق فلتر التصنيفات
-    if (selectedCategories.length > 0) {
-      filtered = filtered.filter(blog => 
-        selectedCategories.every(cat => 
-          blog.categories.includes(cat.value)
-        )
-      );
-    }
-
-    // تطبيق الترتيب
-    filtered.sort((a, b) => {
-      if (dateFilter.value === 'newest') {
-        return b.id - a.id;
-      } else if (dateFilter.value === 'oldest') {
-        return a.id - b.id;
-      } else if (dateFilter.value === 'category') {
-        // ترتيب حسب اسم أول تصنيف
-        const categoryA = a.categories[0] || '';
-        const categoryB = b.categories[0] || '';
-        return categoryA.localeCompare(categoryB, i18n.language);
-      }
-      return 0;
-    });
-
-    return filtered;
-  }, [blogs, searchQuery, selectedCategories, dateFilter, i18n.language]);
-
-  // حساب عدد الصفحات
-  const totalPages = Math.ceil(filteredBlogs.length / 6);
-
-  const currentBlogs = filteredBlogs.slice(currentPage * 6, (currentPage + 1) * 6);
+  const filteredBlogs = filterBlogsByCategory();
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="container mx-auto px-4 min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#BB2632]"></div>
       </div>
     );
@@ -187,164 +60,112 @@ export default function AllBlog() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="container mx-auto px-4 min-h-screen flex items-center justify-center">
         <p className="text-red-600">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12" dir={isRTL ? 'rtl' : 'ltr'}>
-      <h1 className="text-center text-3xl font-bold text-[#BB2632] mb-8">
-        {t('blog.stayInformed')}
-      </h1>
+    <div className="container mx-auto px-4 py-12" dir={isRTL ? 'rtl' : 'ltr'}>
+      <h1 className="text-3xl font-bold mb-8 text-center">{t('blog.title')}</h1>
       
-      {/* فلترات البحث */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="relative">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('blog.searchArticles')}
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setCurrentPage(0);
-                }}
-                placeholder={t('blog.searchPlaceholder')}
-                className={`w-full p-2 ${isRTL ? 'pr-4 pl-10' : 'pl-4 pr-10'} border border-gray-300 rounded-md focus:outline-none focus:border-[#BB2632]`}
-              />
-              <Search className={`absolute ${isRTL ? 'left-3' : 'right-3'} top-1/2 transform -translate-y-1/2 text-gray-400`} size={20} />
-            </div>
-          </div>
+      {/* فلتر الفئات */}
+      <div className="mb-10 flex flex-wrap justify-center gap-3">
+        <button
+          onClick={() => setSelectedCategory('all')}
+          className={`px-4 py-2 rounded-full transition-colors duration-200 ${
+            selectedCategory === 'all' 
+              ? 'bg-[#BB2632] text-white' 
+              : 'bg-white text-[#BB2632] border border-[#BB2632]'
+          }`}
+        >
+          {t('blog.allCategories')}
+        </button>
         
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('blog.filterOptions.byCategory')}
-            </label>
-            <Select
-              isMulti
-              options={uniqueCategories}
-              value={selectedCategories}
-              onChange={(selected) => {
-                setSelectedCategories(selected);
-                setCurrentPage(0);
-              }}
-             
-              noOptionsMessage={() => t('blog.filterOptions.noOptions')}
-              className={`basic-multi-select ${isRTL ? 'rtl-select' : ''}`}
-              classNamePrefix="select"
-              theme={(theme) => ({
-                ...theme,
-                direction: isRTL ? 'rtl' : 'ltr',
-              })}
-              styles={{
-                control: (base) => ({
-                  ...base,
-                  padding: '2px',
-                  textAlign: isRTL ? 'right' : 'left',
-                }),
-                placeholder: (base) => ({
-                  ...base,
-                  textAlign: isRTL ? 'right' : 'left',
-                  marginLeft: isRTL ? 'auto' : '0',
-                  marginRight: isRTL ? '0' : 'auto',
-                }),
-                option: (base) => ({
-                  ...base,
-                  textAlign: isRTL ? 'right' : 'left',
-                  direction: isRTL ? 'rtl' : 'ltr',
-                }),
-                multiValue: (base) => ({
-                  ...base,
-                  direction: isRTL ? 'rtl' : 'ltr',
-                }),
-              }}
-            />
-          </div>
-        
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('blog.sortBy')}
-            </label>
-            <Select
-              options={filterOptions}
-              value={dateFilter}
-              onChange={(selected) => {
-                setDateFilter(selected);
-                setCurrentPage(0);
-              }}
-              placeholder={t('blog.filterOptions.selectSorting')}
-              className={`${isRTL ? 'rtl-select' : ''}`}
-              classNamePrefix="select"
-              theme={(theme) => ({
-                ...theme,
-                direction: isRTL ? 'rtl' : 'ltr',
-              })}
-              styles={{
-                control: (base) => ({
-                  ...base,
-                  padding: '2px',
-                  textAlign: isRTL ? 'right' : 'left',
-                }),
-                placeholder: (base) => ({
-                  ...base,
-                  textAlign: isRTL ? 'right' : 'left',
-                  marginLeft: isRTL ? 'auto' : '0',
-                  marginRight: isRTL ? '0' : 'auto',
-                }),
-                option: (base) => ({
-                  ...base,
-                  textAlign: isRTL ? 'right' : 'left',
-                  direction: isRTL ? 'rtl' : 'ltr',
-                }),
-              }}
-            />
-          </div>
-        </div>
+        {categories.map((category, index) => (
+          <button
+            key={index}
+            onClick={() => setSelectedCategory(category)}
+            className={`px-4 py-2 rounded-full transition-colors duration-200 ${
+              selectedCategory === category 
+                ? 'bg-[#BB2632] text-white' 
+                : 'bg-white text-[#BB2632] border border-[#BB2632]'
+            }`}
+          >
+            {category}
+          </button>
+        ))}
       </div>
-
-   
-      {currentBlogs.length === 0 ? (
-        <div className="text-center py-10 text-gray-500">
-          {t('blog.noArticles')}
-        </div>
-      ) : (
-        <>
-          <div className="grid grid-cols-1 gap-6">
-            {currentBlogs.map((blog) => (
-                    <BlogCard key={blog.id} {...blog} />
-                  ))}
-                </div>
-
-          {/* ترقيم الصفحات */}
-          {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-4 mt-8">
-              <div className="flex items-center gap-2">
-                {Array.from({ length: totalPages }).reverse().map((_, index) => {
-                  const pageNumber = totalPages - index;
-                  return (
-                    <button
-                      key={pageNumber}
-                      onClick={() => setCurrentPage(pageNumber - 1)}
-                      className={`w-10 h-10 rounded-full ${
-                        currentPage === pageNumber - 1
-                          ? 'bg-[#BB2632] text-white'
-                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                      } text-center flex items-center justify-center text-sm font-medium transition-colors duration-300`}
-                    >
-                      {pageNumber}
-                    </button>
-                  );
-                })}
+      
+      {/* عرض المقالات */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {filteredBlogs.length > 0 ? (
+          filteredBlogs.map((blog) => (
+            <Link 
+              to={`/blog/${blog.slug}`} 
+              key={blog.id}
+              className="bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:shadow-xl hover:-translate-y-2"
+            >
+              <div className="aspect-w-16 aspect-h-10 overflow-hidden">
+                <img
+                  src={blog.cover_image}
+                  alt={blog.title}
+                  className="w-full h-full object-cover"
+                />
               </div>
-        </div>
-          )}
-        </>
-      )}
+              
+              <div className="p-6">
+                {/* التصنيفات */}
+                {blog.categories && blog.categories.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {blog.categories.slice(0, 2).map((category, index) => (
+                      <span
+                        key={index}
+                        className="bg-white text-[#BB2632] border border-[#BB2632] px-3 py-1 rounded-full text-xs font-medium"
+                      >
+                        {category}
+                      </span>
+                    ))}
+                    {blog.categories.length > 2 && (
+                      <span className="text-[#BB2632] text-xs font-medium">
+                        +{blog.categories.length - 2}
+                      </span>
+                    )}
+                  </div>
+                )}
+                
+                {/* العنوان */}
+                <h2 className="text-xl font-semibold mb-4 line-clamp-2">{blog.title}</h2>
+                
+                {/* المقتطف */}
+                <p className="text-gray-600 mb-4 line-clamp-3">{blog.excerpt}</p>
+                
+                {/* معلومات الكاتب */}
+                <div className="flex items-center mt-4">
+                  <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                    <span className="text-sm font-bold text-gray-600">
+                      {blog.author_name && blog.author_name.charAt(0)}
+                    </span>
+                  </div>
+                  <div className="ml-3 rtl:mr-3 rtl:ml-0">
+                    <p className="text-sm font-medium">{blog.author_name}</p>
+                    {blog.author_position && (
+                      <p className="text-xs text-gray-500">{blog.author_position}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <div className="col-span-full text-center py-12">
+            <p className="text-gray-600">{t('blog.noBlogs')}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
-}
+};
+
+export default AllBlog;

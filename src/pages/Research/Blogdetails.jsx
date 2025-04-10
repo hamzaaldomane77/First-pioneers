@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getBlogs, setAPILanguage } from '../../services/api';
+import { getBlogs, setAPILanguage, fixImageUrl } from '../../services/api';
 import { useTranslation } from 'react-i18next';
 import CardArticles from '../Markets&Resources/components/CardArticles';
+import parse from 'html-react-parser';
 
 const BlogDetails = () => {
   const { slug } = useParams();
@@ -59,12 +60,110 @@ const BlogDetails = () => {
     );
   }
 
-  const imageGroups = [];
-  if (blog.images && blog.images.length > 0) {
-    for (let i = 0; i < blog.images.length; i += 3) {
-      imageGroups.push(blog.images.slice(i, i + 3));
-    }
-  }
+  // عرض المحتوى باستخدام html-react-parser
+  const renderContent = () => {
+    if (!blog.content) return null;
+    
+    const options = {
+      replace: domNode => {
+        // إزالة عنصر figcaption
+        if (domNode.name === 'figcaption') {
+          return null;
+        }
+        
+        // معالجة الصور
+        if (domNode.name === 'img') {
+          return (
+            <div className="mb-8">
+              <img 
+                src={domNode.attribs.src} 
+                alt={domNode.attribs.alt || ''} 
+                className="w-full h-auto rounded-lg shadow-md"
+              />
+            </div>
+          );
+        }
+        
+        // معالجة العناصر figure التي تحتوي على صور
+        if (domNode.name === 'figure' && domNode.children && domNode.children.some(child => child.name === 'img')) {
+          // إيجاد عنصر الصورة
+          const imgNode = domNode.children.find(child => child.name === 'img');
+          if (imgNode && imgNode.attribs && imgNode.attribs.src) {
+            return (
+              <div className="mb-8">
+                <img 
+                  src={imgNode.attribs.src} 
+                  alt={imgNode.attribs.alt || ''} 
+                  className="w-full h-auto rounded-lg shadow-md"
+                />
+              </div>
+            );
+          }
+        }
+        
+        // معالجة معارض الصور
+        if (domNode.name === 'div' && domNode.attribs && domNode.attribs.class &&
+            (domNode.attribs.class.includes('attachment-gallery') || domNode.attribs.class.includes('gallery'))) {
+          
+          // جمع صور المعرض
+          const galleryImages = [];
+          if (domNode.children) {
+            domNode.children.forEach(child => {
+              if (child.name === 'figure') {
+                const imgNode = child.children && child.children.find(c => c.name === 'img');
+                if (imgNode && imgNode.attribs && imgNode.attribs.src) {
+                  galleryImages.push(imgNode.attribs.src);
+                }
+              }
+            });
+          }
+          
+          if (galleryImages.length > 0) {
+            // صورة واحدة
+            if (galleryImages.length === 1) {
+              return (
+                <div className="mb-8">
+                  <img src={galleryImages[0]} alt="" className="w-full h-auto rounded-lg shadow-md" />
+                </div>
+              );
+            }
+            
+            // صورتان
+            if (galleryImages.length === 2) {
+              return (
+                <div className="grid grid-cols-2 gap-4 mb-8">
+                  {galleryImages.map((image, idx) => (
+                    <div key={idx} className="aspect-w-16 aspect-h-9 rounded-lg shadow-md overflow-hidden">
+                      <img src={image} alt="" className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+              );
+            }
+            
+            // ثلاث صور أو أكثر
+            return (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                {galleryImages.map((image, idx) => (
+                  <div key={idx} className="aspect-w-16 aspect-h-9 rounded-lg shadow-md overflow-hidden">
+                    <img src={image} alt="" className="w-full h-full object-cover" />
+                  </div>
+                ))}
+              </div>
+            );
+          }
+        }
+        
+        return undefined;
+      }
+    };
+    
+    return (
+      <div className="blog-content mb-8 text-lg text-gray-700 leading-relaxed">
+        {parse(blog.content, options)}
+      </div>
+    );
+  };
 
   return (
     <div className="container mx-auto px-4" dir={isRTL ? 'rtl' : 'ltr'}>
@@ -76,7 +175,7 @@ const BlogDetails = () => {
               {blog.categories.map((category, index) => (
                 <span
                   key={index}
-                        className="bg-white text-[#BB2632] border border-[#BB2632] px-4 py-1 rounded-full text-sm font-medium hover:bg-[#BB2632] hover:text-white bahnschrift text-[16px]"
+                  className="bg-white text-[#BB2632] border border-[#BB2632] px-4 py-1 rounded-full text-sm font-medium hover:bg-[#BB2632] hover:text-white bahnschrift text-[16px]"
                 >
                   {category}
                 </span>
@@ -88,19 +187,12 @@ const BlogDetails = () => {
           <h1 className="text-4xl font-bold text-gray-900 mb-8">{blog.title}</h1>
 
           {/* معلومات الكاتب */}
-          <div className="mb-8 pb-6  border-gray-200">
+          <div className="mb-8 pb-6 border-b border-gray-200">
             <h3 className="font-semibold text-gray-900 text-xl">{blog.author_name}</h3>
             {blog.author_position && (
               <p className="text-gray-600 mt-2">{blog.author_position}</p>
             )}
           </div>
-
-          {/* الوصف الأول */}
-          {blog.first_description && (
-            <div className="mb-12 text-lg text-gray-700 leading-relaxed bahnschrift text-[16px]">
-              <p>{blog.first_description}</p>
-            </div>
-          )}
 
           {/* صورة الغلاف */}
           <div className="mb-12">
@@ -113,38 +205,8 @@ const BlogDetails = () => {
             </div>
           </div>
 
-          {/* الوصف الثاني */}
-          {blog.second_description && (
-            <div className="mb-12 text-lg text-gray-700 leading-relaxed">
-              <p>{blog.second_description}</p>
-            </div>
-          )}
-
-          {/* الصور الإضافية */}
-          {imageGroups.length > 0 && (
-            <div className="mb-12 space-y-8">
-              {imageGroups.map((group, groupIndex) => (
-                <div key={groupIndex} className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {group.map((image, index) => (
-                    <div key={index} className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg">
-                      <img
-                        src={image.image}
-                        alt={image.alt_text || blog.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* الوصف الثالث */}
-          {blog.third_description && (
-            <div className="text-lg text-gray-700 leading-relaxed">
-              <p>{blog.third_description}</p>
-            </div>
-          )}
+          {/* عرض المحتوى المعالج */}
+          {renderContent()}
         </div>
       </article>
       <CardArticles />

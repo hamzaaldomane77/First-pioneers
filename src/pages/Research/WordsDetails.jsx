@@ -1,188 +1,301 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Redbackground from "../../assets/images/Redbackground.png";
 import { getWordInMarketById, setAPILanguage } from '../../services/api';
-import { ArrowRight, ArrowLeft } from 'lucide-react';
+import parse from 'html-react-parser';
+import { ArrowLeft, ArrowRight, Calendar, Tag } from 'lucide-react';
+import CardArticles from '../Markets&Resources/components/CardArticles';
+import '../Research/blogdetails.css';
 
 const WordsDetails = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
+    const { t, i18n } = useTranslation();
+    const isRTL = i18n.language === 'ar';
     const [word, setWord] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [galleryImages, setGalleryImages] = useState([]);
     
-    const { t, i18n } = useTranslation();
-    const isRTL = i18n.language === 'ar';
-    
-    // تحديد أيقونة السهم المناسبة حسب اتجاه اللغة
-    const BackArrowIcon = isRTL ? ArrowRight : ArrowLeft;
-    
-    useEffect(() => {
-        const fetchWordDetails = async () => {
-            if (!id) {
-                setError(isRTL ? 'معرف الكلمة غير متوفر' : 'Word ID is not available');
-                setLoading(false);
-                return;
-            }
+    // Memoize the fetch function to prevent unnecessary re-renders
+    const fetchWordDetails = useCallback(async () => {
+        if (!id) {
+            setError(t('words.idMissing', 'Word ID is not available'));
+            setLoading(false);
+            return;
+        }
+        
+        try {
+            setLoading(true);
+            setError(null);
+            setAPILanguage(i18n.language);
             
-            try {
-                setLoading(true);
-                setError(null);
-                setAPILanguage(i18n.language);
+            const data = await getWordInMarketById(id);
+            setWord(data);
+            
+            // Extract gallery images if available
+            if (data.content) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = data.content;
                 
-                // جلب تفاصيل الكلمة الحالية
-                const data = await getWordInMarketById(id);
-                setWord(data);
-            } catch (error) {
-                console.error('Error in WordsDetails component:', error);
-                setError(error.message || (isRTL ? 'فشل تحميل المحتوى' : 'Failed to load content'));
-            } finally {
-                setLoading(false);
+                // Find all images in the content
+                const images = [];
+                const imgElements = tempDiv.querySelectorAll('img');
+                imgElements.forEach(img => {
+                    if (img.src) {
+                        images.push(img.src);
+                    }
+                });
+                
+                setGalleryImages(images);
+            }
+        } catch (error) {
+            console.error('Error in WordsDetails component:', error);
+            setError(error.message || t('common.error', 'Failed to load content'));
+        } finally {
+            setLoading(false);
+        }
+    }, [id, i18n.language, t]);
+
+    useEffect(() => {
+        fetchWordDetails();
+    }, [fetchWordDetails]);
+
+    const processGalleryImages = useCallback((galleryNode) => {
+        const images = [];
+        const figures = galleryNode.querySelectorAll('figure');
+        figures.forEach(figure => {
+            const img = figure.querySelector('img');
+            if (img && img.src) {
+                images.push(img.src);
+            }
+        });
+        return images;
+    }, []);
+
+    const renderGallery = useCallback((images) => {
+        if (!images || images.length === 0) return null;
+
+        if (images.length === 1) {
+            return (
+                <div className="mb-8">
+                    <img 
+                        src={images[0]} 
+                        alt="" 
+                        className="w-full md:max-w-2xl lg:max-w-3xl mx-auto h-auto rounded-lg shadow-md" 
+                    />
+                </div>
+            );
+        }
+
+        if (images.length === 2) {
+            return (
+                <div className="custom-two-images">
+                    {images.map((image, idx) => (
+                        <p key={`img-${idx}-${image.slice(-10)}`}>
+                            <img src={image} alt="" className="w-full h-full object-cover rounded-lg shadow-md" />
+                        </p>
+                    ))}
+                </div>
+            );
+        }
+
+        return (
+            <div className="custom-three-plus-images">
+                {images.map((image, idx) => (
+                    <p key={`img-${idx}-${image.slice(-10)}`}>
+                        <img src={image} alt="" className="w-full h-full object-cover rounded-lg shadow-md" />
+                    </p>
+                ))}
+            </div>
+        );
+    }, []);
+
+    const renderContent = useCallback(() => {
+        if (!word?.content) return null;
+
+        const options = {
+            replace: (domNode) => {
+                if (domNode.name === 'figcaption') {
+                    return null;
+                }
+
+                // Handle gallery divs
+                if (domNode.name === 'div' && 
+                    domNode.attribs && 
+                    domNode.attribs.class && 
+                    domNode.attribs.class.includes('attachment-gallery')) {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = domNode.children.map(child => child.toString()).join('');
+                    const images = processGalleryImages(tempDiv);
+                    return renderGallery(images);
+                }
+
+                // Handle individual figures with images
+                if (domNode.name === 'figure') {
+                    const imgNode = domNode.children.find(child => child.name === 'img');
+                    if (imgNode && imgNode.attribs && imgNode.attribs.src) {
+                        return (
+                            <div className="mb-8">
+                                <img 
+                                    src={imgNode.attribs.src} 
+                                    alt={imgNode.attribs.alt || ''} 
+                                    className="w-full md:max-w-2xl lg:max-w-3xl mx-auto h-auto rounded-lg shadow-md" 
+                                />
+                            </div>
+                        );
+                    }
+                }
+
+                // Handle direct images
+                if (domNode.name === 'img') {
+                    return (
+                        <div className="mb-8">
+                            <img 
+                                src={domNode.attribs.src} 
+                                alt={domNode.attribs.alt || ''} 
+                                className="w-full md:max-w-2xl lg:max-w-3xl mx-auto h-auto rounded-lg shadow-md" 
+                            />
+                        </div>
+                    );
+                }
+
+                // Handle paragraphs with images
+                if (domNode.name === 'p' && domNode.children.some(child => child.name === 'img')) {
+                    const images = domNode.children
+                        .filter(child => child.name === 'img')
+                        .map(img => img.attribs.src);
+                    return renderGallery(images);
+                }
             }
         };
 
-        fetchWordDetails();
-    }, [id, i18n.language, isRTL]);
+        return parse(word.content, options);
+    }, [word, processGalleryImages, renderGallery]);
+
+    // Format date
+    const formatDate = useCallback((dateString) => {
+        try {
+            const date = new Date(dateString);
+            return date.toLocaleDateString(
+                isRTL ? 'ar-EG' : 'en-US', 
+                { year: 'numeric', month: 'long', day: 'numeric' }
+            );
+        } catch (error) {
+            console.error('Error formatting date:', error);
+            return dateString;
+        }
+    }, [isRTL]);
+
+    // Memoize any categories to prevent re-renders
+    const categories = useMemo(() => {
+        if (!word?.categories) return [];
+        return word.categories;
+    }, [word?.categories]);
 
     if (loading) {
         return (
-            <section
-                className="min-h-screen bg-cover bg-center flex items-center justify-center"
-                style={{ backgroundImage: `url(${Redbackground})` }}
-            >
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
-            </section>
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#BB2632]"></div>
+            </div>
         );
     }
 
     if (error) {
         return (
-            <section
-                className="min-h-screen bg-cover bg-center flex items-center justify-center"
-                style={{ backgroundImage: `url(${Redbackground})` }}
-            >
-                <div className="bg-white bg-opacity-75 p-4 rounded-lg">
-                    <p className="text-red-600">{error}</p>
-                </div>
-            </section>
+            <div className="flex flex-col items-center justify-center min-h-screen">
+                <p className="text-red-500 text-xl">{error}</p>
+                <button
+                    onClick={() => navigate(-1)}
+                    className="mt-4 px-6 py-2 bg-[#BB2632] text-white rounded-lg hover:bg-[#A31F29] transition-colors"
+                >
+                    {t('common.goBack', 'Go Back')}
+                </button>
+            </div>
         );
     }
 
     if (!word) {
         return (
-            <section
-                className="min-h-screen bg-cover bg-center flex items-center justify-center"
-                style={{ backgroundImage: `url(${Redbackground})` }}
-            >
-                <div className="bg-white bg-opacity-75 p-4 rounded-lg">
-                    <p className="text-gray-600">
-                        {isRTL ? 'لم يتم العثور على الكلمة المطلوبة' : 'Requested word not found'}
-                    </p>
-                </div>
-            </section>
+            <div className="flex flex-col items-center justify-center min-h-screen">
+                <p className="text-xl">{t('words.notFound', 'Word not found')}</p>
+                <button
+                    onClick={() => navigate(-1)}
+                    className="mt-4 px-6 py-2 bg-[#BB2632] text-white rounded-lg hover:bg-[#A31F29] transition-colors"
+                >
+                    {t('common.goBack', 'Go Back')}
+                </button>
+            </div>
         );
     }
 
-    // تحويل التاريخ إلى تنسيق مناسب
-    const formattedDate = new Date(word.created_at).toLocaleDateString(
-        isRTL ? 'ar-EG' : 'en-US', 
-        { year: 'numeric', month: 'long', day: 'numeric' }
-    );
-
     return (
-        <section 
-            className="min-h-screen bg-cover bg-center"
-            style={{ backgroundImage: `url(${Redbackground})` }}
-            dir={isRTL ? 'rtl' : 'ltr'}
-        >
-            {/* القسم الرئيسي مع صورة خلفية وعنوان */}
-            <div className="relative h-[70vh] min-h-[500px] w-full">
-                {/* صورة الخلفية */}
-                <div className="absolute inset-0 w-full h-full bg-black">
-                    {word.image && (
-                        <img 
-                            src={word.image} 
-                            alt={word.title} 
-                            className="w-full h-full object-cover opacity-70"
-                        />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
-                </div>
-                
-                {/* زر العودة */}
-                <div className="absolute top-4 left-4 right-4 z-10">
-                    <div className="container mx-auto">
-                        <Link 
-                            to="/words" 
-                            className={`inline-flex items-center text-white hover:text-[#BB2632] transition-colors bg-black/20 px-4 py-2 rounded-lg ${isRTL ? 'flex-row-reverse' : ''}`}
-                        >
-                            <BackArrowIcon className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                            {isRTL ? 'العودة إلى جميع الكلمات' : 'Back to All Words'}
-                        </Link>
-                    </div>
-                </div>
-                
-                <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16 text-white">
-                    <div className="container mx-auto">
-                        <div className={`${isRTL ? 'text-right' : 'text-left'}`}>
-                            <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${isRTL ? 'font-medium leading-relaxed' : ''}`}>
-                                {word.title}
-                            </h1>
-                            <p className="text-gray-300 text-sm mt-4">
-                                {formattedDate}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div className="container mx-auto py-16 px-4">
-                {/* عرض الصور الإضافية */}
-                {word.images && word.images.length > 0 && (
-                    <div className="mb-16">
-                        <h2 className={`text-2xl mb-8 text-center text-[#BB2632] font-bold ${isRTL ? 'font-medium' : ''}`}>
-                            {isRTL ? 'المزيد من الصور' : 'More Images'}
-                        </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {word.images.map((img, index) => (
-                                <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                                    <img 
-                                        src={img.image} 
-                                        alt={img.alt_text || word.title} 
-                                        className="w-full h-64 object-cover"
-                                    />
-                                </div>
+        <div className="container mx-auto px-0 md:px-2" dir={isRTL ? 'rtl' : 'ltr'}>
+            <article className="max-w-full mx-0 bg-white overflow-hidden my-8 md:my-12 px-2 md:px-4">
+                <div className="p-2 md:p-4">
+                    {/* Categories */}
+                    {categories.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-4 md:mb-6">
+                            {categories.map((category) => (
+                                <span
+                                    key={`cat-${category.id}`}
+                                    className="text-[#BB2632] border border-[#BB2632] px-3 py-1 rounded-full text-xs md:text-sm font-medium hover:bg-[#BB2632] hover:text-white bahnschrift"
+                                >
+                                    {category.name}
+                                </span>
                             ))}
                         </div>
+                    )}
+
+                    {/* Title */}
+                    <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-8 bahnschrift">
+                        {word.title}
+                    </h1>
+                    
+                    {/* Date */}
+                    <div className="flex items-center text-gray-500 mb-6">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        <span className="text-sm">{formatDate(word.created_at)}</span>
                     </div>
-                )}
-                
-                {/* وصف الكلمة */}
-                <div className="bg-white p-8 rounded-lg shadow-lg my-8">
-                    <h2 className={`text-2xl mb-6 text-[#BB2632] font-bold ${isRTL ? 'text-right font-medium' : ''}`}>
-                        {isRTL ? 'الوصف' : 'Description'}
-                    </h2>
-                    <div className={`text-gray-800 leading-relaxed bahnschrift text-[16px]${isRTL ? 'text-right' : ''}`}>
-                        <p className={`${isRTL ? 'leading-loose text-lg' : ''}`}>{word.description}</p>
+
+                    {/* Excerpt */}
+                    {word.excerpt && (
+                        <p className="text-gray-600 mb-6 text-base md:text-lg bahnschrift">
+                            {word.excerpt}
+                        </p>
+                    )}
+
+                    {/* Cover Image */}
+                    {word.image && (
+                        <div className="mb-6 md:mb-8">
+                            <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg md:max-w-3xl lg:max-w-4xl mx-auto">
+                                <img
+                                    src={word.image}
+                                    alt={word.title}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Content */}
+                    <div className="custom-html-container mx-0 md:mx-auto md:max-w-3xl lg:max-w-4xl">
+                        <div className="custom-html bahnschrift">
+                            {renderContent()}
+                        </div>
                     </div>
+                    
+                    {/* Navigation */}
+                  
                 </div>
-                
-                <div className="mt-10 text-center">
-                    <Link 
-                        to="/words" 
-                        className={`bg-[#BB2632] text-white px-6 py-2 rounded-lg hover:bg-opacity-90 transition-all duration-300 ${isRTL ? 'ml-4' : 'mr-4'}`}
-                    >
-                        {isRTL ? 'عرض جميع الكلمات' : 'View All Words'}
-                    </Link>
-                    <Link 
-                        to="/" 
-                        className="bg-gray-700 text-white px-6 py-2 rounded-lg hover:bg-opacity-90 transition-all duration-300"
-                    >
-                        {isRTL ? 'العودة إلى الصفحة الرئيسية' : 'Back to Home'}
-                    </Link>
-                </div>
-            </div>
-        </section>
+            </article>
+            
+            {/* Related content */}
+            {/* <div className="my-8">
+                <CardArticles />
+            </div> */}
+        </div>
     );
 };
 
