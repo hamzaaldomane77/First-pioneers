@@ -93,11 +93,28 @@
     "selectSorting": "اختر طريقة الترتيب",
     "noArticles": "لم يتم العثور على مقالات",
     "viewBlog": "اقرأ المزيد",
+    "viewarticle": "عرض المقال",
+    "placeholderImage": "https://via.placeholder.com/400x300?text=First+Pioneers",
+    "allBlogsTitle": "جميع المقالات",
+    "error": "حدث خطأ في تحميل المقالات",
+    "notFound": "المقال غير موجود",
+    "noBlogs": "لا توجد مقالات متاحة حالياً",
     "filterOptions": {
       "newest": "الأحدث أولاً",
       "oldest": "الأقدم أولاً",
+      "titleAZ": "عنوان (أ-ي)",
+      "titleZA": "عنوان (ي-أ)",
       "byCategory": "حسب التصنيف",
-      "viewAllBlogs": "عرض جميع المقالات "
+      "viewAllBlogs": "عرض جميع المقالات",
+      "filters": "الفلاتر",
+      "clearFilters": "مسح الفلاتر",
+      "sortBy": "ترتيب حسب",
+      "categories": "التصنيفات",
+      "showing": "يتم عرض",
+      "of": "من",
+      "blogs": "مقال",
+      "noResults": "لا توجد نتائج تطابق معايير البحث",
+      "noOptions": "لا توجد خيارات متاحة"
     },
     "pagination": {
       "page": "صفحة",
@@ -176,5 +193,34 @@
   },
   "trends": {
     "title": "  الرائج في العلامات "
+  },
+  "resources": {
+    "allResources": "جميع الموارد",
+    "title": "الموارد التعليمية",
+    "searchPlaceholder": "ابحث بالعنوان أو الوصف...",
+    "filterOptions": "خيارات التصفية",
+    "category": "التصنيف",
+    "selectCategory": "اختر التصنيف",
+    "sortBy": "ترتيب حسب",
+    "sortOptions": {
+      "newest": "الأحدث أولاً",
+      "oldest": "الأقدم أولاً"
+    },
+    "clearFilters": "مسح التصفية",
+    "noResults": "لم يتم العثور على موارد",
+    "pageInfo": "صفحة {{current}} من {{total}}",
+    "previousPage": "الصفحة السابقة",
+    "nextPage": "الصفحة التالية",
+    "pageNumber": "صفحة {{number}}",
+    "notFound": "المورد غير موجود",
+    "goBack": "رجوع",
+    "showing": "يتم عرض",
+    "of": "من",
+    "resources": "مورد",
+    "noResultsFound": "لا توجد نتائج تطابق معايير البحث",
+    "viewResource": "عرض المورد",
+    "filterByCategory": "تصفية حسب التصنيف",
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ في تحميل الموارد"
   }
 } 

@@ -12,7 +12,7 @@ export default function Reports() {
         triggerOnce: true,
     });
     
-    const { i18n } = useTranslation();
+    const { t, i18n } = useTranslation();
     const isRTL = i18n.language === 'ar';
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -25,9 +25,18 @@ export default function Reports() {
                 setError(null);
                 setAPILanguage(i18n.language);
                 
+                console.log('Fetching reports with language:', i18n.language);
                 const data = await getFeaturedReports();
-                // Get only the first 4 reports
-                setReports(data.slice(0, 4));
+                console.log('Reports data received:', data);
+                
+                if (Array.isArray(data) && data.length > 0) {
+                    // Get only the first 4 reports
+                    setReports(data.slice(0, 4));
+                    console.log('Reports set:', data.slice(0, 4));
+                } else {
+                    console.warn('No reports received or empty array', data);
+                    setReports([]);
+                }
             } catch (error) {
                 console.error('Error in Reports component:', error);
                 setError(error.message || (isRTL ? 'فشل تحميل المحتوى' : 'Failed to load content'));
@@ -70,7 +79,12 @@ export default function Reports() {
                 style={{ backgroundImage: `url(${Whitebackground})` }}
             >
                 <div className="bg-white bg-opacity-75 p-4 rounded-lg">
-                    <p className="text-gray-600">{isRTL ? 'لا توجد تقارير متاحة' : 'No reports available'}</p>
+                    <p className="text-gray-600 bahnschrift">{isRTL ? 'لا توجد تقارير متاحة' : 'No reports available'}</p>
+                    <p className="text-gray-500 text-sm mt-2 bahnschrift">
+                        {isRTL 
+                            ? 'يرجى التحقق من اتصالك بالإنترنت أو المحاولة لاحقًا' 
+                            : 'Please check your internet connection or try again later'}
+                    </p>
                 </div>
             </section>
         );
@@ -84,15 +98,15 @@ export default function Reports() {
             dir={isRTL ? 'rtl' : 'ltr'}
         >
             <div className="w-full max-w-6xl space-y-10">
-                <h1 className='text-center text-4xl font-bold text-red-700' >Our Featured Reports</h1>
+                <h1 className='text-center text-4xl font-bold text-red-700 bahnschrift'>{isRTL ? 'تقاريرنا المميزة' : 'Our Featured Reports'}</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {reports.map((report) => (
                         <Card 
                             key={report.id} 
                             id={report.id}
                             logo="Logo-main"
-                            title={report.title}
-                            description={report.excerpt} 
+                            title={report.title || (isRTL ? 'تقرير بدون عنوان' : 'Untitled Report')}
+                            description={report.excerpt || ''} 
                             isRTL={isRTL}
                         />
                     ))}
@@ -136,7 +150,7 @@ function Card({ id, logo, title, description, isRTL }) {
                     }`}
                     style={{ top: '10rem' }}
                 >
-                    <h3 className="text-xl font-bold text-center text-black line-clamp-3">{title}</h3>
+                    <h3 className="text-xl font-bold text-center text-black line-clamp-3 bahnschrift">{title}</h3>
                 </div>
                 
                 {/* View Report button */}
@@ -158,7 +172,7 @@ function Card({ id, logo, title, description, isRTL }) {
                             : 'translate-y-full'
                     }`}
                 >
-                    <h3 className="text-xl font-bold mb-4 text-center text-red-700">{title}</h3>
+                    <h3 className="text-xl font-bold mb-4 text-center text-red-700 bahnschrift">{title}</h3>
                     <p className="text-sm text-center mb-6 line-clamp-4 bahnschrift text-[16px]">{description}</p>
                     <button className="px-12 py-2 text-red-700 font-medium bahnschrift text-[16px]">{viewText}</button>
                 </div>

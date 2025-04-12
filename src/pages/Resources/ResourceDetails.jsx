@@ -1,28 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { getEducationResourceById, setAPILanguage } from '../../services/api';
-import { ArrowLeft, ArrowRight, Calendar, Tag } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { getEducationResourceById } from '../../services/api';
+import parse from 'html-react-parser';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import '../Research/blogdetails.css';
 
-export default function ResourceDetails() {
+const ResourceDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const [resource, setResource] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const { t, i18n } = useTranslation();
-  const isRTL = i18n.language === 'ar';
 
   useEffect(() => {
     const fetchResourceDetails = async () => {
       try {
         setLoading(true);
         setError(null);
-        setAPILanguage(i18n.language);
-        
         const resourceData = await getEducationResourceById(id);
+        console.log('Resource data:', resourceData); // Debug log
         setResource(resourceData);
       } catch (error) {
         console.error('Error fetching resource details:', error);
@@ -33,23 +32,123 @@ export default function ResourceDetails() {
     };
 
     fetchResourceDetails();
-  }, [id, i18n.language, t]);
+  }, [id, t]);
 
-  const handleNextImage = () => {
-    if (resource?.images?.length > 0) {
-      setCurrentImageIndex((prev) => (prev + 1) % resource.images.length);
-    }
+  const processGalleryImages = (galleryNode) => {
+    const images = [];
+    const figures = galleryNode.querySelectorAll('figure');
+    figures.forEach(figure => {
+      const img = figure.querySelector('img');
+      if (img && img.src) {
+        images.push(img.src);
+      }
+    });
+    return images;
   };
 
-  const handlePrevImage = () => {
-    if (resource?.images?.length > 0) {
-      setCurrentImageIndex((prev) => (prev - 1 + resource.images.length) % resource.images.length);
+  const renderGallery = (images) => {
+    if (!images || images.length === 0) return null;
+
+    if (images.length === 1) {
+      return (
+        <div className="mb-8">
+          <img 
+            src={images[0]} 
+            alt="" 
+            className="w-full md:max-w-2xl lg:max-w-3xl mx-auto h-auto rounded-lg shadow-md" 
+          />
+        </div>
+      );
     }
+
+    if (images.length === 2) {
+      return (
+        <div className="custom-two-images">
+          {images.map((image, idx) => (
+            <p key={idx}>
+              <img src={image} alt="" className="w-full h-full object-cover rounded-lg shadow-md" />
+            </p>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <div className="custom-three-plus-images">
+        {images.map((image, idx) => (
+          <p key={idx}>
+            <img src={image} alt="" className="w-full h-full object-cover rounded-lg shadow-md" />
+          </p>
+        ))}
+      </div>
+    );
+  };
+
+  const renderContent = () => {
+    if (!resource?.content) return null;
+
+    const options = {
+      replace: (domNode) => {
+        if (domNode.name === 'figcaption') {
+          return null;
+        }
+
+        // Handle gallery divs
+        if (domNode.name === 'div' && 
+            domNode.attribs && 
+            domNode.attribs.class && 
+            domNode.attribs.class.includes('attachment-gallery')) {
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = domNode.children.map(child => child.toString()).join('');
+          const images = processGalleryImages(tempDiv);
+          return renderGallery(images);
+        }
+
+        // Handle individual figures with images
+        if (domNode.name === 'figure') {
+          const imgNode = domNode.children.find(child => child.name === 'img');
+          if (imgNode && imgNode.attribs && imgNode.attribs.src) {
+            return (
+              <div className="mb-8">
+                <img 
+                  src={imgNode.attribs.src} 
+                  alt={imgNode.attribs.alt || ''} 
+                  className="w-full md:max-w-2xl lg:max-w-3xl mx-auto h-auto rounded-lg shadow-md" 
+                />
+              </div>
+            );
+          }
+        }
+
+        // Handle direct images
+        if (domNode.name === 'img') {
+          return (
+            <div className="mb-8">
+              <img 
+                src={domNode.attribs.src} 
+                alt={domNode.attribs.alt || ''} 
+                className="w-full md:max-w-2xl lg:max-w-3xl mx-auto h-auto rounded-lg shadow-md" 
+              />
+            </div>
+          );
+        }
+
+        // Handle paragraphs with images
+        if (domNode.name === 'p' && domNode.children.some(child => child.name === 'img')) {
+          const images = domNode.children
+            .filter(child => child.name === 'img')
+            .map(img => img.attribs.src);
+          return renderGallery(images);
+        }
+      }
+    };
+
+    return parse(resource.content, options);
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex justify-center items-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#BB2632]"></div>
       </div>
     );
@@ -57,122 +156,85 @@ export default function ResourceDetails() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="bg-red-500 bg-opacity-75 p-4 rounded-lg">
-          <p className="text-white">{error}</p>
-        </div>
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <p className="text-red-500 text-xl">{error}</p>
+        <button
+          onClick={() => navigate(-1)}
+          className="mt-4 px-6 py-2 bg-[#BB2632] text-white rounded-lg hover:bg-[#A31F29] transition-colors"
+        >
+          {t('common.goBack', 'Go Back')}
+        </button>
       </div>
     );
   }
 
   if (!resource) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-700 mb-4">
-            {isRTL ? 'المورد غير موجود' : 'Resource Not Found'}
-          </h2>
-          <Link
-            to="/resources"
-            className="text-[#BB2632] hover:underline flex items-center justify-center gap-2"
-          >
-            {isRTL ? <ArrowLeft className="w-5 h-5" /> : <ArrowRight className="w-5 h-5" />}
-            {isRTL ? 'العودة إلى الموارد التعليمية' : 'Back to Resources'}
-          </Link>
-        </div>
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <p className="text-xl">{t('resources.notFound', 'Resource not found')}</p>
+        <button
+          onClick={() => navigate(-1)}
+          className="mt-4 px-6 py-2 bg-[#BB2632] text-white rounded-lg hover:bg-[#A31F29] transition-colors"
+        >
+          {t('common.goBack', 'Go Back')}
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen py-20 px-6 md:px-12" dir={isRTL ? 'rtl' : 'ltr'}>
-      <Link
-        to="/resources"
-        className="text-[#BB2632] hover:underline flex items-center gap-2 mb-8"
-      >
-        {isRTL ? <ArrowLeft className="w-5 h-5" /> : <ArrowRight className="w-5 h-5" />}
-        {isRTL ? 'العودة إلى الموارد التعليمية' : 'Back to Resources'}
-      </Link>
-
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          {/* Main Image */}
-          <div className="relative h-96">
-            <img
-              src={resource.image}
-              alt={resource.title}
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          <div className="p-8">
-            {/* Title and Description */}
-            <div className="mb-6">
-              <h1 className="text-3xl font-bold text-[#BB2632] mb-4">
-                {resource.title}
-              </h1>
-              <p className="text-gray-700 leading-relaxed bahnschrift text-[16px]">
-                {resource.description}
-              </p>
+    <div className="container mx-auto px-0 md:px-2" dir={isRTL ? 'rtl' : 'ltr'}>
+      <article className="max-w-full mx-0 bg-white overflow-hidden my-8 md:my-12 px-2 md:px-4">
+        <div className="p-2 md:p-4">
+          {/* Categories */}
+          {resource.categories && resource.categories.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-4 md:mb-6">
+              {resource.categories.map((category) => (
+                <span
+                  key={category.id}
+                  className="text-[#BB2632] border border-[#BB2632] px-3 py-1 rounded-full text-xs md:text-sm font-medium hover:bg-[#BB2632] hover:text-white bahnschrift"
+                >
+                  {category.name}
+                </span>
+              ))}
             </div>
+          )}
 
-            {/* Categories */}
-            {resource.categories && resource.categories.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-4">
-                  {isRTL ? 'التصنيفات' : 'Categories'}
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {resource.categories.map((category) => (
-                    <div
-                      key={category.id}
-                      className="bg-gray-50 p-4 rounded-lg border border-gray-100"
-                    >
-                      <div className="flex items-center gap-2 mb-2">
-                        <Tag className="w-5 h-5 text-[#BB2632]" />
-                        <h4 className="font-semibold text-[#BB2632]">
-                          {category.name}
-                        </h4>
-                      </div>
-                      {category.description && (
-                        <p className="text-gray-600 text-sm bahnschrift text-[16px]">
-                          {category.description}
-                        </p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+          {/* Title */}
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-8 bahnschrift">
+            {resource.title}
+          </h1>
 
-            {/* Additional Images Gallery */}
-            {resource.images && resource.images.length > 0 && (
-              <div className="mt-8">
-                <h3 className="text-xl font-semibold mb-4">
-                  {isRTL ? 'معرض الصور' : 'Image Gallery'}
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {resource.images.map((image) => (
-                    <div
-                      key={image.id}
-                      className="relative h-48 rounded-lg overflow-hidden cursor-pointer"
-                      onClick={() => {
-                        setCurrentImageIndex(resource.images.findIndex(img => img.id === image.id));
-                      }}
-                    >
-                      <img
-                        src={image.image}
-                        alt={image.alt_text}
-                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                      />
-                    </div>
-                  ))}
-                </div>
+          {/* Excerpt */}
+          {resource.excerpt && (
+            <p className="text-gray-600 mb-6 text-base md:text-lg bahnschrift">
+              {resource.excerpt}
+            </p>
+          )}
+
+          {/* Cover Image */}
+          {resource.image && (
+            <div className="mb-6 md:mb-8">
+              <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg md:max-w-3xl lg:max-w-4xl mx-auto">
+                <img
+                  src={resource.image}
+                  alt={resource.title}
+                  className="w-full h-full object-cover"
+                />
               </div>
-            )}
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="custom-html-container mx-0 md:mx-auto md:max-w-3xl lg:max-w-4xl">
+            <div className="custom-html bahnschrift">
+              {renderContent()}
+            </div>
           </div>
         </div>
-      </div>
+      </article>
     </div>
   );
-} 
+};
+
+export default ResourceDetails; 

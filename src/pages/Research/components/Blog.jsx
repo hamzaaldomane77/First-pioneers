@@ -1,5 +1,5 @@
-import { ArrowRight, ArrowLeft, ArrowLeftCircle } from "lucide-react";
-import React, { useEffect } from "react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
+import React from "react";
 import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
 import { getBlogs } from "../../../services/api";
@@ -60,7 +60,6 @@ export default function Blog() {
           {t("blog.stayInformed")}
         </h2>
       
-
         <div className="grid grid-cols-1 gap-8 max-w-5xl mx-auto">
           {blogs.map((blog, index) => (
             <article
@@ -80,7 +79,7 @@ export default function Blog() {
                     <img
                       src={blog.cover_image}
                       alt={blog.title}
-                      className="absolute inset-0 w-full h-full object-cover "
+                      className="absolute inset-0 w-full h-full object-cover"
                       onError={(e) => {
                         e.target.src = t("blog.placeholderImage");
                       }}
@@ -106,19 +105,18 @@ export default function Blog() {
                     {blog.title}
                   </h3>
 
-                  <div className="text-sm text-gray-600 mb-4 py-5">
+                  <div className="text-sm text-gray-600 mb-4">
                     {blog.author_name && (
-                      <span className="block">{blog.author_name}</span>
+                      <span className="block font-medium text-gray-800">{blog.author_name}</span>
                     )}
                     {blog.author_position && (
-                      <span className="block text-gray-500 pt-3">{blog.author_position}</span>
+                      <span className="block text-gray-500 mt-1">{blog.author_position}</span>
                     )}
-                   
                   </div>
 
-                  {blog.first_description && (
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2 py-4 bahnschrift text-[16px]">
-                      {blog.first_description}
+                  {blog.excerpt && (
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-3  bahnschrift text-[16px]">
+                      {blog.excerpt}
                     </p>
                   )}
 
@@ -128,7 +126,11 @@ export default function Blog() {
                       className="inline-flex items-center text-[#BB2632] font-semibold hover:opacity-80 transition-opacity duration-300"
                     >
                       {t("blog.viewarticle")}
-                      
+                      {isRTL ? (
+                        <ArrowLeft className="w-5 h-5 ml-2" />
+                      ) : (
+                        <ArrowRight className="w-5 h-5 ml-2" />
+                      )}
                     </Link>
                   </div>
                 </div>
@@ -136,22 +138,20 @@ export default function Blog() {
             </article>
           ))}
         </div>
-     <div className="flex justify-center items-center py-12 text-xl">
-        <Link 
-          to="/AllBlog" 
-          className="inline-flex items-center text-[#ec3a49] font-semibold hover:opacity-80 transition-opacity duration-300 text-center group"
-        > 
-          
-          {t("blog.filterOptions.viewAllBlogs")}
-
-
-          {isRTL ? (
-            <ArrowLeft className="w-6 h-6 transform pr-2 transition-transform duration-300" />
-          ) : (
-            <ArrowRight className="w-4 h-4  transform  transition-transform duration-300" />
-          )}
-        </Link>
-     </div>
+        
+        <div className="flex justify-center items-center py-12 text-xl">
+          <Link 
+            to="/AllBlog" 
+            className="inline-flex items-center text-[#ec3a49] font-semibold hover:opacity-80 transition-opacity duration-300 text-center group"
+          > 
+            {t("blog.filterOptions.viewAllBlogs")}
+            {isRTL ? (
+              <ArrowLeft className="w-6 h-6 ml-2 transition-transform duration-300" />
+            ) : (
+              <ArrowRight className="w-6 h-6 ml-2 transition-transform duration-300" />
+            )}
+          </Link>
+        </div>
       </div>
     </section>
   );

@@ -1,4 +1,7 @@
 import axios from 'axios';
+import parse from 'html-react-parser';
+import { domToReact } from 'html-react-parser';
+import { Element } from 'domhandler';
 
 
 const API_URL = 'https://first.pioneers.backend.techpundits.net';
@@ -286,6 +289,9 @@ export const getBlogs = async (limit = null) => {
     const processedBlogs = blogs.map(blog => {
       // معالجة تصنيفات المدونة
       const categories = blog.categories?.map(category => category.name) || [];
+      
+      // معالجة محتوى HTML لفصل النصوص والصور
+      const { contentSections, images } = processHtmlContent(blog.content);
 
       return {
         id: blog.id,
@@ -293,24 +299,19 @@ export const getBlogs = async (limit = null) => {
         cover_image: fixImageUrl(blog.cover_image) || '',
         title: blog.title || '',
         content: blog.content || '',
+        contentSections: contentSections,
+        images: images,
         excerpt: blog.excerpt || '',
         author_name: blog.author_name || '',
         author_position: blog.author_position || '',
         categories: categories,
-        first_description: blog.first_description || '',
-        second_description: blog.second_description || '',
-        third_description: blog.third_description || '',
         created_at: blog.created_at,
-        images: blog.images ? blog.images.map(img => ({
-          ...img,
-          image: fixImageUrl(img.image)
-        })) : []
       };
     })
     .filter(blog => blog.title);
 
     // ترتيب المدونات حسب التاريخ بشكل افتراضي
-    const sortedBlogs = processedBlogs.sort((a, b) => b.id - a.id);
+    const sortedBlogs = processedBlogs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     
     const result = limit ? sortedBlogs.slice(0, limit) : sortedBlogs;
     
@@ -318,6 +319,141 @@ export const getBlogs = async (limit = null) => {
   } catch (error) {
     throw error;
   }
+};
+
+// وظيفة مساعدة لمعالجة محتوى HTML وفصل النصوص والصور
+const processHtmlContent = (htmlContent) => {
+  if (!htmlContent) return { contentSections: [], images: [] };
+  
+  const contentSections = [];
+  const images = [];
+
+  // تحويل HTML إلى كائنات يمكن معالجتها
+  try {
+    const parseOptions = {
+      replace: (domNode) => {
+        // إزالة عنصر figcaption وكل محتوياته
+        if (domNode instanceof Element && domNode.name === 'figcaption') {
+          return null; // إزالة العنصر تمامًا
+        }
+        
+        if (domNode instanceof Element) {
+          // معالجة الفقرات النصية
+          if (domNode.name === 'p' && !domNode.children.some(child => 
+              child.name === 'figure' || child.name === 'img')) {
+            contentSections.push({
+              type: 'text',
+              content: domToReact(domNode.children, parseOptions),
+              tag: 'p'
+            });
+            return null; // إزالة العنصر من الإخراج النهائي
+          }
+          
+          // معالجة العناوين
+          if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(domNode.name)) {
+            contentSections.push({
+              type: 'text',
+              content: domToReact(domNode.children, parseOptions),
+              tag: domNode.name
+            });
+            return null;
+          }
+          
+          // معالجة الصور داخل figure
+          if (domNode.name === 'figure') {
+            // إزالة عنصر figcaption من العناصر الفرعية لل figure قبل المعالجة
+            const children = domNode.children.filter(child => child.name !== 'figcaption');
+            const imgNode = children.find(child => child.name === 'img');
+            
+            if (imgNode) {
+              const imgSrc = fixImageUrl(imgNode.attribs.src);
+              contentSections.push({ type: 'image', src: imgSrc });
+              images.push(imgSrc);
+            }
+            return null;
+          }
+          
+          // معالجة الصور المستقلة
+          if (domNode.name === 'img') {
+            const imgSrc = fixImageUrl(domNode.attribs.src);
+            contentSections.push({ type: 'image', src: imgSrc });
+            images.push(imgSrc);
+            return null;
+          }
+          
+          // معالجة معارض الصور
+          if (domNode.name === 'div' && 
+              domNode.attribs && 
+              domNode.attribs.class && 
+              (domNode.attribs.class.includes('gallery') || 
+               domNode.attribs.class.includes('attachment-gallery'))) {
+            
+            const galleryImages = [];
+            domNode.children.forEach(child => {
+              if (child.name === 'figure') {
+                // إزالة عنصر figcaption من العناصر الفرعية لل figure قبل المعالجة
+                const figChildren = child.children.filter(figChild => figChild.name !== 'figcaption');
+                const imgNode = figChildren.find(c => c.name === 'img');
+                
+                if (imgNode && imgNode.attribs && imgNode.attribs.src) {
+                  const imgSrc = fixImageUrl(imgNode.attribs.src);
+                  galleryImages.push(imgSrc);
+                  images.push(imgSrc);
+                }
+              }
+            });
+            
+            if (galleryImages.length > 0) {
+              contentSections.push({ type: 'gallery', images: galleryImages });
+            }
+            return null;
+          }
+          
+          // معالجة القوائم
+          if (domNode.name === 'ul' || domNode.name === 'ol') {
+            contentSections.push({
+              type: 'list',
+              content: domNode.outerHTML,
+              tag: domNode.name
+            });
+            return null;
+          }
+        }
+        
+        return undefined; // الاستمرار في المعالجة العادية
+      }
+    };
+    
+    // تطبيق التحليل
+    parse(htmlContent, parseOptions);
+  } catch (error) {
+    console.error('Error parsing HTML content:', error);
+    // استخدام المعالجة البديلة البسيطة في حالة حدوث خطأ
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlContent;
+    
+    // إزالة جميع عناصر figcaption
+    const figcaptions = tempDiv.querySelectorAll('figcaption');
+    figcaptions.forEach(figcaption => {
+      figcaption.remove();
+    });
+    
+    // استخراج النص
+    const textContent = tempDiv.innerText;
+    if (textContent.trim()) {
+      contentSections.push({ type: 'text', content: textContent.trim(), tag: 'p' });
+    }
+    
+    // استخراج الصور
+    const imgElements = tempDiv.querySelectorAll('img');
+    imgElements.forEach(img => {
+      const imgSrc = fixImageUrl(img.src);
+      images.push(imgSrc);
+      contentSections.push({ type: 'image', src: imgSrc });
+    });
+  }
+  
+  return { contentSections, images };
 };
 
 // وظائف خاصة بالشركاء
@@ -538,23 +674,27 @@ export const getEducationResourceById = async (id) => {
       }
     });
 
-    if (!response.data?.success || !response.data?.data) {
+    if (!response.data?.success) {
       throw new Error('Resource not found or invalid response');
     }
 
     const resource = response.data.data;
     
-    // إصلاح روابط الصور
+    // Process HTML content similar to blog content
+    const { contentSections, images } = processHtmlContent(resource.content);
+    
+    // Fix image URLs and return processed data
     return {
       ...resource,
       image: fixImageUrl(resource.image),
-      images: resource.images ? resource.images.map(img => ({
-        ...img,
-        image: fixImageUrl(img.image)
-      })) : []
+      content: resource.content,
+      contentSections: contentSections,
+      images: images,
+      categories: resource.categories || []
     };
 
   } catch (error) {
+    console.error('Error fetching resource:', error);
     throw error;
   }
 };
@@ -624,6 +764,58 @@ export const getWordInMarketById = async (wordId) => {
     return word;
     
   } catch (error) {
+    throw error;
+  }
+};
+
+// وظيفة لجلب تصنيفات كلمات في الأسواق
+export const getWordInMarketCategories = async () => {
+  try {
+    const response = await api.get('/api/v1/words-in-market-categories', {
+      params: {
+        lang: currentLanguage
+      }
+    });
+
+    if (!response.data?.success) {
+      throw new Error('No categories found or invalid response');
+    }
+
+    return response.data.data || [];
+    
+  } catch (error) {
+    console.error('Error fetching word categories:', error);
+    throw error;
+  }
+};
+
+// وظيفة لجلب الكلمات حسب التصنيف
+export const getWordsByCategory = async (categoryId) => {
+  try {
+    const response = await api.get(`/api/v1/words-in-market-categories/${categoryId}`, {
+      params: {
+        lang: currentLanguage
+      }
+    });
+
+    if (!response.data?.success || !response.data?.data?.items) {
+      throw new Error('No words found for this category or invalid response');
+    }
+
+    const items = response.data.data.items;
+    
+    // إصلاح روابط الصور
+    return items.map(item => ({
+      ...item,
+      image: fixImageUrl(item.image),
+      images: item.images ? item.images.map(img => ({
+        ...img,
+        image: fixImageUrl(img.image)
+      })) : []
+    }));
+    
+  } catch (error) {
+    console.error('Error fetching words by category:', error);
     throw error;
   }
 };
@@ -785,16 +977,39 @@ export const getFeaturedReports = async () => {
       }
     });
 
-    if (!response.data?.success || !response.data?.data?.reports) {
-      throw new Error('No featured reports found or invalid response');
+    // تسجيل استجابة API للتشخيص
+    console.log('Featured Reports API Response:', response.data);
+
+    if (!response.data?.success) {
+      console.warn('API request not successful', response.data);
+      return [];
     }
 
-    const reports = response.data.data.reports;
+    // التحقق من هيكل البيانات المختلف المحتمل
+    let reports = [];
     
-    // إصلاح روابط الصور
+    if (response.data.data?.our_featured_reports) {
+      reports = response.data.data.our_featured_reports;
+    } else if (response.data.data?.reports) {
+      reports = response.data.data.reports;
+    } else if (Array.isArray(response.data.data)) {
+      reports = response.data.data;
+    } else if (response.data.data) {
+      // في حالة كان data كائن يحتوي على تقارير بطريقة أخرى
+      const possibleArrayProps = Object.values(response.data.data).filter(val => Array.isArray(val));
+      if (possibleArrayProps.length > 0) {
+        reports = possibleArrayProps[0]; 
+      } else {
+        console.warn('Could not find reports array in response data', response.data.data);
+      }
+    }
+    
+    console.log('Processed reports count:', reports.length);
+    
+    // إصلاح روابط الصور إذا وجدت
     return reports.map(report => ({
       ...report,
-      image: fixImageUrl(report.image),
+      image: report.image ? fixImageUrl(report.image) : '',
       images: report.images ? report.images.map(img => ({
         ...img,
         image: fixImageUrl(img.image)
@@ -802,28 +1017,67 @@ export const getFeaturedReports = async () => {
     }));
     
   } catch (error) {
+    console.error('Error fetching featured reports:', error);
     throw error;
   }
 };
 
 export const getFeaturedReportById = async (reportId) => {
   try {
+    console.log(`Fetching report with ID: ${reportId}, language: ${currentLanguage}`);
     const response = await api.get(`/api/v1/our-featured-reports/${reportId}`, {
       params: {
         lang: currentLanguage
       }
     });
 
-    if (!response.data?.success || !response.data?.data) {
-      throw new Error('Featured report not found or invalid response');
+    console.log('Report Details API Response:', response.data);
+    
+    if (!response.data?.success) {
+      console.warn('API request not successful', response.data);
+      throw new Error(response.data?.message || 'Failed to fetch report details');
     }
     
-    const report = response.data.data;
+    // التعامل مع اختلاف هيكل البيانات المحتمل
+    let report = null;
     
-    // إصلاح روابط الصور
+    if (response.data.data) {
+      report = response.data.data;
+    } else {
+      console.warn('Could not find report in response data', response.data);
+      throw new Error('Report data not found in response');
+    }
+    
+    // إصلاح روابط الصور الموجودة في محتوى HTML
+    if (report.content) {
+      try {
+        // تحديث روابط الصور في المحتوى الغني
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = report.content;
+        
+        const images = tempDiv.querySelectorAll('img');
+        images.forEach(img => {
+          if (img.src && !img.src.startsWith('http')) {
+            img.src = fixImageUrl(img.src);
+          }
+          
+          // إضافة فئات لتحسين العرض
+          img.classList.add('featured-report-image');
+        });
+        
+        report.content = tempDiv.innerHTML;
+      } catch (processError) {
+        console.error('Error processing HTML content:', processError);
+        // عدم التوقف في حالة حدوث خطأ في معالجة المحتوى
+      }
+    }
+    
+    console.log('Processed report:', report);
+    
+    // إصلاح روابط الصور المستقلة إذا وجدت
     return {
       ...report,
-      image: fixImageUrl(report.image),
+      image: report.image ? fixImageUrl(report.image) : '',
       images: report.images ? report.images.map(img => ({
         ...img,
         image: fixImageUrl(img.image)
@@ -831,6 +1085,7 @@ export const getFeaturedReportById = async (reportId) => {
     };
     
   } catch (error) {
+    console.error(`Error fetching report with ID ${reportId}:`, error);
     throw error;
   }
 };
@@ -846,6 +1101,26 @@ export const getPrivacyPolicy = async () => {
 
     if (!response.data?.success || !response.data?.data) {
       throw new Error('No privacy policy found or invalid response');
+    }
+
+    return response.data.data;
+    
+  } catch (error) {
+    throw error;
+  }
+};
+
+// وظائف خاصة بالشروط والأحكام
+export const getTermsAndConditions = async () => {
+  try {
+    const response = await api.get('/api/v1/terms-and-conditions', {
+      params: {
+        lang: currentLanguage
+      }
+    });
+
+    if (!response.data?.success || !response.data?.data) {
+      throw new Error('No terms and conditions found or invalid response');
     }
 
     return response.data.data;

@@ -93,11 +93,27 @@
     "selectSorting": "Select sorting method",
     "noArticles": "No articles found",
     "viewarticle": "view article",
+    "placeholderImage": "https://via.placeholder.com/400x300?text=First+Pioneers",
+    "allBlogsTitle": "All Blog Articles",
+    "error": "Error loading articles",
+    "notFound": "Article not found",
+    "noBlogs": "No blog articles available at the moment",
     "filterOptions": {
       "newest": "Newest First",
       "oldest": "Oldest First",
+      "titleAZ": "Title (A-Z)",
+      "titleZA": "Title (Z-A)",
       "byCategory": "By Category",
-      "viewAllBlogs": "View All Blogs"
+      "viewAllBlogs": "View All Blogs",
+      "filters": "Filters",
+      "clearFilters": "Clear Filters",
+      "sortBy": "Sort By",
+      "categories": "Categories",
+      "showing": "Showing",
+      "of": "of",
+      "blogs": "blogs",
+      "noResults": "No results match your search criteria",
+      "noOptions": "No options available"
     },
     "pagination": {
       "page": "Page",
@@ -176,5 +192,34 @@
   },
   "trends": {
     "title": "Trends In Markets"
+  },
+  "resources": {
+    "allResources": "All Resources",
+    "title": "Educational Resources",
+    "searchPlaceholder": "Search by title or description...",
+    "filterOptions": "Filter Options",
+    "category": "Category",
+    "selectCategory": "Select Category",
+    "sortBy": "Sort by",
+    "sortOptions": {
+      "newest": "Newest First",
+      "oldest": "Oldest First"
+    },
+    "clearFilters": "Clear Filters",
+    "noResults": "No resources found",
+    "pageInfo": "Page {{current}} of {{total}}",
+    "previousPage": "Previous Page",
+    "nextPage": "Next Page",
+    "pageNumber": "Page {{number}}",
+    "notFound": "Resource not found",
+    "goBack": "Go Back",
+    "showing": "Showing",
+    "of": "of",
+    "resources": "resources",
+    "noResultsFound": "No results match your search criteria",
+    "viewResource": "View Resource",
+    "filterByCategory": "Filter by Category",
+    "loading": "Loading...",
+    "error": "Error loading resources"
   }
 } 

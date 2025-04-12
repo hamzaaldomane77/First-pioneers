@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import Home from "./pages/Home/Home";
 import ServicesTools from "./pages/ServicesTools/ServicesTools";
@@ -23,11 +23,24 @@ import ReportDetails from "./pages/Research/ReportDetails.jsx";
 import AllWords from "./pages/Research/AllWords.jsx";
 import WordsDetails from "./pages/Research/WordsDetails.jsx";
 import ToolDetails from "./pages/ServicesTools/ToolDetails.jsx";
+import Termsand from "./pages/Termsand/Termsand.jsx";
+
+// مكون للتمرير إلى الأعلى عند تغيير المسار
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
+};
 
 export default function App() {
   return (
     <LoadingProvider>
       <Router>
+        <ScrollToTop />
         <Routes>
           <Route element={<MainLayout />}>
             <Route index element={<Home />} />
@@ -51,6 +64,7 @@ export default function App() {
             <Route path="/words" element={<AllWords />} />
             <Route path="/words/:id" element={<WordsDetails />} />
             <Route path="/tools/:id" element={<ToolDetails />} />
+            <Route path="/terms-and-conditions" element={<Termsand />} />
           </Route>
         </Routes>
       </Router>

@@ -369,7 +369,7 @@ const MainLayout = () => {
                     <div className='py-7 mb-4'>
                         <ul className="space-y-5 text-lg">
                             <li><Link to='/PrivacyPolicy' className="hover:text-[#BB2632] transition-colors">{t('footer.privacy')}</Link></li>
-                            <li><Link to='/terms' className="hover:text-[#BB2632] transition-colors">{t('footer.terms')}</Link></li>
+                            <li><Link to='/terms-and-conditions' className="hover:text-[#BB2632] transition-colors">{t('footer.terms')}</Link></li>
                             <li><Link to='/Questions' className="hover:text-[#BB2632] transition-colors">{t('footer.faq')}</Link></li>
                         </ul>
                     </div>
