@@ -75,7 +75,7 @@ export default function Services() {
         </h1>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 md:px-4 max-w-7xl mx-auto space-y-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 md:px-4 max-w-7xl mx-auto">
         {servicesData.map(service => (
           <Link to={`/servicesdetils/${service.id}`} key={service.id} className="overflow-hidden shadow-lg rounded-lg transition-all duration-500 hover:scale-105 cursor-pointer group block bg-white">
             <div className="relative">
