@@ -221,5 +221,11 @@
     "filterByCategory": "Filter by Category",
     "loading": "Loading...",
     "error": "Error loading resources"
+  },
+  "servicesTools": {
+    "hero": {
+      "title": "Expert Solutions for Your Business Challenges",
+      "description": "We offer a wide range of services designed to help businesses make data-driven decisions and achieve their goals. Explore our offerings below"
+    }
   }
 } 

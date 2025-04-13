@@ -192,35 +192,41 @@
     "image_alt": "صندوق البريد"
   },
   "trends": {
-    "title": "  الرائج في العلامات "
+    "title": "اتجاهات في الأسواق"
   },
   "resources": {
     "allResources": "جميع الموارد",
     "title": "الموارد التعليمية",
-    "searchPlaceholder": "ابحث بالعنوان أو الوصف...",
+    "searchPlaceholder": "البحث حسب العنوان أو الوصف...",
     "filterOptions": "خيارات التصفية",
-    "category": "التصنيف",
-    "selectCategory": "اختر التصنيف",
-    "sortBy": "ترتيب حسب",
+    "category": "الفئة",
+    "selectCategory": "اختر فئة",
+    "sortBy": "الترتيب حسب",
     "sortOptions": {
       "newest": "الأحدث أولاً",
       "oldest": "الأقدم أولاً"
     },
     "clearFilters": "مسح التصفية",
     "noResults": "لم يتم العثور على موارد",
-    "pageInfo": "صفحة {{current}} من {{total}}",
+    "pageInfo": "الصفحة {{current}} من {{total}}",
     "previousPage": "الصفحة السابقة",
     "nextPage": "الصفحة التالية",
-    "pageNumber": "صفحة {{number}}",
+    "pageNumber": "الصفحة {{number}}",
     "notFound": "المورد غير موجود",
-    "goBack": "رجوع",
-    "showing": "يتم عرض",
+    "goBack": "العودة",
+    "showing": "عرض",
     "of": "من",
-    "resources": "مورد",
-    "noResultsFound": "لا توجد نتائج تطابق معايير البحث",
+    "resources": "موارد",
+    "noResultsFound": "لا توجد نتائج تطابق معايير البحث الخاصة بك",
     "viewResource": "عرض المورد",
-    "filterByCategory": "تصفية حسب التصنيف",
+    "filterByCategory": "تصفية حسب الفئة",
     "loading": "جاري التحميل...",
-    "error": "حدث خطأ في تحميل الموارد"
+    "error": "خطأ في تحميل الموارد"
+  },
+  "servicesTools": {
+    "hero": {
+      "title": "حلول خبيرة لتحديات عملك",
+      "description": "نقدم مجموعة واسعة من الخدمات المصممة لمساعدة الشركات على اتخاذ قرارات مستندة إلى البيانات وتحقيق أهدافها. استكشف عروضنا أدناه"
+    }
   }
 } 
