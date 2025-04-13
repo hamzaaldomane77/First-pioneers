@@ -74,7 +74,7 @@ export default function Hero() {
             </div>
           ) : (
             <div 
-              className={`text-lg leading-8 text-black sm:text-sm md:text-base whitespace-pre-line about-us px-0`}
+              className={`text-lg leading-8 text-black sm:text-sm md:text-base whitespace-pre-line about-us px-0 bahnschrift`}
               dangerouslySetInnerHTML={{ 
                 __html: loading ? t('loading', 'Loading...') : description 
               }}

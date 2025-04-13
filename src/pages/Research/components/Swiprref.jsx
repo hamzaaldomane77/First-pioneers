@@ -13,7 +13,7 @@ import { getTrendsInMarkets, setAPILanguage } from '../../../services/api';
 
 export default function Testimonials() {
   const { ref, inView } = useInView({
-    threshold: 0.3,
+    threshold: 0.5,
     triggerOnce: true,
   });
 
@@ -108,7 +108,7 @@ export default function Testimonials() {
             clickable: true,
           }}
           autoplay={{
-            delay: 3000,
+            delay: 10000,
             disableOnInteraction: false,
             reverseDirection: isRTL
           }}
@@ -125,8 +125,8 @@ export default function Testimonials() {
                     className="w-[605px] h-[350px] mb-4 rounded-xl object-cover" 
                   />
                 )}
-                <h2 className="text-[#BB2632] text-xl font-bold">{item.title}</h2>
-                <p className="text-gray-800 text-base mt-4 bahnschrift text-[16px]">{item.description}</p>
+                <h2 className="text-[#BB2632] text-xl font-bold text-start">{item.title}</h2>
+                <p className="text-gray-800 text-base mt-4 bahnschrift text-[16px] text-start">{item.description}</p>
               </div>
             </SwiperSlide>
           ))}

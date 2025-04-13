@@ -92,13 +92,13 @@ export default function Tools() {
     <section
       dir={isRTL ? 'rtl' : 'ltr'}
       ref={ref}
-      className={`min-h-screen transition-all duration-1000 px-1 py-20 overflow-clip ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      className={`min-h-screen transition-all duration-1000 px-1 py-20 overflow-clip  ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
     >
       <h1 className={`text-[#BB2632] text-3xl sm:text-4xl md:text-5xl text-center pt-12 sm:pt-24 pb-8 sm:pb-16 ${isRTL ? 'font-medium' : ''}`}>
         {isRTL ? 'أدواتنا' : 'Our Tools'}
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 px-4 sm:px-5 max-w-7xl mx-auto space-y-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 px-4 sm:px-5 max-w-7xl mx-auto pb-12">
         {tools.map((tool, index) => (
           <div
             key={tool.id}
@@ -122,10 +122,10 @@ export default function Tools() {
                   <h3 className="text-xl sm:text-2xl text-[#000000] mb-2 sm:mb-4">
                     {tool.name}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-4 bahnschrift">
+                  <p className="text-sm text-black mb-4 bahnschrift ">
                     {tool.description}
                   </p>
-                  <span className="text-[#BB2632] font-semibold relative inline-block group-hover:after:w-full">
+                  <span className="text-[#BB2632] font-semibold relative inline-block group-hover:after:w-full text-[14px]">
                     {isRTL ? 'استكشاف الأداة' : 'Explore Tool'}
                     <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#BB2632] transition-all duration-500 group-hover:w-full"></span>
                   </span>

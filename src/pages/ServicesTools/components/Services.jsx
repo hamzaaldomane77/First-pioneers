@@ -41,7 +41,7 @@ export default function Services() {
   if (loading) {
     return (
       <section
-        className="min-h-screen bg-cover bg-center flex items-center justify-center"
+        className="min-h-screen bg-cover bg-center flex items-center justify-center "
         style={{ backgroundImage: `url(${Redbackground})` }}
       >
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
@@ -64,7 +64,7 @@ export default function Services() {
 
   return (
     <section
-      className={`min-h-screen bg-cover bg-center transition-all duration-1000 px-4 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      className={`min-h-screen bg-cover bg-center transition-all duration-1000 px-4 pb-12 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
       style={{ backgroundImage: `url(${Redbackground})` }}
       ref={ref}
       dir={isRTL ? 'rtl' : 'ltr'}
@@ -83,8 +83,8 @@ export default function Services() {
             </div>
             <div className="p-3 md:p-6 text-center">
               <h3 className="text-lg font-semibold transition-all duration-500 group-hover:text-[#BB2632]">{service.title}</h3>
-              <p className="text-sm text-[#333333] my-4 text-[16px]">{service.excerpt}</p>
-              <span className="text-[#BB2632] font-semibold relative inline-block pb-2">
+              <p className="text-sm text-[#333333] my-4 text-[16px] bahnschrift">{service.excerpt}</p>
+              <span className="text-[#BB2632] font-semibold relative inline-block pb-2 text-[14px]">
                 {isRTL ? 'استكشاف الخدمة' : 'Explore Service'}
                 <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#BB2632] transition-all duration-500 group-hover:w-full"></span>
               </span>

@@ -74,7 +74,7 @@ export default function Services() {
       <div>
         <h1 className="text-[#BB2632] text-5xl text-center pt-24">{isRTL ? 'خدماتنا' : 'Our Services'}</h1>
         <p className='text-center text-3xl mt-4 mb-8 Bahnschrift'>{isRTL ? 'هل أنت مستعد لنقل عملك إلى المستوى التالي؟' : 'Are you ready to take your business to the next level?'}</p>
-        <p className='text-center text-sm mb-8 text-[#010203] leading-8 Bahnschrift'>
+        <p className='text-center text-sm mb-8 text-[#010203] leading-8 bahnschrift'>
           {isRTL 
             ? 'تم تصميم مجموعتنا الشاملة من خدمات أبحاث السوق والتسويق خصيصًا لتلبية احتياجاتك الفريدة ودفع نجاحك سواء كنت تطلق منتجًا جديدًا أو تحسّن علامتك التجارية أو تستكشف فرصًا جديدة فنحن نغطيك بحلول مبتكرة تقدم نتائج حقيقية.'
             : 'Our comprehensive suite of market research and marketing services is tailor-made to meet your unique needs and drive your success. Whether you\'re launching a new product, refining your brand, or exploring new opportunities, we\'ve got you covered with innovative solutions that deliver real results.'}

@@ -77,8 +77,8 @@ export default function CoreValues() {
               animate={inView ? { scale: 1, opacity: 1 } : {}}
               transition={{ duration: 0.8, delay: value.id * 0.3 }}
             />
-            <h2 className="text-xl font-bold mb-4">{value.title}</h2>
-            <p className="text-gray-600">{value.description}</p>
+            <h2 className="text-xl font-bold mb-4 text-red-700">{value.title}</h2>
+            <p className="text-black bahnschrift ">{value.description}</p>
           </motion.div>
         ))}
       </div>

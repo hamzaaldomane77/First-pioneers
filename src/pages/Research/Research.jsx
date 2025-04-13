@@ -11,7 +11,7 @@ const Research = () => {
   return (
   <>
     <Hero />
-    <Reports />
+    {/* <Reports /> */}
     <Swiperref />
     <Blog />
     <Markets />

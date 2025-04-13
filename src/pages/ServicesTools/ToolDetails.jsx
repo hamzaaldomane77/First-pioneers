@@ -113,7 +113,7 @@ const ToolDetails = () => {
                     backgroundPosition: 'center'
                 }}
             >
-                {/* طبقة التعتيم لتحسين وضوح النص */}
+                
                 <div className="absolute inset-0 bg-black bg-opacity-60"></div>
                 
                 {/* زر العودة */}
@@ -121,7 +121,7 @@ const ToolDetails = () => {
                     <div className="container mx-auto">
                         <Link 
                             to="/ServicesTools" 
-                            className={`inline-flex items-center text-white hover:text-[#BB2632] transition-colors bg-black/20 px-4 py-2 rounded-lg ${isRTL ? 'flex-row-reverse' : ''}`}
+                            className={`inline-flex items-center text-white hover:text-[#BB2632] transition-colors bg-black/20 px-4  rounded-lg ${isRTL ? 'flex-row-reverse' : ''}`}
                         >
                             <BackArrowIcon className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
                             {isRTL ? 'العودة إلى الأدوات' : 'Back to Tools'}
@@ -130,7 +130,7 @@ const ToolDetails = () => {
                 </div>
                 
                 {/* المحتوى فوق الصورة */}
-                <div className="container mx-auto px-4 z-10 text-center">
+                <div className="container mx-auto  z-10 text-center">
                     <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
                         {tool.name}
                     </h1>
@@ -140,28 +140,22 @@ const ToolDetails = () => {
                 </div>
             </section>
             
-            {/* قسم الاستكشاف مع صورة واحدة */}
+            
             {singleImageExplores.length > 0 && (
-                <section className="py-16">
-                    <div className="container mx-auto px-4">
-                        <h2 className={`text-3xl font-bold mb-12 text-center text-[#BB2632] ${isRTL ? 'font-medium' : ''}`}>
-                            {isRTL ? 'استكشاف الأداة' : 'Explore the Tool'}
-                        </h2>
-                        
+                <section>
+                    <div className="container mx-auto">
                         {singleImageExplores.map((explore, index) => {
-                            // تبديل الخلفية بين الأقسام
                             const bgImage = index % 2 === 0 ? Redbackground : Whitebackground;
                             const textColor = index % 2 === 0 ? 'text-black' : 'text-black';
                             
                             return (
                                 <div 
                                     key={explore.id}
-                                    className="mb-16 py-12 bg-cover bg-center"
+                                    className="py-12 bg-cover bg-center"
                                     style={{ backgroundImage: `url(${bgImage})` }}
                                 >
                                     <div className="container mx-auto px-4">
                                         <div className={`flex flex-col ${index % 2 !== 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-8`}>
-                                            {/* قسم الصورة */}
                                             <div className="md:w-1/2">
                                                 <img 
                                                     src={explore.image} 
@@ -170,7 +164,6 @@ const ToolDetails = () => {
                                                 />
                                             </div>
                                             
-                                            {/* قسم المحتوى */}
                                             <div className={`md:w-1/2 ${textColor}`}>
                                                 <h3 className={`text-2xl font-bold mb-4 ${isRTL ? 'text-right' : 'text-left'}`}>
                                                     {explore.title}
@@ -188,46 +181,40 @@ const ToolDetails = () => {
                 </section>
             )}
             
-            {/* قسم الاستكشاف مع صورتين - يظهر دائمًا في النهاية */}
+           
             {doubleImageExplores.length > 0 && (
-                <section className="">
-                    <div className="container ">
-                       
-                        
+                <section>
+                    <div className="container mx-auto">
                         {doubleImageExplores.map((explore, index) => {
-                            // تبديل الخلفية بين الأقسام
                             const bgImage = index % 2 === 0 ? Redbackground : Whitebackground;
                             const textColor = index % 2 === 0 ? 'text-black' : 'text-gray-800';
                             
                             return (
                                 <div 
                                     key={explore.id}
-                                    className="mb-16 py-12 bg-cover bg-center"
+                                    className="py-12 bg-cover bg-center"
                                     style={{ backgroundImage: `url(${bgImage})` }}
                                 >
                                     <div className="container mx-auto px-4">
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-                                            {/* الصورة الأولى على اليمين */}
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
                                             <div className="md:col-span-1 order-2 md:order-1">
                                                 <img 
                                                     src={explore.image} 
                                                     alt={explore.title} 
-                                                    className="w-full h-auto rounded-lg shadow-lg"
+                                                    className="w-full h-70 object-cover"
                                                 />
                                             </div>
                                             
-                                            {/* المحتوى في الوسط */}
                                             <div className={`md:col-span-1 order-1 md:order-2 text-center ${textColor}`}>
                                                 <h3 className="text-2xl font-bold mb-4">{explore.title}</h3>
                                                 <p className={`${isRTL ? 'leading-loose' : ''}`}>{explore.description}</p>
                                             </div>
                                             
-                                            {/* الصورة الثانية على اليسار */}
                                             <div className="md:col-span-1 order-3">
                                                 <img 
                                                     src={explore.second_image} 
                                                     alt={`${explore.title} - secondary`} 
-                                                    className="w-full h-auto rounded-lg shadow-lg"
+                                                    className="w-full h-70 object-cover"
                                                 />
                                             </div>
                                         </div>

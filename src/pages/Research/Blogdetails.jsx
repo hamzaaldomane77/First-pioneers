@@ -339,7 +339,7 @@ const BlogDetails = () => {
       
           <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-8 bahnschrift">{blog.title}</h1>
 
-          
+
           <div className="mb-4 md:mb-6 pb-3 md:pb-4 border-b border-gray-200">
             <h3 className="font-semibold text-gray-900 text-lg md:text-xl bahnschrift">{blog.author_name}</h3>
             {blog.author_position && (
@@ -361,7 +361,7 @@ const BlogDetails = () => {
           {/* عرض المحتوى باستخدام dangerouslySetInnerHTML مع فئة CSS مخصصة */}
           <div className="custom-html-container mx-0 md:mx-auto md:max-w-3xl lg:max-w-4xl">
             <div className="custom-html bahnschrift" dangerouslySetInnerHTML={{ __html: blog.content }} />
-          </div>
+            </div>
         </div>
       </article>
       <CardArticles />

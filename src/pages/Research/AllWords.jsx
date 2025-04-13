@@ -61,11 +61,11 @@ const AllWords = () => {
 
     // Fetch words and categories
     const fetchWordsAndCategories = useCallback(async () => {
-        try {
-            setLoading(true);
-            setError(null);
-            setAPILanguage(i18n.language);
-            
+            try {
+                setLoading(true);
+                setError(null);
+                setAPILanguage(i18n.language);
+                
             // Fetch words and categories in parallel
             const [wordsData, categoriesData] = await Promise.all([
                 getWordsInMarkets(),
@@ -86,12 +86,12 @@ const AllWords = () => {
                 setCategories(categoriesData);
             }
             
-        } catch (error) {
-            console.error('Error in AllWords component:', error);
+            } catch (error) {
+                console.error('Error in AllWords component:', error);
             setError(error.message || t('common.error', 'Failed to load content'));
-        } finally {
-            setLoading(false);
-        }
+            } finally {
+                setLoading(false);
+            }
     }, [i18n.language, t, wordsPerPage]);
 
     useEffect(() => {
@@ -191,15 +191,15 @@ const AllWords = () => {
                 <div className="bg-red-500 bg-opacity-75 p-4 rounded-lg">
                     <p className="text-white">{error}</p>
                 </div>
-            </div>
+                </div>
         );
     }
 
     return (
         <div className="min-h-screen py-20 px-6 md:px-12" dir={isRTL ? 'rtl' : 'ltr'}>
             <h1 className="text-4xl font-bold text-center text-[#BB2632] mb-12">
-                {isRTL ? 'كلمات في الأسواق' : 'Words In Markets'}
-            </h1>
+                    {isRTL ? 'كلمات في الأسواق' : 'Words In Markets'}
+                </h1>
 
             {/* Search and Filters */}
             <div className="max-w-6xl mx-auto mb-8">
@@ -314,15 +314,15 @@ const AllWords = () => {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {currentWords.map((word) => (
-                        <Link
+                        <Link 
                             to={`/words/${word.id}`}
                             key={`word-${word.id}`}
                             className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
                         >
                             <div className="relative h-48">
-                                <img
-                                    src={word.image}
-                                    alt={word.title}
+                                    <img 
+                                        src={word.image} 
+                                        alt={word.title} 
                                     className="w-full h-full object-cover"
                                     loading="lazy"
                                 />
@@ -340,8 +340,8 @@ const AllWords = () => {
                                                 </span>
                                             </div>
                                         ))}
-                                    </div>
-                                )}
+                                </div>
+                            )}
                             </div>
                             <div className="p-6">
                                 <h3 className="text-xl font-semibold mb-3 text-[#BB2632] hover:opacity-80 transition-opacity">
@@ -408,8 +408,8 @@ const AllWords = () => {
                                     </button>
                                 );
                             })}
-                        </div>
-
+                </div>
+                
                         <button
                             onClick={nextPage}
                             disabled={currentPage === totalPages}
@@ -431,7 +431,7 @@ const AllWords = () => {
                     </p>
                 </div>
             )}
-        </div>
+            </div>
     );
 };
 

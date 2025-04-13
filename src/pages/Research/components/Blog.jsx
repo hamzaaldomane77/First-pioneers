@@ -64,7 +64,7 @@ export default function Blog() {
           {blogs.map((blog, index) => (
             <article
               key={blog.id}
-              className={`bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-500 ${
+              className={`bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-500 group ${
                 inView
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-20"
@@ -79,7 +79,7 @@ export default function Blog() {
                     <img
                       src={blog.cover_image}
                       alt={blog.title}
-                      className="absolute inset-0 w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       onError={(e) => {
                         e.target.src = t("blog.placeholderImage");
                       }}
@@ -93,7 +93,7 @@ export default function Blog() {
                       {blog.categories.map((category, index) => (
                         <span
                           key={index}
-                          className="text-sm text-[#BB2632] font-medium bg-red-50 px-3 py-1 rounded-full bahnschrift text-[16px]"
+                          className="text-sm text-[#BB2632] font-medium bg-red-50 px-3 py-1 rounded-full bahnschrift text-[16px] group-hover:bg-white transition-colors duration-500"
                         >
                           {category}
                         </span>
@@ -101,16 +101,16 @@ export default function Blog() {
                     </div>
                   )}
 
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 pt-3">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 pt-3 group-hover:text-[#BB2632] transition-colors duration-300">
                     {blog.title}
                   </h3>
 
-                  <div className="text-sm text-gray-600 mb-4">
+                  <div className="text-[14px] text-gray-600 mb-4">
                     {blog.author_name && (
                       <span className="block font-medium text-gray-800">{blog.author_name}</span>
                     )}
                     {blog.author_position && (
-                      <span className="block text-gray-500 mt-1">{blog.author_position}</span>
+                      <span className="block text-gray-500 mt-1 text-[12px]">{blog.author_position}</span>
                     )}
                   </div>
 
