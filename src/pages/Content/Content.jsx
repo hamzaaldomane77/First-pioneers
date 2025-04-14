@@ -128,7 +128,7 @@ const Content = () => {
                 <h3 className="text-lg md:text-xl font-semibold text-red-800 mb-3 ">{t('contactPage.socialMedia')}</h3>
                 <div className={`flex ${isRTL ? 'space-x-12 rtl:space-x-reverse' : 'space-x-6'}`}>
                   {socialMedia.length > 0 ? (
-                    // عرض أيقونات وسائل التواصل الاجتماعي من API
+                    
                     socialMedia.map((item) => (
                       <a 
                         key={item.id} 
